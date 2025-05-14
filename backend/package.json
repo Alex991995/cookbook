@@ -23,10 +23,12 @@
   "dependencies": {
     "@prisma/client": "^6.7.0",
     "dotenv": "^16.5.0",
-    "express": "^5.1.0"
+    "express": "^5.1.0",
+    "tslog": "^4.9.3"
   },
   "scripts": {
-    "dev": "nodemon",
+    "start": "node --import ./loader-config.mjs ./src/main.ts",
+    "dev": "nodemon --exec npm start",
     "build": "tsc",
     "lint": "eslint ./src/**",
     "lint:fix": "eslint ./src/** --fix",
