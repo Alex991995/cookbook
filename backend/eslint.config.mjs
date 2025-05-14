@@ -26,7 +26,7 @@ export default defineConfig([
 		plugins: {
 			'@typescript-eslint': typescriptEslint,
 		},
-
+		ignores: ["src/generated/**"],
 		languageOptions: {
 			parser: tsParser,
 		},
