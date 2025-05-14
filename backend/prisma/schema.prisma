@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       String     @id @default(uuid())
+  email    String     @unique
+  name     String?
+  password String
+  image    String?
+  recipe   Recipe[]
+  cookbook Cookbook[]
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("user")
+}
+
+model Recipe {
+  id             String   @id @default(uuid())
+  title          String
+  description    String?
+  ingredients    String[]
+  direction      String[]
+  likes          Int      @default(0)
+  views          Int      @default(0)
+  estimated_time DateTime @db.Time()
+  image          String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user_id String?
+
+  user     User?           @relation(fields: [user_id], references: [id])
+  comment  CommentRecipe[]
+  cookbook Cookbook[]
+
+  @@map("recipe")
+}
+
+model CommentRecipe {
+  id          String @id @default(uuid())
+  description String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  recipe_id String?
+
+  recipe Recipe? @relation(fields: [recipe_id], references: [id])
+
+  @@map("comment_recipe")
+}
+
+model Cookbook {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  likes       Int      @default(0)
+  image       String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user_id   String?
+  recipe_id String?
+
+  user            User?             @relation(fields: [user_id], references: [id])
+  recipe          Recipe?           @relation(fields: [recipe_id], references: [id])
+  commentCookbook CommentCookbook[]
+
+  @@map("cookbook")
+}
+
+model CommentCookbook {
+  id          String @id @default(uuid())
+  description String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  cookbook_id String?
+
+  cookbook Cookbook? @relation(fields: [cookbook_id], references: [id])
+
+  @@map("comment_cookbook")
+}
