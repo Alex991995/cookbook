@@ -10,7 +10,7 @@ export class LoggerService {
 	}
 
 	log(...args: unknown[]) {
-		this.logger.log(1, 'log', args);
+		this.logger.info(args);
 	}
 
 	error(...args: unknown[]) {
