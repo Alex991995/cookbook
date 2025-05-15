@@ -26,7 +26,7 @@ export default defineConfig([
 		plugins: {
 			'@typescript-eslint': typescriptEslint,
 		},
-
+		ignores: ['src/generated/**'],
 		languageOptions: {
 			parser: tsParser,
 		},
@@ -35,8 +35,7 @@ export default defineConfig([
 			'no-empty-function': 'off',
 			'@typescript-eslint/ban-types': 'off',
 			'@typescript-eslint/no-unused-vars': 'warn',
-			'@typescript-eslint/explicit-function-return-type': 'warn',
-
+			'@typescript-eslint/explicit-function-return-type': 'off',
 			'prettier/prettier': [
 				'error',
 				{

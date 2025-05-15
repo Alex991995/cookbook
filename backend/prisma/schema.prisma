@@ -1,5 +1,6 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -8,13 +9,16 @@ datasource db {
 }
 
 model User {
-  id       String     @id @default(uuid())
-  email    String     @unique
+  id       String  @id @default(uuid())
+  email    String  @unique
   name     String?
   password String
   image    String?
-  recipe   Recipe[]
-  cookbook Cookbook[]
+
+  recipe         Recipe[]
+  cookbook       Cookbook[]
+  likes          Recipe_Likes[]
+  Cookbook_Likes Cookbook_Likes[]
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -28,7 +32,6 @@ model Recipe {
   description    String?
   ingredients    String[]
   direction      String[]
-  likes          Int      @default(0)
   views          Int      @default(0)
   estimated_time DateTime @db.Time()
   image          String
@@ -41,8 +44,23 @@ model Recipe {
   user     User?           @relation(fields: [user_id], references: [id])
   comment  CommentRecipe[]
   cookbook Cookbook[]
+  likes    Recipe_Likes[]
 
   @@map("recipe")
+}
+
+model Recipe_Likes {
+  id        String  @id @default(uuid())
+  recipe_id String?
+  user_id   String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  recipe Recipe? @relation(fields: [recipe_id], references: [id])
+  user   User?   @relation(fields: [user_id], references: [id])
+
+  @@map("recipe_likes")
 }
 
 model CommentRecipe {
@@ -74,8 +92,23 @@ model Cookbook {
   user            User?             @relation(fields: [user_id], references: [id])
   recipe          Recipe?           @relation(fields: [recipe_id], references: [id])
   commentCookbook CommentCookbook[]
+  Cookbook_Likes  Cookbook_Likes[]
 
   @@map("cookbook")
+}
+
+model Cookbook_Likes {
+  id          String  @id @default(uuid())
+  cookbook_id String?
+  user_id     String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  cookbook Cookbook? @relation(fields: [cookbook_id], references: [id])
+  user     User?     @relation(fields: [user_id], references: [id])
+
+  @@map("cookbook_likes")
 }
 
 model CommentCookbook {
