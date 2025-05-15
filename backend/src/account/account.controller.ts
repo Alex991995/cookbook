@@ -1,5 +1,6 @@
+import { HttpError } from '@/errors/http-error';
 import { LoggerService } from '@/logger/logger.service';
-import { Router } from 'express';
+import { NextFunction, Router, Request, Response } from 'express';
 
 export class AccountController {
 	router: Router;
@@ -7,6 +8,8 @@ export class AccountController {
 	constructor(private logger: LoggerService) {
 		this.router = Router();
 
-		// this.router.get('/')
+		this.router.get('/login', (req: Request, res: Response, next: NextFunction) => {
+			next(new HttpError(404, 'не авторизован'));
+		});
 	}
 }

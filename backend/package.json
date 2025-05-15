@@ -13,7 +13,6 @@
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.0",
-    "nodemon": "^3.1.10",
     "prettier": "^3.5.3",
     "prisma": "^6.7.0",
     "ts-node": "^10.9.2",
@@ -27,8 +26,7 @@
     "tslog": "^4.9.3"
   },
   "scripts": {
-    "start": "node --import ./loader-config.mjs ./src/main.ts",
-    "dev": "nodemon --exec npm start",
+    "dev": "tsx src/main.ts --watch",
     "build": "tsc",
     "lint": "eslint ./src/**",
     "lint:fix": "eslint ./src/** --fix",

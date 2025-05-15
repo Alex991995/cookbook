@@ -1,4 +1,4 @@
-import { PrismaClient } from '@/generated/prisma';
+import { PrismaClient } from '../generated/prisma';
 import { LoggerService } from '@/logger/logger.service';
 
 export class PrismaService {
