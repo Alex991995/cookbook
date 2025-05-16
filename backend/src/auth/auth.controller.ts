@@ -4,37 +4,44 @@ import { NextFunction, Router, Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterSchema } from './auth-scheme/auth-scheme';
 import { RegisterDTO } from './dto/register.dto';
+import { ZodError } from 'zod';
+import { CustomZodError } from '@/errors/zod-error';
 
 export class AuthController {
-	router: Router;
+  router: Router;
 
-	constructor(
-		private logger: LoggerService,
-		private authService: AuthService,
-	) {
-		this.router = Router();
-		// this.userService = userService;
+  constructor(
+    private logger: LoggerService,
+    private authService: AuthService,
+  ) {
+    this.router = Router();
+  }
 
-		// this.router.get('/login', (req: Request, res: Response, next: NextFunction) => {
-		// 	next(new HttpError(404, 'не авторизован'));
-		// });
-	}
+  routes() {
+    this.router.post('/login', (req, res) => {
+      // const result = this.authService
+      res.send('login');
+    });
 
-	routes() {
-		this.router.post('/login', (req, res) => {
-			// const result = this.authService
-			res.send('login');
-		});
+    this.router.post(
+      '/register',
+      async ({ body }: Request<object, object, RegisterDTO>, res, next: NextFunction) => {
+        try {
+          RegisterSchema.parse(body);
+          const result = await this.authService.createUser(body);
 
-		this.router.post('/register', async ({ body }: Request<object, object, RegisterDTO>, res) => {
-			const validatedData = RegisterSchema.parse(body);
-
-			console.log(validatedData);
-
-			const result = await this.authService.createUser(body);
-
-			res.send(result);
-		});
-		return this.router;
-	}
+          if (!result) {
+            next(new HttpError(422, 'User already exists'));
+          } else {
+            res.send(result);
+          }
+        } catch (error) {
+          if (error instanceof ZodError) {
+            next(new CustomZodError(400, error.issues));
+          }
+        }
+      },
+    );
+    return this.router;
+  }
 }

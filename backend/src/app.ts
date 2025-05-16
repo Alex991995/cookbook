@@ -49,7 +49,6 @@ export class App {
 	}
 
 	useExceptionFilters() {
-		console.log('useExceptionFilters');
 		this.app.use(this.exceptionFilter.catch.bind(this.exceptionFilter));
 	}
 

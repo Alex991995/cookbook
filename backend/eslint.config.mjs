@@ -9,45 +9,45 @@ import { FlatCompat } from '@eslint/eslintrc';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const compat = new FlatCompat({
-	baseDirectory: __dirname,
-	recommendedConfig: js.configs.recommended,
-	allConfig: js.configs.all,
+  baseDirectory: __dirname,
+  recommendedConfig: js.configs.recommended,
+  allConfig: js.configs.all,
 });
 
 export default defineConfig([
-	{
-		extends: compat.extends(
-			'eslint:recommended',
-			'plugin:@typescript-eslint/eslint-recommended',
-			'plugin:@typescript-eslint/recommended',
-			'plugin:prettier/recommended',
-		),
+  {
+    extends: compat.extends(
+      'eslint:recommended',
+      'plugin:@typescript-eslint/eslint-recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:prettier/recommended',
+    ),
 
-		plugins: {
-			'@typescript-eslint': typescriptEslint,
-		},
-		ignores: ['src/generated/**'],
-		languageOptions: {
-			parser: tsParser,
-		},
+    plugins: {
+      '@typescript-eslint': typescriptEslint,
+    },
+    ignores: ['src/generated/**'],
+    languageOptions: {
+      parser: tsParser,
+    },
 
-		rules: {
-			'no-empty-function': 'off',
-			'@typescript-eslint/ban-types': 'off',
-			'@typescript-eslint/no-unused-vars': 'warn',
-			'@typescript-eslint/explicit-function-return-type': 'off',
-			'prettier/prettier': [
-				'error',
-				{
-					singleQuote: true,
-					useTabs: true,
-					semi: true,
-					trailingComma: 'all',
-					bracketSpacing: true,
-					printWidth: 100,
-					endOfLine: 'auto',
-				},
-			],
-		},
-	},
+    rules: {
+      'no-empty-function': 'off',
+      '@typescript-eslint/ban-types': 'off',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: true,
+          useTabs: true,
+          semi: true,
+          trailingComma: 'all',
+          bracketSpacing: true,
+          printWidth: 100,
+          endOfLine: 'off',
+        },
+      ],
+    },
+  },
 ]);
