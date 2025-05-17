@@ -2,8 +2,9 @@ import { HttpError } from '@/errors/http-error';
 import { LoggerService } from '@/logger/logger.service';
 import { NextFunction, Router, Request, Response } from 'express';
 import { AuthService } from './auth.service';
-import { RegisterSchema } from './auth-scheme/auth-scheme';
+import { LoginSchema, RegisterSchema } from './auth-scheme/auth-scheme';
 import { RegisterDTO } from './dto/register.dto';
+import { LoginDTO } from './dto/login.dto';
 import { ZodError } from 'zod';
 import { CustomZodError } from '@/errors/zod-error';
 
@@ -18,10 +19,24 @@ export class AuthController {
   }
 
   routes() {
-    this.router.post('/login', (req, res) => {
-      // const result = this.authService
-      res.send('login');
-    });
+    this.router.post(
+      '/login',
+      async ({ body }: Request<object, object, LoginDTO>, res, next: NextFunction) => {
+        try {
+          LoginSchema.parse(body);
+          const result = await this.authService.loginUser(body);
+          if (!result) {
+            next(new HttpError(401, 'Wrong credentials'));
+          }
+
+          res.sendStatus(201);
+        } catch (error) {
+          if (error instanceof ZodError) {
+            next(new CustomZodError(400, error.issues));
+          }
+        }
+      },
+    );
 
     this.router.post(
       '/register',
@@ -33,7 +48,7 @@ export class AuthController {
           if (!result) {
             next(new HttpError(422, 'User already exists'));
           } else {
-            res.send(result);
+            res.status(201).end();
           }
         } catch (error) {
           if (error instanceof ZodError) {

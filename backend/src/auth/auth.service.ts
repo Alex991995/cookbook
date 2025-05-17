@@ -1,7 +1,10 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
+import * as jose from 'jose';
 
 import { PrismaService } from '@/database/prisma.service';
 import { RegisterDTO } from './dto/register.dto';
+import { jwtConstants, SALT } from '@/common/constants';
+import { LoginDTO } from './dto/login.dto';
 
 export class AuthService {
   constructor(private prismaService: PrismaService) {}
@@ -14,7 +17,7 @@ export class AuthService {
       return null;
     }
 
-    const hashPassword = await bcrypt.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, SALT);
 
     return await this.prismaService.client.user.create({
       data: {
@@ -24,11 +27,49 @@ export class AuthService {
     });
   }
 
+  async loginUser({ email, password }: LoginDTO) {
+    const existedUser = await this.isExistedUser(email);
+    if (!existedUser) {
+      return null;
+    }
+    const isMatchedPassword = await bcrypt.compare(password, existedUser?.password);
+
+    if (existedUser?.email === email && isMatchedPassword) {
+      const rs = await this.signJWT(email);
+      // console.log('jwt',rs);
+      const payload = await this.decodeJWT(rs);
+      console.log(payload);
+      return true;
+    }
+
+    // return null;
+  }
+
   async isExistedUser(email: string) {
     return await this.prismaService.client.user.findUnique({
       where: {
         email,
       },
     });
+  }
+
+  async signJWT(email: string) {
+    const payload: jose.JWTPayload = {};
+
+    payload['email'] = email;
+
+    const secret = new TextEncoder().encode(jwtConstants.secret);
+
+    return await new jose.SignJWT(payload)
+      .setProtectedHeader({ alg: jwtConstants.alg })
+      .setIssuedAt()
+      .setExpirationTime('5d')
+      .sign(secret);
+  }
+
+  async decodeJWT(jwt: string) {
+    const secret = new TextEncoder().encode(jwtConstants.secret);
+    const { payload } = await jose.jwtVerify(jwt, secret);
+    return payload;
   }
 }

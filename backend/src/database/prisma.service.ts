@@ -14,7 +14,7 @@ export class PrismaService {
 			this.logger.log('Database is connected');
 		} catch (error) {
 			if (error instanceof Error) {
-				this.logger.error('Database is connected' + error.message);
+				this.logger.error('Database is crushed' + error.message);
 			}
 		}
 	}
