@@ -11,10 +11,7 @@ import { CustomZodError } from '@/errors/zod-error';
 export class AuthController {
   router: Router;
 
-  constructor(
-    private logger: LoggerService,
-    private authService: AuthService,
-  ) {
+  constructor(private authService: AuthService) {
     this.router = Router();
   }
 
@@ -26,13 +23,17 @@ export class AuthController {
           LoginSchema.parse(body);
           const result = await this.authService.loginUser(body);
           if (!result) {
-            next(new HttpError(401, 'Wrong credentials'));
+            return next(new HttpError(401, 'Wrong credentials'));
           }
-
-          res.sendStatus(201);
+          console.log('jwt', result.jwt);
+          res
+            .cookie('access_token', result.jwt, {
+              httpOnly: true,
+            })
+            .end();
         } catch (error) {
           if (error instanceof ZodError) {
-            next(new CustomZodError(400, error.issues));
+            return next(new CustomZodError(400, error.issues));
           }
         }
       },

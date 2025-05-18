@@ -35,14 +35,10 @@ export class AuthService {
     const isMatchedPassword = await bcrypt.compare(password, existedUser?.password);
 
     if (existedUser?.email === email && isMatchedPassword) {
-      const rs = await this.signJWT(email);
-      // console.log('jwt',rs);
-      const payload = await this.decodeJWT(rs);
-      console.log(payload);
-      return true;
-    }
+      const token = await this.signJWT(email);
 
-    // return null;
+      return { jwt: token };
+    }
   }
 
   async isExistedUser(email: string) {
