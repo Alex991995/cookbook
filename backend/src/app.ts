@@ -11,6 +11,7 @@ import { ExceptionFilter } from './errors/exception.filter';
 import { AuthController } from './auth/auth.controller';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { GuardMiddleware } from './middleware/guard.middleware';
+import { RecipeController } from './recipe/recipe.controller';
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ export class App {
   authController: AuthController;
   authMiddleware: AuthMiddleware;
   guardMiddleware: GuardMiddleware;
+  recipeController: RecipeController;
 
   constructor(
     logger: LoggerService,
@@ -34,6 +36,7 @@ export class App {
     authController: AuthController,
     authMiddleware: AuthMiddleware,
     guardMiddleware: GuardMiddleware,
+    recipeController: RecipeController,
   ) {
     this.app = express();
     this.port = 8000;
@@ -44,6 +47,7 @@ export class App {
     this.authController = authController;
     this.authMiddleware = authMiddleware;
     this.guardMiddleware = guardMiddleware;
+    this.recipeController = recipeController;
   }
 
   useMiddleware() {
@@ -56,10 +60,7 @@ export class App {
   useRoutes() {
     console.log('useRoutes');
     // this.app.use('/account', this.accountController.router());
-    this.app.use('/api/account', (req, res) => {
-      res.send('account');
-    });
-
+    this.app.use('/api/recipe', this.recipeController.routes());
     this.app.use('/api/auth', this.authController.routes());
   }
 

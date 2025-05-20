@@ -63,9 +63,4 @@ export class AuthService {
       .sign(secret);
   }
 
-  async decodeJWT(jwt: string) {
-    const secret = new TextEncoder().encode(jwtConstants.secret);
-    const { payload } = await jose.jwtVerify(jwt, secret);
-    return payload;
-  }
 }
