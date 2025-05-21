@@ -60,20 +60,6 @@ export class RecipeController {
     this.router.get('/all', async (req, res, next) => {
       const id = req.user.id;
 
-      // const base = Buffer.from('vdvd', 'base64');
-      // var bytes = new Uint8Array(world);
-
-      // const file = new File(['hello', ' ', 'world'], 'hello_world.txt', { type: 'text/plain' });
-      // file.arrayBuffer().then(arrayBuffer => {
-      //   const blob = new Blob([new Uint8Array(arrayBuffer)], { type: file.type });
-      //   console.log(blob);
-      // });
-
-      // let blob = new Blob(['world'], { type: 'image/png' });
-      // console.log(blob);
-      // const base = btoa('1')
-      // console.log(base.toString('base64'))
-
       const recipes = await this.recipeService.getAllRecipeByUserId(id);
 
       if (recipes) {

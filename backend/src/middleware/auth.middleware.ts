@@ -11,18 +11,21 @@ export class AuthMiddleware {
 
   async execute(req: Request, res: Response, next: NextFunction) {
     const [, , route] = req.originalUrl.trim().split('/');
-
+// console.log(route)
     if (route === 'auth') {
       return next();
     }
 
     const [type, token] = req.headers.authorization?.split(' ') ?? [];
+ 
     try {
+      console.log(token)
       const { email } = await this.decodeJWT(token);
-
+ 
       req.userEmail = email;
       return next();
     } catch (err) {
+
       return next(new HttpError(401, 'Invalid Token'));
     }
   }

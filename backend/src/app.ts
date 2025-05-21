@@ -13,8 +13,7 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { GuardMiddleware } from './middleware/guard.middleware';
 import { RecipeController } from './recipe/recipe.controller';
 import path from 'node:path';
-import { __dirname } from '../__dirname'
-
+import { __dirname } from '../__dirname';
 
 dotenv.config();
 
@@ -61,7 +60,18 @@ export class App {
         extended: true,
       }),
     );
-     this.app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+    //  this.app.use("/uploads", express.static(path.join("uploads")));
+    // const r = path.join(__dirname, 'uploads');
+    // console.log(r);
+    const uploadsPath = path.join(__dirname, '/uploads');
+    this.app.use(
+      '/uploads',
+      express.static(uploadsPath, {
+        setHeaders: (res, path) => {
+          res.set('Content-Type', 'image/png');
+        },
+      }),
+    );
 
     this.app.use(this.authMiddleware.execute.bind(this.authMiddleware));
     this.app.use(this.guardMiddleware.execute.bind(this.guardMiddleware));

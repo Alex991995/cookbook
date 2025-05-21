@@ -11,7 +11,7 @@ export class GuardMiddleware {
 
   async execute(req: Request, res: Response, next: NextFunction) {
     const [, , route] = req.originalUrl.trim().split('/');
-
+// console.log(route)
     if (route === 'auth') {
       return next();
     }
