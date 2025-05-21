@@ -49,11 +49,13 @@ export class RecipeService {
 
   async deleteById(id: string) {
     try {
-      await this.prismaService.client.recipe.delete({
-        where: {
-          id,
-        },
-      });
+      // await this.prismaService.client.recipe.delete({
+      //   where: {
+      //     id,
+      //   },
+      // });
+
+       await this.prismaService.client.recipe.deleteMany();
 
       return true;
     } catch (err) {

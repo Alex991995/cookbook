@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-const token ='eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVyZUBnbWFpbC5jb20iLCJpYXQiOjE3NDc2NTYzNjQsImV4cCI6MTc0ODA4ODM2NH0.iKvWvYv_HXUb1e8YGcC8vn-T-T3Cdpyjp7R8rlt4I8o';
+const token =
+  'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVyZUBnbWFpbC5jb20iLCJpYXQiOjE3NDc2NTYzNjQsImV4cCI6MTc0ODA4ODM2NH0.iKvWvYv_HXUb1e8YGcC8vn-T-T3Cdpyjp7R8rlt4I8o';
 export interface RecipeDto {
   title: string;
   description: string | null;
@@ -12,15 +13,18 @@ export interface RecipeDto {
 }
 
 function App() {
-  const [file, setFile] = useState<RecipeDto[]>();
+  const [file, setFile] = useState<File | null>(null);
 
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (e.target.files) {
-  //     setFile(e.target.files[0]);
-  //   }
-  // };
+  const [data, setData] = useState<RecipeDto[]>();
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFile(e.target.files[0]);
+    }
+  };
 
   async function f(): Promise<RecipeDto[]> {
+    console.log('звапрс');
     const result = await fetch('/api/recipe/all', {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
@@ -31,74 +35,76 @@ function App() {
   }
 
   useEffect(() => {
-    f().then(data => {
-      console.log(data);
+    f().then(d => {
+      console.log(d);
 
-      setFile(data);
+      setData(d);
     });
   }, []);
 
-  // const handleUpload = async () => {
-  //   if (file) {
-  //     const body = {
-  //       title: '3у3к3к',
-  //       description: null,
-  //       ingredients: ['cds', 'cdsvdfsv'],
-  //       direction: ['cds', 'cdsvdfsv'],
-  // views: 1,
-  //       estimated_time: 2,
-  //     };
+  const handleUpload = async () => {
+    if (file) {
+      const body = {
+        title: '3у3к3к',
+        description: null,
+        ingredients: ['cds', 'cdsvdfsv'],
+        direction: ['cds', 'cdsvdfsv'],
+        views: 1,
+        estimated_time: 2,
+      };
 
-  //     const formData = new FormData();
-  //     formData.append('file', file);
-  //     formData.append('data', JSON.stringify(body));
+      const formData = new FormData();
+      for (const key in body) {
+        if (Object.prototype.hasOwnProperty.call(body, key)) {
 
-  //     try {
-  //       const result = await fetch('/api/recipe/', {
-  //         headers: new Headers({
-  //           Authorization: `Bearer ${token}`,
-  //         }),
-  //         method: 'POST',
-  //         body: formData,
-  //       });
+          formData.append(key, JSON.stringify(body[key]));
+        }
+      }
+      formData.append('file', file);
+      // formData.append('data', JSON.stringify(body));
 
-  //       const data = await result.json();
+      try {
+        const result = await fetch('/api/recipe/', {
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+          method: 'POST',
+          body: formData,
+        });
 
-  //       console.log(data);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   }
-  // };
+        const data = await result.json();
+
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
 
   return (
-    <div>
-      {file?.map(item => (
+    <>
+      <div className="input-group">
+        <input id="file" type="file" onChange={handleFileChange} />
+      </div>
+      {file && (
+        <section>
+          File details:
+          <ul>
+            <li>Name: {file.name}</li>
+            <li>Type: {file.type}</li>
+            <li>Size: {file.size} bytes</li>
+          </ul>
+        </section>
+      )}
 
-        <img src={item.image} alt="fdsefedfgerg" />
-      ))}
-    </div>
-    // <>
-    //   <div className="input-group">
-    //     <input id="file" type="file" onChange={handleFileChange} />
-    //   </div>
-    //   {file && (
-    //     <section>
-    //       File details:
-    //       <ul>
-    //         <li>Name: {file.name}</li>
-    //         <li>Type: {file.type}</li>
-    //         <li>Size: {file.size} bytes</li>
-    //       </ul>
-    //     </section>
-    //   )}
+      {file && (
+        <button onClick={handleUpload} className="submit">
+          Upload a file
+        </button>
+      )}
 
-    //   {file && (
-    //     <button onClick={handleUpload} className="submit">
-    //       Upload a file
-    //     </button>
-    //   )}
-    // </>
+      <div>{data?.length && data?.map(item => <img src={item.image} alt="fdsefedfgerg" />)}</div>
+    </>
   );
 }
 

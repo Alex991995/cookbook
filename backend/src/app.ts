@@ -14,6 +14,7 @@ import { GuardMiddleware } from './middleware/guard.middleware';
 import { RecipeController } from './recipe/recipe.controller';
 import path from 'node:path';
 import { __dirname } from '../__dirname';
+import cors from 'cors';
 
 dotenv.config();
 
@@ -54,6 +55,8 @@ export class App {
 
   useMiddleware() {
     console.log('Middleware');
+    // this.app.use(cors())
+
     this.app.use(body.json());
     this.app.use(
       body.urlencoded({
