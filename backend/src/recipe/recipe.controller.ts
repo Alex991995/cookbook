@@ -5,6 +5,13 @@ import { RecipeScheme, UpdateRecipeScheme } from './recipe-scheme/recipe-scheme'
 import { ZodError } from 'zod';
 import { CustomZodError } from '@/errors/zod-error';
 import { HttpError } from '@/errors/http-error';
+import multer from 'multer';
+import { storage } from '@/common/storage-multer';
+import { DataFormDataRecipe } from '@/types';
+
+const upload = multer({ storage });
+
+
 
 export class RecipeController {
   router: Router;
@@ -13,29 +20,59 @@ export class RecipeController {
   }
 
   routes() {
-    this.router.post('/', async (req: Request<object, object, RecipeDto>, res, next) => {
-      const recipe = req.body;
-      const id = req.user.id;
-
-      try {
-        RecipeScheme.parse(recipe);
-
-        const result = await this.recipeService.createRecipe(id, recipe);
-        if (result) {
-          res.sendStatus(200);
-        } else {
-          console.error(result);
-          return next(new HttpError(400, 'Bad Request'));
+    this.router.post(
+      '/',
+      upload.single('file'),
+      async (
+        req: Request<object, object, DataFormDataRecipe>,
+        res: { sendStatus: (arg0: number) => void },
+        next: (arg0: HttpError | CustomZodError) => any,
+      ) => {
+        if (!req.file) {
+          return next(new HttpError(400, 'Image is required'));
         }
-      } catch (error) {
-        if (error instanceof ZodError) {
-          return next(new CustomZodError(400, error.issues));
+        const id = req.user.id;
+        const recipeStringify = req.body.data;
+
+        const fileName = req.file.filename;
+        const filePath = `/uploads/${fileName}`;
+
+        try {
+          const recipe = JSON.parse(recipeStringify) as RecipeDto;
+          recipe.image = filePath;
+          RecipeScheme.parse(recipe);
+
+          const result = await this.recipeService.createRecipe(id, recipe);
+          if (result) {
+            res.sendStatus(200);
+          } else {
+            console.error(result);
+            return next(new HttpError(400, 'Bad Request'));
+          }
+        } catch (error) {
+          if (error instanceof ZodError) {
+            return next(new CustomZodError(400, error.issues));
+          }
         }
-      }
-    });
+      },
+    );
 
     this.router.get('/all', async (req, res, next) => {
       const id = req.user.id;
+
+      // const base = Buffer.from('vdvd', 'base64');
+      // var bytes = new Uint8Array(world);
+
+      // const file = new File(['hello', ' ', 'world'], 'hello_world.txt', { type: 'text/plain' });
+      // file.arrayBuffer().then(arrayBuffer => {
+      //   const blob = new Blob([new Uint8Array(arrayBuffer)], { type: file.type });
+      //   console.log(blob);
+      // });
+
+      // let blob = new Blob(['world'], { type: 'image/png' });
+      // console.log(blob);
+      // const base = btoa('1')
+      // console.log(base.toString('base64'))
 
       const recipes = await this.recipeService.getAllRecipeByUserId(id);
 
@@ -57,17 +94,13 @@ export class RecipeController {
         try {
           UpdateRecipeScheme.parse(body);
           const result = await this.recipeService.updateRecipe(id, body);
-          
+
           if (result) {
             res.sendStatus(200);
-          } 
-          
-          else {
+          } else {
             next(new HttpError(404, 'Record to update not found'));
           }
-        } 
-        
-        catch (error) {
+        } catch (error) {
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));
           }

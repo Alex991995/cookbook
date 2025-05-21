@@ -8,7 +8,7 @@ export const RecipeScheme = z
     direction: z.string().array(),
     views: z.number(),
     estimated_time: z.number(),
-    image: z.string(),
+    // image: z.instanceof(File),
   })
   .required();
 

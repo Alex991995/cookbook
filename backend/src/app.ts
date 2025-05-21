@@ -12,6 +12,9 @@ import { AuthController } from './auth/auth.controller';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { GuardMiddleware } from './middleware/guard.middleware';
 import { RecipeController } from './recipe/recipe.controller';
+import path from 'node:path';
+import { __dirname } from '../__dirname'
+
 
 dotenv.config();
 
@@ -53,6 +56,13 @@ export class App {
   useMiddleware() {
     console.log('Middleware');
     this.app.use(body.json());
+    this.app.use(
+      body.urlencoded({
+        extended: true,
+      }),
+    );
+     this.app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
     this.app.use(this.authMiddleware.execute.bind(this.authMiddleware));
     this.app.use(this.guardMiddleware.execute.bind(this.guardMiddleware));
   }
