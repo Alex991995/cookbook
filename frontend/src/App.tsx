@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const token =
-  'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImVyZUBnbWFpbC5jb20iLCJpYXQiOjE3NDc2NTYzNjQsImV4cCI6MTc0ODA4ODM2NH0.iKvWvYv_HXUb1e8YGcC8vn-T-T3Cdpyjp7R8rlt4I8o';
+const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjFyZUBnbWFpbC5jb20iLCJpYXQiOjE3NDc5MTcwNDMsImV4cCI6MTc0ODM0OTA0M30.yaxTsEUsYEUNVN4HUtuKsHa5VD3imCjavMgfQ0e5PSA'
 export interface RecipeDto {
   title: string;
   description: string | null;
@@ -24,10 +23,10 @@ function App() {
   };
 
   async function f(): Promise<RecipeDto[]> {
-    console.log('звапрс');
+
     const result = await fetch('/api/recipe/all', {
       headers: new Headers({
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`, 
       }),
       method: 'GET',
     });
@@ -54,14 +53,8 @@ function App() {
       };
 
       const formData = new FormData();
-      for (const key in body) {
-        if (Object.prototype.hasOwnProperty.call(body, key)) {
-
-          formData.append(key, JSON.stringify(body[key]));
-        }
-      }
       formData.append('file', file);
-      // formData.append('data', JSON.stringify(body));
+      formData.append('data', JSON.stringify(body));
 
       try {
         const result = await fetch('/api/recipe/', {
@@ -103,7 +96,11 @@ function App() {
         </button>
       )}
 
-      <div>{data?.length && data?.map(item => <img src={item.image} alt="fdsefedfgerg" />)}</div>
+      <div>
+        {data?.length && data?.map(item => (
+          <img src={item.image} alt="fdsefedfgerg" />
+        ))}
+      </div>
     </>
   );
 }

@@ -1,4 +1,4 @@
-import { Router, Request } from 'express';
+import { Router, Request, Response, NextFunction } from 'express';
 import { RecipeService } from './recipe.service';
 import { RecipeDto, UpdateRecipeDto } from './dto/recipe.dto';
 import { RecipeScheme, UpdateRecipeScheme } from './recipe-scheme/recipe-scheme';
@@ -7,27 +7,21 @@ import { CustomZodError } from '@/errors/zod-error';
 import { HttpError } from '@/errors/http-error';
 import multer from 'multer';
 import { storage } from '@/common/storage-multer';
-import { DataFormDataRecipe } from '@/types';
-
-const upload = multer({ storage });
-
-
 
 export class RecipeController {
   router: Router;
+  upload: multer.Multer;
+
   constructor(private recipeService: RecipeService) {
     this.router = Router();
+    this.upload = multer({ storage });
   }
 
   routes() {
     this.router.post(
       '/',
-      upload.single('file'),
-      async (
-        req: Request<object, object, DataFormDataRecipe>,
-        res: { sendStatus: (arg0: number) => void },
-        next: (arg0: HttpError | CustomZodError) => any,
-      ) => {
+      this.upload.single('file'),
+      async (req: Request<object, object, { data: string }>, res: Response, next: NextFunction) => {
         if (!req.file) {
           return next(new HttpError(400, 'Image is required'));
         }
@@ -35,7 +29,7 @@ export class RecipeController {
         const recipeStringify = req.body.data;
 
         const fileName = req.file.filename;
-        const filePath = `/uploads/${fileName}`;
+        const filePath = `/uploads/recipes/${fileName}`;
 
         try {
           const recipe = JSON.parse(recipeStringify) as RecipeDto;
@@ -43,8 +37,9 @@ export class RecipeController {
           RecipeScheme.parse(recipe);
 
           const result = await this.recipeService.createRecipe(id, recipe);
+
           if (result) {
-            res.sendStatus(200);
+            res.send({ result });
           } else {
             console.error(result);
             return next(new HttpError(400, 'Bad Request'));
@@ -82,7 +77,7 @@ export class RecipeController {
           const result = await this.recipeService.updateRecipe(id, body);
 
           if (result) {
-            res.sendStatus(200);
+            res.status(204).send()
           } else {
             next(new HttpError(404, 'Record to update not found'));
           }
@@ -98,7 +93,7 @@ export class RecipeController {
       const id = req.params.id;
       const result = await this.recipeService.deleteById(id);
       if (result) {
-        res.sendStatus(204);
+        res.status(204).send()
       } else {
         next(new HttpError(404, 'Record to delete does not exist.'));
       }

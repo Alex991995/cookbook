@@ -4,7 +4,7 @@ import fs from 'fs';
 
 export const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    const path = 'uploads/';
+    const path = 'uploads/recipes';
     fs.mkdirSync(path, { recursive: true });
     cb(null, path);
   },

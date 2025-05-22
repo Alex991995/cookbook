@@ -24,7 +24,7 @@ async function bootstrap() {
 
   const exceptionFilter = new ExceptionFilter(logger);
   const authMiddleware = new AuthMiddleware(logger);
-  const guardMiddleware = new GuardMiddleware(logger, prismaService);
+  const guardMiddleware = new GuardMiddleware(prismaService);
 
   const app = new App(
     logger,

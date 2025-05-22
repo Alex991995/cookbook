@@ -1,13 +1,9 @@
 import { PrismaService } from '@/database/prisma.service';
 import { HttpError } from '@/errors/http-error';
-import { LoggerService } from '@/logger/logger.service';
 import { Request, Response, NextFunction } from 'express';
 
 export class GuardMiddleware {
-  constructor(
-    private logger: LoggerService,
-    private prismaService: PrismaService,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
   async execute(req: Request, res: Response, next: NextFunction) {
     const [, , route] = req.originalUrl.trim().split('/');
@@ -16,12 +12,12 @@ export class GuardMiddleware {
     }
 
     const user = await this.findUser(req.userEmail);
-    // console.log(user)
+
     if (user) {
       req.user = user;
       return next();
     }
-    next(new HttpError(401, "User is not registered"))
+    next(new HttpError(401, 'User is not registered'));
   }
 
   async findUser(email: string) {

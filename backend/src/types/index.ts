@@ -7,10 +7,6 @@ export interface IResultPayload extends jose.JWTPayload {
   exp: number;
 }
 
-export interface DataFormDataRecipe {
-  data: string;
-}
-
 declare global {
   namespace Express {
     interface Request {

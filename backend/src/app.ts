@@ -1,22 +1,19 @@
 import express, { Express } from 'express';
 import { Server } from 'node:http';
-import dotenv from 'dotenv';
 import body from 'body-parser';
 
-import { LoggerService } from './logger/logger.service';
-
-import { AccountController } from './account/account.controller';
-import { PrismaService } from './database/prisma.service';
-import { ExceptionFilter } from './errors/exception.filter';
-import { AuthController } from './auth/auth.controller';
 import { AuthMiddleware } from './middleware/auth.middleware';
 import { GuardMiddleware } from './middleware/guard.middleware';
-import { RecipeController } from './recipe/recipe.controller';
-import path from 'node:path';
-import { __dirname } from '../__dirname';
-import cors from 'cors';
 
-dotenv.config();
+import { LoggerService } from './logger/logger.service';
+import { PrismaService } from './database/prisma.service';
+import { ExceptionFilter } from './errors/exception.filter';
+
+import { AccountController } from './account/account.controller';
+import { AuthController } from './auth/auth.controller';
+import { RecipeController } from './recipe/recipe.controller';
+
+import { uploadsRecipesPath } from './common/constants';
 
 export class App {
   app: Express;
@@ -55,26 +52,14 @@ export class App {
 
   useMiddleware() {
     console.log('Middleware');
-    // this.app.use(cors())
-
     this.app.use(body.json());
     this.app.use(
       body.urlencoded({
         extended: true,
       }),
     );
-    //  this.app.use("/uploads", express.static(path.join("uploads")));
-    // const r = path.join(__dirname, 'uploads');
-    // console.log(r);
-    const uploadsPath = path.join(__dirname, '/uploads');
-    this.app.use(
-      '/uploads',
-      express.static(uploadsPath, {
-        setHeaders: (res, path) => {
-          res.set('Content-Type', 'image/png');
-        },
-      }),
-    );
+
+    this.app.use('/uploads/recipes', express.static(uploadsRecipesPath));
 
     this.app.use(this.authMiddleware.execute.bind(this.authMiddleware));
     this.app.use(this.guardMiddleware.execute.bind(this.guardMiddleware));
