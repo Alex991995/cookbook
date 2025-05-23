@@ -137,13 +137,10 @@ export class RecipeController {
 
     this.router.get('/comment/:id', async (req, res) => {
       const result = await this.commentRecipeService.getAllCommentsByRecipeId(req.params.id);
-      if (result) {
-        res.send(result);
-      } else {
-        res.status(200).send({
-          data: [],
-        });
-      }
+
+      res.send({
+        data: result,
+      });
     });
 
     return this.router;

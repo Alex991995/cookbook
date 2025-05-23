@@ -15,8 +15,8 @@ export class CommentRecipeService {
     }
   }
 
-  async getAllCommentsByRecipeId(recipe_id: string,) {
-    const result = await this.prismaService.client.commentRecipe.findMany({
+  async getAllCommentsByRecipeId(recipe_id: string) {
+    return await this.prismaService.client.commentRecipe.findMany({
       where: {
         recipe_id,
       },
@@ -34,10 +34,5 @@ export class CommentRecipeService {
         },
       },
     });
-
-    if(result.length){
-      return result
-    }
-    return false
   }
 }
