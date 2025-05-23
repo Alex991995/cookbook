@@ -12,8 +12,6 @@ export class AuthMiddleware {
   async execute(req: Request, res: Response, next: NextFunction) {
     const [, , route] = req.originalUrl.trim().split('/');
 
-    console.log(route);
-
     if (route === 'auth') {
       return next();
     }
@@ -25,6 +23,7 @@ export class AuthMiddleware {
       req.userEmail = email;
       return next();
     } catch (err) {
+      console.log(err);
       return next(new HttpError(401, 'Invalid Token'));
     }
   }
