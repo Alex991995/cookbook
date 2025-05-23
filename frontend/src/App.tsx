@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjFyZUBnbWFpbC5jb20iLCJpYXQiOjE3NDc5MTcwNDMsImV4cCI6MTc0ODM0OTA0M30.yaxTsEUsYEUNVN4HUtuKsHa5VD3imCjavMgfQ0e5PSA'
+
+const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjFyZUBnbWFpbC5jb20iLCJpYXQiOjE3NDc5MTY2ODIsImV4cCI6MTc0ODM0ODY4Mn0.p0Loy3GKk010udfWvjTXpc-yzeFftm3abkLLZ9-tem8'
 export interface RecipeDto {
   title: string;
   description: string | null;

@@ -8,7 +8,6 @@ export const RecipeScheme = z
     direction: z.string().array(),
     views: z.number(),
     estimated_time: z.number(),
-    // image: z.instanceof(File),
   })
   .required();
 
@@ -23,3 +22,10 @@ export const UpdateRecipeScheme = z
     image: z.string(),
   })
   .partial();
+
+export const CommentRecipeScheme = z
+  .object({
+    description: z.string(),
+    recipe_id: z.string()
+  })
+  .required();

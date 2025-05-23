@@ -9,17 +9,13 @@ export class ExceptionFilter {
     if (err instanceof HttpError) {
       this.logger.error(err.message);
       res.status(err.statusCode).send(err.message);
-    } 
-		
-		else if (err instanceof CustomZodError) {
+    } else if (err instanceof CustomZodError) {
       const errorSummary = err.issues
         .map(issue => `[${issue.code}] ${issue.path.join('.')}: ${issue.message}`)
         .join('; ');
       this.logger.error(errorSummary);
       res.status(err.statusCode).send(errorSummary);
-    } 
-		
-		else {
+    } else {
       this.logger.error(err.message);
       res.status(500).send(err.message);
     }

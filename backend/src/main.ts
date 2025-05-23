@@ -9,6 +9,7 @@ import { AuthMiddleware } from './middleware/auth.middleware';
 import { GuardMiddleware } from './middleware/guard.middleware';
 import { RecipeController } from './recipe/recipe.controller';
 import { RecipeService } from './recipe/recipe.service';
+import { CommentRecipeService } from './recipe/comment-recipe/comment-recipe.service';
 
 async function bootstrap() {
   const logger = new LoggerService();
@@ -20,7 +21,8 @@ async function bootstrap() {
   const authController = new AuthController(authService);
 
   const recipeService = new RecipeService(prismaService);
-  const recipeController = new RecipeController(recipeService);
+  const commentRecipeService = new CommentRecipeService(prismaService);
+  const recipeController = new RecipeController(recipeService, commentRecipeService);
 
   const exceptionFilter = new ExceptionFilter(logger);
   const authMiddleware = new AuthMiddleware(logger);
