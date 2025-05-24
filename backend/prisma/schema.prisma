@@ -49,9 +49,10 @@ model Recipe {
 }
 
 model Recipe_Likes {
-  id        String @id @default(uuid())
-  recipe_id String
-  user_id   String
+  id           String @id @default(uuid())
+  number_likes Int    @default(0)
+  recipe_id    String
+  user_id      String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -97,9 +98,10 @@ model Cookbook {
 }
 
 model Cookbook_Likes {
-  id          String @id @default(uuid())
-  cookbook_id String
-  user_id     String
+  id           String @id @default(uuid())
+  number_likes Int    @default(0)
+  cookbook_id  String
+  user_id      String
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

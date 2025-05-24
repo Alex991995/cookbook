@@ -51,7 +51,6 @@ export class App {
   }
 
   useMiddleware() {
-    console.log('Middleware');
     this.app.use(body.json());
     this.app.use(
       body.urlencoded({
@@ -66,7 +65,6 @@ export class App {
   }
 
   useRoutes() {
-    console.log('useRoutes');
     // this.app.use('/account', this.accountController.router());
     this.app.use('/api/recipe', this.recipeController.routes());
     this.app.use('/api/auth', this.authController.routes());
@@ -77,7 +75,6 @@ export class App {
   }
 
   public async init() {
-    console.log('init');
     this.useMiddleware();
     this.useRoutes();
     this.useExceptionFilters();
