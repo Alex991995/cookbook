@@ -5,7 +5,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const SALT = process.env.SALT ? +process.env.SALT : 10;
-export const uploadsRecipesPath = path.join(__dirname, '/uploads/recipes');
+
+export const uploadsRecipePath = '/uploads/recipe'
+export const uploadsCookbookPath = '/uploads/cookbook'
+
+export const uploadsRecipesRootPath = path.join(__dirname, uploadsRecipePath);
+export const uploadsCookbookRootPath = path.join(__dirname, uploadsRecipePath);
+
+
+
 
 export const jwtConstants = {
   secret: process.env.JWT_SECRET || 'mySecret',

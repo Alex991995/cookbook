@@ -54,11 +54,30 @@ export class RecipeService {
 
   async deleteById(id: string) {
     try {
+      const recipe = await this.prismaService.client.recipe.findUnique({
+        where: { id },
+        select: {
+          likes: true,
+        },
+      });
+      const likeId = recipe?.likes[0].id;
+
+      if (likeId) {
+        await this.prismaService.client.recipe_Likes.deleteMany({
+          where: {
+            id: likeId,
+          },
+        });
+      }
+
       await this.prismaService.client.recipe.delete({
         where: {
           id,
         },
       });
+
+      // await this.prismaService.client.recipe.deleteMany();
+      // await this.prismaService.client.recipe_Likes.deleteMany();
 
       return true;
     } catch (err) {

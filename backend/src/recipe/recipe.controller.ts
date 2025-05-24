@@ -14,6 +14,7 @@ import multer from 'multer';
 import { storage } from '@/common/storage-multer';
 import { CommentRecipeService } from './comment-recipe/comment-recipe.service';
 import { LikeRecipeService } from './like-recipe/like-recipe.service';
+import { uploadsRecipePath } from '@/common/constants';
 
 export class RecipeController {
   router: Router;
@@ -40,7 +41,7 @@ export class RecipeController {
         const recipeStringify = req.body.data;
 
         const fileName = req.file.filename;
-        const filePath = `/uploads/recipes/${fileName}`;
+        const filePath = `${uploadsRecipePath}/${fileName}`;
 
         try {
           const recipe = JSON.parse(recipeStringify) as RecipeDto;
@@ -67,6 +68,7 @@ export class RecipeController {
     this.router.get('/all', async (req, res, next) => {
       const id = req.user.id;
 
+     
       const recipes = await this.recipeService.getAllRecipeByUserId(id);
 
       res.send({
@@ -85,7 +87,6 @@ export class RecipeController {
           res.send({
             data: recipes,
           });
-          
         } catch (error) {
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));

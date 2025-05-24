@@ -40,12 +40,29 @@ model Recipe {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user     User            @relation(fields: [user_id], references: [id])
-  comment  CommentRecipe[]
-  cookbook Cookbook[]
-  likes    Recipe_Likes[]
+  user    User            @relation(fields: [user_id], references: [id])
+  comment CommentRecipe[]
+  likes   Recipe_Likes[]
 
   @@map("recipe")
+}
+
+model Cookbook {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  image       String
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  user_id   String
+  recipe_id String[]
+
+  user            User              @relation(fields: [user_id], references: [id])
+  commentCookbook CommentCookbook[]
+  Cookbook_Likes  Cookbook_Likes[]
+
+  @@map("cookbook")
 }
 
 model Recipe_Likes {
@@ -77,25 +94,24 @@ model CommentRecipe {
   @@map("comment_recipe")
 }
 
-model Cookbook {
-  id          String   @id @default(uuid())
-  title       String
-  description String?
-  likes       Int      @default(0)
-  image       String
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+// model Cookbook {
+//   id          String   @id @default(uuid())
+//   title       String
+//   description String?
+//   image       String
+//   createdAt   DateTime @default(now()) @map("created_at")
+//   updatedAt   DateTime @updatedAt @map("updated_at")
 
-  user_id   String
-  recipe_id String
+//   user_id   String
+//   recipe_id String[]
 
-  user            User              @relation(fields: [user_id], references: [id])
-  recipe          Recipe            @relation(fields: [recipe_id], references: [id])
-  commentCookbook CommentCookbook[]
-  Cookbook_Likes  Cookbook_Likes[]
+//   user            User              @relation(fields: [user_id], references: [id])
+//   recipe          Recipe            @relation(fields: [recipe_id], references: [id])
+//   commentCookbook CommentCookbook[]
+//   Cookbook_Likes  Cookbook_Likes[]
 
-  @@map("cookbook")
-}
+//   @@map("cookbook")
+// }
 
 model Cookbook_Likes {
   id           String @id @default(uuid())

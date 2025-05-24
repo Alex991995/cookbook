@@ -11,6 +11,8 @@ import { RecipeController } from './recipe/recipe.controller';
 import { RecipeService } from './recipe/recipe.service';
 import { CommentRecipeService } from './recipe/comment-recipe/comment-recipe.service';
 import { LikeRecipeService } from './recipe/like-recipe/like-recipe.service';
+import { CookbookController } from './cookbook/cookbook.controller';
+import { CookbookService } from './cookbook/cookbook.service';
 
 async function bootstrap() {
   const logger = new LoggerService();
@@ -30,6 +32,9 @@ async function bootstrap() {
     likeRecipeService,
   );
 
+  const cookbookService = new CookbookService(prismaService)
+  const cookbookController = new CookbookController(cookbookService)
+
   const exceptionFilter = new ExceptionFilter(logger);
   const authMiddleware = new AuthMiddleware(logger);
   const guardMiddleware = new GuardMiddleware(prismaService);
@@ -43,6 +48,7 @@ async function bootstrap() {
     authMiddleware,
     guardMiddleware,
     recipeController,
+    cookbookController
   );
   await app.init();
 }

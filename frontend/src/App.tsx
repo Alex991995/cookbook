@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
 
+const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InJlQGdtYWlsLmNvbSIsImlhdCI6MTc0ODExNjIyMiwiZXhwIjoxNzQ4NTQ4MjIyfQ.9mjDaOy3dREgOrVb9NjTd3tZ28kAXQPIRKVWFH7PWSs';
 
-const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6IjFyZUBnbWFpbC5jb20iLCJpYXQiOjE3NDc5MTY2ODIsImV4cCI6MTc0ODM0ODY4Mn0.p0Loy3GKk010udfWvjTXpc-yzeFftm3abkLLZ9-tem8'
+export interface RecipeDtoArray {
+  data: RecipeDto[] | []
+}
 export interface RecipeDto {
   title: string;
   description: string | null;
@@ -15,7 +18,7 @@ export interface RecipeDto {
 function App() {
   const [file, setFile] = useState<File | null>(null);
 
-  const [data, setData] = useState<RecipeDto[]>();
+  const [result, setResult] = useState<RecipeDtoArray>();
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -23,11 +26,10 @@ function App() {
     }
   };
 
-  async function f(): Promise<RecipeDto[]> {
-
+  async function f(): Promise<RecipeDtoArray> {
     const result = await fetch('/api/recipe/all', {
       headers: new Headers({
-        Authorization: `Bearer ${token}`, 
+        Authorization: `Bearer ${token}`,
       }),
       method: 'GET',
     });
@@ -38,14 +40,14 @@ function App() {
     f().then(d => {
       console.log(d);
 
-      setData(d);
+      setResult(d);
     });
   }, []);
 
   const handleUpload = async () => {
     if (file) {
       const body = {
-        title: '3у3к3к',
+        title: 'milkshaik',
         description: null,
         ingredients: ['cds', 'cdsvdfsv'],
         direction: ['cds', 'cdsvdfsv'],
@@ -97,11 +99,7 @@ function App() {
         </button>
       )}
 
-      <div>
-        {data?.length && data?.map(item => (
-          <img src={item.image} alt="fdsefedfgerg" />
-        ))}
-      </div>
+      <div>{result?.data.length && result.data.map(item => <img src={item.image} alt="fdsefedfgerg" />)}</div>
     </>
   );
 }

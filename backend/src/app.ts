@@ -13,7 +13,8 @@ import { AccountController } from './account/account.controller';
 import { AuthController } from './auth/auth.controller';
 import { RecipeController } from './recipe/recipe.controller';
 
-import { uploadsRecipesPath } from './common/constants';
+import { uploadsCookbookPath, uploadsCookbookRootPath, uploadsRecipePath, uploadsRecipesRootPath } from './common/constants';
+import { CookbookController } from './cookbook/cookbook.controller';
 
 export class App {
   app: Express;
@@ -27,6 +28,7 @@ export class App {
   authMiddleware: AuthMiddleware;
   guardMiddleware: GuardMiddleware;
   recipeController: RecipeController;
+  cookbookController: CookbookController;
 
   constructor(
     logger: LoggerService,
@@ -37,6 +39,7 @@ export class App {
     authMiddleware: AuthMiddleware,
     guardMiddleware: GuardMiddleware,
     recipeController: RecipeController,
+    cookbookController: CookbookController,
   ) {
     this.app = express();
     this.port = 8000;
@@ -48,6 +51,7 @@ export class App {
     this.authMiddleware = authMiddleware;
     this.guardMiddleware = guardMiddleware;
     this.recipeController = recipeController;
+    this.cookbookController = cookbookController;
   }
 
   useMiddleware() {
@@ -58,7 +62,8 @@ export class App {
       }),
     );
 
-    this.app.use('/uploads/recipes', express.static(uploadsRecipesPath));
+    this.app.use(uploadsRecipePath, express.static(uploadsRecipesRootPath));
+    this.app.use(uploadsCookbookPath, express.static(uploadsCookbookRootPath));
 
     this.app.use(this.authMiddleware.execute.bind(this.authMiddleware));
     this.app.use(this.guardMiddleware.execute.bind(this.guardMiddleware));
@@ -68,6 +73,7 @@ export class App {
     // this.app.use('/account', this.accountController.router());
     this.app.use('/api/recipe', this.recipeController.routes());
     this.app.use('/api/auth', this.authController.routes());
+    this.app.use('/api/cookbook', this.cookbookController.routes());
   }
 
   useExceptionFilters() {

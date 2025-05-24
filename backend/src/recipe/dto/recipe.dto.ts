@@ -8,8 +8,4 @@ export interface RecipeDto {
   image: string;
 }
 
-
-
-
-
 export type UpdateRecipeDto = Partial<RecipeDto>;
