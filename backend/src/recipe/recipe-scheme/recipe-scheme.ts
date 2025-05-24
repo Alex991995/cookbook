@@ -26,6 +26,12 @@ export const UpdateRecipeScheme = z
 export const CommentRecipeScheme = z
   .object({
     description: z.string(),
-    recipe_id: z.string()
+    recipe_id: z.string(),
+  })
+  .required();
+
+export const LikeRecipeScheme = z
+  .object({
+    title: z.string(),
   })
   .required();

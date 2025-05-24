@@ -3,6 +3,7 @@ import { RecipeService } from './recipe.service';
 import { RecipeDto, UpdateRecipeDto } from './dto/recipe.dto';
 import {
   CommentRecipeScheme,
+  LikeRecipeScheme,
   RecipeScheme,
   UpdateRecipeScheme,
 } from './recipe-scheme/recipe-scheme';
@@ -12,6 +13,7 @@ import { HttpError } from '@/errors/http-error';
 import multer from 'multer';
 import { storage } from '@/common/storage-multer';
 import { CommentRecipeService } from './comment-recipe/comment-recipe.service';
+import { LikeRecipeService } from './like-recipe/like-recipe.service';
 
 export class RecipeController {
   router: Router;
@@ -20,6 +22,7 @@ export class RecipeController {
   constructor(
     private recipeService: RecipeService,
     private commentRecipeService: CommentRecipeService,
+    private likeRecipeService: LikeRecipeService,
   ) {
     this.router = Router();
     this.upload = multer({ storage });
@@ -47,6 +50,7 @@ export class RecipeController {
           const result = await this.recipeService.createRecipe(id, recipe);
 
           if (result) {
+            await this.likeRecipeService.createLike(result.id, id);
             res.send({ result });
           } else {
             console.error(result);
@@ -65,14 +69,30 @@ export class RecipeController {
 
       const recipes = await this.recipeService.getAllRecipeByUserId(id);
 
-      if (recipes) {
-        res.send(recipes);
-      } else {
-        res.status(200).send({
-          data: [],
-        });
-      }
+      res.send({
+        data: recipes,
+      });
     });
+
+    this.router.get(
+      '/',
+      async (req: Request<object, object, object, { title: string }>, res, next) => {
+        try {
+          LikeRecipeScheme.parse(req.query);
+          const title = req.query.title;
+          const recipes = await this.recipeService.getRecipeByTitle(title);
+
+          res.send({
+            data: recipes,
+          });
+          
+        } catch (error) {
+          if (error instanceof ZodError) {
+            return next(new CustomZodError(400, error.issues));
+          }
+        }
+      },
+    );
 
     this.router.put(
       '/:id',
@@ -138,6 +158,15 @@ export class RecipeController {
     this.router.get('/comment/:id', async (req, res) => {
       const result = await this.commentRecipeService.getAllCommentsByRecipeId(req.params.id);
 
+      res.send({
+        data: result,
+      });
+    });
+
+    this.router.put('/like/:id', async (req, res) => {
+      const id = req.params.id;
+
+      const result = await this.likeRecipeService.addLike(id);
       res.send({
         data: result,
       });
