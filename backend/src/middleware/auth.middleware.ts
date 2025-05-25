@@ -11,7 +11,7 @@ export class AuthMiddleware {
 
   async execute(req: Request, res: Response, next: NextFunction) {
     const [, , route] = req.originalUrl.trim().split('/');
-
+console.log(req.originalUrl)
     if (route === 'auth') {
       return next();
     }

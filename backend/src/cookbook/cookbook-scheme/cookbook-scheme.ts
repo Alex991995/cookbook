@@ -5,8 +5,13 @@ export const CookbookScheme = z
     title: z.string(),
     description: z.string().nullable(),
     image: z.string(),
-    user_id: z.string(),
-    recipe_id: z.string(),
+    recipesIDs: z.array(
+      z
+        .object({
+          id: z.string(),
+        })
+        .required(),
+    ),
   })
   .required();
 
@@ -15,8 +20,11 @@ export const UpdateCookbookScheme = z
     title: z.string(),
     description: z.string().nullable(),
     image: z.string(),
-    user_id: z.string(),
-    recipe_id: z.string(),
+    recipesIDs: z.array(
+      z.object({
+        id: z.string(),
+      }),
+    ),
   })
   .partial();
 

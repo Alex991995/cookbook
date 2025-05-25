@@ -68,7 +68,6 @@ export class RecipeController {
     this.router.get('/all', async (req, res, next) => {
       const id = req.user.id;
 
-     
       const recipes = await this.recipeService.getAllRecipeByUserId(id);
 
       res.send({

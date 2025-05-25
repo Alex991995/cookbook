@@ -1,24 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InJlQGdtYWlsLmNvbSIsImlhdCI6MTc0ODExNjIyMiwiZXhwIjoxNzQ4NTQ4MjIyfQ.9mjDaOy3dREgOrVb9NjTd3tZ28kAXQPIRKVWFH7PWSs';
+const token =
+  'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InJlQGdtYWlsLmNvbSIsImlhdCI6MTc0ODExNjIyMiwiZXhwIjoxNzQ4NTQ4MjIyfQ.9mjDaOy3dREgOrVb9NjTd3tZ28kAXQPIRKVWFH7PWSs';
 
-export interface RecipeDtoArray {
-  data: RecipeDto[] | []
-}
-export interface RecipeDto {
-  title: string;
-  description: string | null;
-  ingredients: string[];
-  direction: string[];
-  views: number;
-  estimated_time: number;
-  image: string;
-}
-
-function App() {
+function Cookbook() {
   const [file, setFile] = useState<File | null>(null);
 
-  const [result, setResult] = useState<RecipeDtoArray>();
+  const [result, setResult] = useState();
+
+  console.log(result)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -26,33 +16,14 @@ function App() {
     }
   };
 
-  async function f(): Promise<RecipeDtoArray> {
-    const result = await fetch('/api/recipe/all', {
-      headers: new Headers({
-        Authorization: `Bearer ${token}`,
-      }),
-      method: 'GET',
-    });
-    return result.json();
-  }
-
-  useEffect(() => {
-    f().then(d => {
-      console.log(d);
-
-      setResult(d);
-    });
-  }, []);
-
   const handleUpload = async () => {
     if (file) {
       const body = {
-        title: 'butterbread',
+        title: 'vffffffffffffffffff',
         description: null,
-        ingredients: ['cds', 'cdsvdfsv'],
-        direction: ['cds', 'cdsvdfsv'],
-        views: 1,
-        estimated_time: 2,
+        recipesIDs: [
+          { id: '831cd7ad-4a36-4f98-b411-595c3c581693' },
+        ],
       };
 
       const formData = new FormData();
@@ -60,11 +31,11 @@ function App() {
       formData.append('data', JSON.stringify(body));
 
       try {
-        const result = await fetch('/api/recipe/', {
+        const result = await fetch('/api/cookbook/fd7b18e5-9096-4faf-a5c7-016f4e0d41e', {
           headers: new Headers({
             Authorization: `Bearer ${token}`,
           }),
-          method: 'POST',
+          method: 'PUT',
           body: formData,
         });
 
@@ -76,6 +47,24 @@ function App() {
       }
     }
   };
+
+  async function f() {
+      const result = await fetch('/api/cookbook/all', {
+        headers: new Headers({
+          Authorization: `Bearer ${token}`,
+        }),
+        method: 'GET',
+      });
+      return result.json();
+    }
+
+    useEffect(() => {
+      f().then(d => {
+        console.log(d);
+
+        setResult(d);
+      });
+    }, []);
 
   return (
     <>
@@ -99,9 +88,9 @@ function App() {
         </button>
       )}
 
-      <div>{result?.data.length && result.data.map(item => <img src={item.image} alt="fdsefedfgerg" />)}</div>
+       {/* <div>{result?.data.length && result.data.map(item => <img src={item.image} alt="fdsefedfgerg" />)}</div> */}
     </>
   );
 }
 
-export default App;
+export default Cookbook;

@@ -10,7 +10,7 @@ export const uploadsRecipePath = '/uploads/recipe'
 export const uploadsCookbookPath = '/uploads/cookbook'
 
 export const uploadsRecipesRootPath = path.join(__dirname, uploadsRecipePath);
-export const uploadsCookbookRootPath = path.join(__dirname, uploadsRecipePath);
+export const uploadsCookbookRootPath = path.join(__dirname, uploadsCookbookPath);
 
 
 
