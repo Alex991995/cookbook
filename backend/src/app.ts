@@ -13,8 +13,14 @@ import { AccountController } from './account/account.controller';
 import { AuthController } from './auth/auth.controller';
 import { RecipeController } from './recipe/recipe.controller';
 
-import { uploadsCookbookPath, uploadsCookbookRootPath, uploadsRecipePath, uploadsRecipesRootPath } from './common/constants';
+import {
+  uploadsCookbookPath,
+  uploadsCookbookRootPath,
+  uploadsRecipePath,
+  uploadsRecipesRootPath,
+} from './common/constants';
 import { CookbookController } from './cookbook/cookbook.controller';
+import { CommentCookbookService } from './cookbook/comment-cookbook/comment-cookbook.service';
 
 export class App {
   app: Express;
@@ -29,6 +35,7 @@ export class App {
   guardMiddleware: GuardMiddleware;
   recipeController: RecipeController;
   cookbookController: CookbookController;
+  // commentCookbookService: CommentCookbookService;
 
   constructor(
     logger: LoggerService,
@@ -40,6 +47,7 @@ export class App {
     guardMiddleware: GuardMiddleware,
     recipeController: RecipeController,
     cookbookController: CookbookController,
+    // commentCookbookService: CommentCookbookService,
   ) {
     this.app = express();
     this.port = 8000;
@@ -52,6 +60,7 @@ export class App {
     this.guardMiddleware = guardMiddleware;
     this.recipeController = recipeController;
     this.cookbookController = cookbookController;
+    // this.commentCookbookService = commentCookbookService;
   }
 
   useMiddleware() {

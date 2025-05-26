@@ -40,10 +40,10 @@ model Recipe {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user       User            @relation(fields: [user_id], references: [id])
-  comment    CommentRecipe[]
-  likes      Recipe_Likes[]
-  cookbooks  Cookbook[]
+  user      User            @relation(fields: [user_id], references: [id])
+  comment   CommentRecipe[]
+  likes     Recipe_Likes[]
+  cookbooks Cookbook[]
 
   @@map("recipe")
 }
@@ -75,7 +75,7 @@ model Recipe_Likes {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  recipe Recipe @relation(fields: [recipe_id], references: [id])
+  recipe Recipe @relation(fields: [recipe_id], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [user_id], references: [id])
 
   @@map("recipe_likes")
@@ -104,7 +104,7 @@ model Cookbook_Likes {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  cookbook Cookbook @relation(fields: [cookbook_id], references: [id])
+  cookbook Cookbook @relation(fields: [cookbook_id], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [user_id], references: [id])
 
   @@map("cookbook_likes")

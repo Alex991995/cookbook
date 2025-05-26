@@ -3,8 +3,8 @@ import { RecipeService } from './recipe.service';
 import { RecipeDto, UpdateRecipeDto } from './dto/recipe.dto';
 import {
   CommentRecipeScheme,
-  LikeRecipeScheme,
   RecipeScheme,
+  RecipeTitleScheme,
   UpdateRecipeScheme,
 } from './recipe-scheme/recipe-scheme';
 import { ZodError } from 'zod';
@@ -13,7 +13,7 @@ import { HttpError } from '@/errors/http-error';
 import multer from 'multer';
 import { storage } from '@/common/storage-multer';
 import { CommentRecipeService } from './comment-recipe/comment-recipe.service';
-import { LikeRecipeService } from './like-recipe/like-recipe.service';
+
 import { uploadsRecipePath } from '@/common/constants';
 
 export class RecipeController {
@@ -23,7 +23,7 @@ export class RecipeController {
   constructor(
     private recipeService: RecipeService,
     private commentRecipeService: CommentRecipeService,
-    private likeRecipeService: LikeRecipeService,
+
   ) {
     this.router = Router();
     this.upload = multer({ storage });
@@ -51,7 +51,7 @@ export class RecipeController {
           const result = await this.recipeService.createRecipe(id, recipe);
 
           if (result) {
-            await this.likeRecipeService.createLike(result.id, id);
+            // await this.likeRecipeService.createLike(result.id, id);
             res.send({ result });
           } else {
             console.error(result);
@@ -79,7 +79,7 @@ export class RecipeController {
       '/',
       async (req: Request<object, object, object, { title: string }>, res, next) => {
         try {
-          LikeRecipeScheme.parse(req.query);
+          RecipeTitleScheme.parse(req.query);
           const title = req.query.title;
           const recipes = await this.recipeService.getRecipeByTitle(title);
 
@@ -163,13 +163,16 @@ export class RecipeController {
       });
     });
 
-    this.router.put('/like/:id', async (req, res) => {
+    this.router.put('/like/:id', async (req, res, next) => {
       const id = req.params.id;
 
-      const result = await this.likeRecipeService.addLike(id);
-      res.send({
-        data: result,
-      });
+      const result = await this.recipeService.addLike(id);
+      if (result) {
+        res.status(204).send();
+      } else {
+        next(new HttpError(404, 'Record to update does not exist.'));
+      }
+
     });
 
     return this.router;

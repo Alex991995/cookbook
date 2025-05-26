@@ -35,8 +35,3 @@ export const CommentCookbookScheme = z
   })
   .required();
 
-// export const CookbookLikesScheme = z
-//   .object({
-//     title: z.string(),
-//   })
-//   .required();

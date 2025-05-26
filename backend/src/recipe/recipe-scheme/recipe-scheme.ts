@@ -30,7 +30,7 @@ export const CommentRecipeScheme = z
   })
   .required();
 
-export const LikeRecipeScheme = z
+export const RecipeTitleScheme = z
   .object({
     title: z.string(),
   })

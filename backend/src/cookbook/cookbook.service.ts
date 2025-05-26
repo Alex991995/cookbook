@@ -8,7 +8,14 @@ export class CookbookService {
     const { recipesIDs, ...cookbook } = body;
 
     const result = await this.prismaService.client.cookbook.create({
-      data: { ...cookbook, user_id, recipes: { connect: recipesIDs } },
+      data: {
+        ...cookbook,
+        user_id,
+        recipes: { connect: recipesIDs },
+        Cookbook_Likes: {
+          create: { user_id },
+        },
+      },
     });
     return result;
   }
@@ -41,14 +48,40 @@ export class CookbookService {
       where: {
         user_id: id,
       },
+      include: {
+        Cookbook_Likes: true,
+      },
     });
   }
 
   async deleteCookbook(id: string) {
-    return await this.prismaService.client.cookbook.delete({
-      where: {
-        id,
-      },
-    });
+    try {
+      await this.prismaService.client.cookbook.delete({
+        where: {
+          id,
+        },
+      });
+
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  async addLike(id: string) {
+    try {
+      await this.prismaService.client.cookbook_Likes.update({
+        where: {
+          id,
+        },
+        data: { number_likes: { increment: 1 } },
+      });
+
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
   }
 }

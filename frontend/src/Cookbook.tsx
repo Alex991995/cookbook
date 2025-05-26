@@ -31,11 +31,11 @@ function Cookbook() {
       formData.append('data', JSON.stringify(body));
 
       try {
-        const result = await fetch('/api/cookbook/fd7b18e5-9096-4faf-a5c7-016f4e0d41e', {
+        const result = await fetch('/api/cookbook', {
           headers: new Headers({
             Authorization: `Bearer ${token}`,
           }),
-          method: 'PUT',
+          method: 'POST',
           body: formData,
         });
 
@@ -88,7 +88,7 @@ function Cookbook() {
         </button>
       )}
 
-       {/* <div>{result?.data.length && result.data.map(item => <img src={item.image} alt="fdsefedfgerg" />)}</div> */}
+       <div>{result?.data.length && result.data.map(item => <img src={item.image} alt="fdsefedfgerg" />)}</div>
     </>
   );
 }
