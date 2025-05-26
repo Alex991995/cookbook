@@ -14,12 +14,14 @@ import { CommentRecipeService } from './recipe/comment-recipe/comment-recipe.ser
 import { CookbookController } from './cookbook/cookbook.controller';
 import { CookbookService } from './cookbook/cookbook.service';
 import { CommentCookbookService } from './cookbook/comment-cookbook/comment-cookbook.service';
+import { AccountService } from './account/account.service';
 
 async function bootstrap() {
   const logger = new LoggerService();
   const prismaService = new PrismaService(logger);
 
-  const accountController = new AccountController(logger);
+  const accountService = new AccountService(prismaService);
+  const accountController = new AccountController(accountService);
 
   const authService = new AuthService(prismaService);
   const authController = new AuthController(authService);
@@ -32,7 +34,7 @@ async function bootstrap() {
   const cookbookService = new CookbookService(prismaService);
   const commentCookbookService = new CommentCookbookService(prismaService);
   const cookbookController = new CookbookController(cookbookService, commentCookbookService);
-  
+
   const exceptionFilter = new ExceptionFilter(logger);
   const authMiddleware = new AuthMiddleware(logger);
   const guardMiddleware = new GuardMiddleware(prismaService);

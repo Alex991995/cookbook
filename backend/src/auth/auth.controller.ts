@@ -25,13 +25,15 @@ export class AuthController {
           if (!result) {
             return next(new HttpError(401, 'Wrong credentials'));
           }
-          console.log('jwt', result.jwt);
+
           res
             .cookie('access_token', result.jwt, {
               httpOnly: true,
             })
             .end();
-        } catch (error) {
+        } 
+        
+        catch (error) {
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));
           }
