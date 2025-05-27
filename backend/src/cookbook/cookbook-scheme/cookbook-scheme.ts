@@ -1,0 +1,37 @@
+import { z } from 'zod';
+
+export const CookbookScheme = z
+  .object({
+    title: z.string(),
+    description: z.string().nullable(),
+    image: z.string(),
+    recipesIDs: z.array(
+      z
+        .object({
+          id: z.string(),
+        })
+        .required(),
+    ),
+  })
+  .required();
+
+export const UpdateCookbookScheme = z
+  .object({
+    title: z.string(),
+    description: z.string().nullable(),
+    image: z.string(),
+    recipesIDs: z.array(
+      z.object({
+        id: z.string(),
+      }),
+    ),
+  })
+  .partial();
+
+export const CommentCookbookScheme = z
+  .object({
+    cookbook_id: z.string(),
+    description: z.string(),
+  })
+  .required();
+

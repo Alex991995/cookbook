@@ -13,7 +13,16 @@ import { AccountController } from './account/account.controller';
 import { AuthController } from './auth/auth.controller';
 import { RecipeController } from './recipe/recipe.controller';
 
-import { uploadsRecipesPath } from './common/constants';
+import {
+  uploadsAccountPath,
+  uploadsAccountRootPath,
+  uploadsCookbookPath,
+  uploadsCookbookRootPath,
+  uploadsRecipePath,
+  uploadsRecipesRootPath,
+} from './common/constants';
+import { CookbookController } from './cookbook/cookbook.controller';
+import { CommentCookbookService } from './cookbook/comment-cookbook/comment-cookbook.service';
 
 export class App {
   app: Express;
@@ -27,6 +36,7 @@ export class App {
   authMiddleware: AuthMiddleware;
   guardMiddleware: GuardMiddleware;
   recipeController: RecipeController;
+  cookbookController: CookbookController;
 
   constructor(
     logger: LoggerService,
@@ -37,6 +47,7 @@ export class App {
     authMiddleware: AuthMiddleware,
     guardMiddleware: GuardMiddleware,
     recipeController: RecipeController,
+    cookbookController: CookbookController,
   ) {
     this.app = express();
     this.port = 8000;
@@ -48,10 +59,10 @@ export class App {
     this.authMiddleware = authMiddleware;
     this.guardMiddleware = guardMiddleware;
     this.recipeController = recipeController;
+    this.cookbookController = cookbookController;
   }
 
   useMiddleware() {
-    console.log('Middleware');
     this.app.use(body.json());
     this.app.use(
       body.urlencoded({
@@ -59,17 +70,19 @@ export class App {
       }),
     );
 
-    this.app.use('/uploads/recipes', express.static(uploadsRecipesPath));
+    this.app.use(uploadsRecipePath, express.static(uploadsRecipesRootPath));
+    this.app.use(uploadsCookbookPath, express.static(uploadsCookbookRootPath));
+    this.app.use(uploadsAccountPath, express.static(uploadsAccountRootPath));
 
     this.app.use(this.authMiddleware.execute.bind(this.authMiddleware));
     this.app.use(this.guardMiddleware.execute.bind(this.guardMiddleware));
   }
 
   useRoutes() {
-    console.log('useRoutes');
-    // this.app.use('/account', this.accountController.router());
+    this.app.use('/api/account', this.accountController.routes());
     this.app.use('/api/recipe', this.recipeController.routes());
     this.app.use('/api/auth', this.authController.routes());
+    this.app.use('/api/cookbook', this.cookbookController.routes());
   }
 
   useExceptionFilters() {
@@ -77,7 +90,6 @@ export class App {
   }
 
   public async init() {
-    console.log('init');
     this.useMiddleware();
     this.useRoutes();
     this.useExceptionFilters();

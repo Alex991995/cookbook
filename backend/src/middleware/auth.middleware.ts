@@ -17,6 +17,7 @@ export class AuthMiddleware {
     }
 
     const [type, token] = req.headers.authorization?.split(' ') ?? [];
+
     try {
       const { email } = await this.decodeJWT(token);
 

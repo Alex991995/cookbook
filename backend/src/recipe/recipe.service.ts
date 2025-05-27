@@ -6,11 +6,17 @@ export class RecipeService {
 
   async createRecipe(user_id: string, recipe: RecipeDto) {
     try {
-      await this.prismaService.client.recipe.create({
-        data: { ...recipe, user_id },
+      const result = await this.prismaService.client.recipe.create({
+        data: {
+          ...recipe,
+          user_id,
+          likes: {
+            create: { user_id },
+          },
+        },
       });
 
-      return true;
+      return result;
     } catch (err) {
       console.error(err);
       return false;
@@ -18,7 +24,7 @@ export class RecipeService {
   }
 
   async getAllRecipeByUserId(user_id: string) {
-    const result = await this.prismaService.client.recipe.findMany({
+    return await this.prismaService.client.recipe.findMany({
       where: {
         user_id,
       },
@@ -28,10 +34,14 @@ export class RecipeService {
         updatedAt: true,
       },
     });
-    if (result.length) {
-      return result;
-    }
-    return false;
+  }
+
+  async getRecipeByTitle(title: string) {
+    return await this.prismaService.client.recipe.findMany({
+      where: {
+        title: { contains: title },
+      },
+    });
   }
 
   async updateRecipe(id: string, body: UpdateRecipeDto) {
@@ -54,6 +64,22 @@ export class RecipeService {
         where: {
           id,
         },
+      });
+
+      return true;
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  async addLike(id: string) {
+    try {
+      await this.prismaService.client.recipe_Likes.update({
+        where: {
+          id,
+        },
+        data: { number_likes: { increment: 1 } },
       });
 
       return true;

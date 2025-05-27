@@ -1,24 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-const token = 'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InJlQGdtYWlsLmNvbSIsImlhdCI6MTc0ODExNjIyMiwiZXhwIjoxNzQ4NTQ4MjIyfQ.9mjDaOy3dREgOrVb9NjTd3tZ28kAXQPIRKVWFH7PWSs';
+const token =
+  'eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InFxcXFxcmVAZ21haWwuY29tIiwiaWF0IjoxNzQ4MjkyNDY1LCJleHAiOjE3NDg3MjQ0NjV9.DkCH-vqDJgIfMfRz-u2lJRgYlkBl5dAsj47xllnQd1k';
 
-export interface RecipeDtoArray {
-  data: RecipeDto[] | []
-}
-export interface RecipeDto {
-  title: string;
-  description: string | null;
-  ingredients: string[];
-  direction: string[];
-  views: number;
-  estimated_time: number;
-  image: string;
-}
-
-function App() {
+function Cookbook() {
   const [file, setFile] = useState<File | null>(null);
 
-  const [result, setResult] = useState<RecipeDtoArray>();
+  const [result, setResult] = useState();
+
+  console.log(result);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -26,8 +16,47 @@ function App() {
     }
   };
 
-  async function f(): Promise<RecipeDtoArray> {
-    const result = await fetch('/api/recipe/all', {
+  const handleUpload = async () => {
+    if (file) {
+      // const body = {
+      //   title: 'vffffffffffffffffff',
+      //   description: null,
+      //   recipesIDs: [
+      //     { id: '831cd7ad-4a36-4f98-b411-595c3c581693' },
+      //   ],
+      // };
+
+      const body = {
+        name: 'sasha',
+
+        email: 'qqqqqre@gmail.com',
+        password: '233ed32d32',
+      };
+
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('data', JSON.stringify(body));
+
+      try {
+        const result = await fetch('/api/account/settings', {
+          headers: new Headers({
+            Authorization: `Bearer ${token}`,
+          }),
+          method: 'PUT',
+          body: formData,
+        });
+
+        const data = await result.json();
+
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  async function f() {
+    const result = await fetch('/api/account/settings', {
       headers: new Headers({
         Authorization: `Bearer ${token}`,
       }),
@@ -43,39 +72,6 @@ function App() {
       setResult(d);
     });
   }, []);
-
-  const handleUpload = async () => {
-    if (file) {
-      const body = {
-        title: 'butterbread',
-        description: null,
-        ingredients: ['cds', 'cdsvdfsv'],
-        direction: ['cds', 'cdsvdfsv'],
-        views: 1,
-        estimated_time: 2,
-      };
-
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('data', JSON.stringify(body));
-
-      try {
-        const result = await fetch('/api/recipe/', {
-          headers: new Headers({
-            Authorization: `Bearer ${token}`,
-          }),
-          method: 'POST',
-          body: formData,
-        });
-
-        const data = await result.json();
-
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-  };
 
   return (
     <>
@@ -99,9 +95,12 @@ function App() {
         </button>
       )}
 
-      <div>{result?.data.length && result.data.map(item => <img src={item.image} alt="fdsefedfgerg" />)}</div>
+      {/* <div>
+        {result?.data.length &&
+          result.data.map(item => <img src={item.image} alt="fdsefedfgerg" />)}
+      </div> */}
     </>
   );
 }
 
-export default App;
+export default Cookbook;

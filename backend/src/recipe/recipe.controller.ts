@@ -4,6 +4,7 @@ import { RecipeDto, UpdateRecipeDto } from './dto/recipe.dto';
 import {
   CommentRecipeScheme,
   RecipeScheme,
+  RecipeTitleScheme,
   UpdateRecipeScheme,
 } from './recipe-scheme/recipe-scheme';
 import { ZodError } from 'zod';
@@ -13,6 +14,8 @@ import multer from 'multer';
 import { storage } from '@/common/storage-multer';
 import { CommentRecipeService } from './comment-recipe/comment-recipe.service';
 
+import { uploadsRecipePath } from '@/common/constants';
+
 export class RecipeController {
   router: Router;
   upload: multer.Multer;
@@ -20,6 +23,7 @@ export class RecipeController {
   constructor(
     private recipeService: RecipeService,
     private commentRecipeService: CommentRecipeService,
+
   ) {
     this.router = Router();
     this.upload = multer({ storage });
@@ -37,7 +41,7 @@ export class RecipeController {
         const recipeStringify = req.body.data;
 
         const fileName = req.file.filename;
-        const filePath = `/uploads/recipes/${fileName}`;
+        const filePath = `${uploadsRecipePath}/${fileName}`;
 
         try {
           const recipe = JSON.parse(recipeStringify) as RecipeDto;
@@ -47,6 +51,7 @@ export class RecipeController {
           const result = await this.recipeService.createRecipe(id, recipe);
 
           if (result) {
+            // await this.likeRecipeService.createLike(result.id, id);
             res.send({ result });
           } else {
             console.error(result);
@@ -65,14 +70,29 @@ export class RecipeController {
 
       const recipes = await this.recipeService.getAllRecipeByUserId(id);
 
-      if (recipes) {
-        res.send(recipes);
-      } else {
-        res.status(200).send({
-          data: [],
-        });
-      }
+      res.send({
+        data: recipes,
+      });
     });
+
+    this.router.get(
+      '/',
+      async (req: Request<object, object, object, { title: string }>, res, next) => {
+        try {
+          RecipeTitleScheme.parse(req.query);
+          const title = req.query.title;
+          const recipes = await this.recipeService.getRecipeByTitle(title);
+
+          res.send({
+            data: recipes,
+          });
+        } catch (error) {
+          if (error instanceof ZodError) {
+            return next(new CustomZodError(400, error.issues));
+          }
+        }
+      },
+    );
 
     this.router.put(
       '/:id',
@@ -141,6 +161,18 @@ export class RecipeController {
       res.send({
         data: result,
       });
+    });
+
+    this.router.put('/like/:id', async (req, res, next) => {
+      const id = req.params.id;
+
+      const result = await this.recipeService.addLike(id);
+      if (result) {
+        res.status(204).send();
+      } else {
+        next(new HttpError(404, 'Record to update does not exist.'));
+      }
+
     });
 
     return this.router;
