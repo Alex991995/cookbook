@@ -1,0 +1,6 @@
+.section {
+  background: linear-gradient(0.25turn, #f1f7f7, #e2ebf0);
+
+  display: flex;
+  justify-content: space-between;
+}
