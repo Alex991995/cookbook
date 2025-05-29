@@ -63,6 +63,7 @@ export class App {
   }
 
   useMiddleware() {
+    // this.app.use(express.json())
     this.app.use(body.json());
     this.app.use(
       body.urlencoded({

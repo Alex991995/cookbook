@@ -24,6 +24,12 @@ export class AuthService {
         email,
         password: hashPassword,
       },
+      select: {
+        email: true,
+        id: true,
+        name: true,
+        image: true,
+      },
     });
   }
 
@@ -62,5 +68,4 @@ export class AuthService {
       .setExpirationTime('5d')
       .sign(secret);
   }
-
 }

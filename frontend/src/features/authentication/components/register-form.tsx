@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import styles from '../styles/authentication.module.css';
@@ -9,14 +9,29 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    // setError,
+    formState: { errors, isValid },
   } = useForm<RegisterType>({
     mode: 'onBlur',
     resolver: zodResolver(RegisterSchema),
   });
 
-  const onSubmit: SubmitHandler<RegisterType> = data => {
-    console.log(data);
+  const onSubmit: SubmitHandler<RegisterType> = async data => {
+    try {
+      const response = await fetch('/api/auth/register', {
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      console.log(result);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -63,12 +78,10 @@ export default function RegisterForm() {
           className={styles.input}
           {...register('repeatPassword', { required: true })}
         />
-        <p className="h-6 text-red-600">{errors.repeatPassword?.message}</p>
+        <p className="h-6 text-red-600 bg-amber-900">{errors.repeatPassword?.message}</p>
       </div>
 
-
-
-      <button className={styles.button} type="submit">
+      <button className={`${styles.button}`} disabled={!isValid} type="submit">
         Sign Up
       </button>
     </form>

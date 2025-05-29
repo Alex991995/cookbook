@@ -31,9 +31,7 @@ export class AuthController {
               httpOnly: true,
             })
             .end();
-        } 
-        
-        catch (error) {
+        } catch (error) {
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));
           }
@@ -51,9 +49,10 @@ export class AuthController {
           if (!result) {
             next(new HttpError(422, 'User already exists'));
           } else {
-            res.status(201).end();
+            res.send(result);
           }
         } catch (error) {
+          // console.log(error)
           if (error instanceof ZodError) {
             next(new CustomZodError(400, error.issues));
           }
