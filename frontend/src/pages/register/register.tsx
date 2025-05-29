@@ -8,7 +8,7 @@ function Register() {
     <section className={styles.section}>
       <img src={source} alt="signup" className={styles.img} />
 
-      <div className="flex-auto flex justify-center ">
+      <div className="flex-auto flex justify-center mx-2.5">
         <RegisterForm />
       </div>
     </section>

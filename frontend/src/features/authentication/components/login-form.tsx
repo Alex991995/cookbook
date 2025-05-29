@@ -3,22 +3,22 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import styles from '../styles/authentication.module.css';
 import Logo from '../../../components/logo';
-import { RegisterSchema, type RegisterType } from '../zod-scheme/register-schema';
+import { LoginSchema, type LoginType } from '../zod-scheme/register-schema';
 
-export default function RegisterForm() {
+export default function LoginForm() {
   const {
     register,
     handleSubmit,
     setError,
     formState: { errors, isValid },
-  } = useForm<RegisterType>({
+  } = useForm<LoginType>({
     mode: 'onBlur',
-    resolver: zodResolver(RegisterSchema),
+    resolver: zodResolver(LoginSchema),
   });
 
-  const onSubmit: SubmitHandler<RegisterType> = async data => {
+  const onSubmit: SubmitHandler<LoginType> = async data => {
     try {
-      const response = await fetch('/api/auth/register', {
+      const response = await fetch('/api/auth/login', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -43,9 +43,9 @@ export default function RegisterForm() {
       </div>
 
       <div className="self-start ">
-        <div className="text-4xl font-semibold">Join our community</div>
+        <div className="text-4xl font-semibold">Welcome back</div>
         <div className=" text-secondary">
-          Already have an account?<span className="text-primary"> Sign In</span>
+          New here<span className="text-primary"> Create an account</span>
         </div>
       </div>
 
@@ -68,19 +68,6 @@ export default function RegisterForm() {
           {...register('password', { required: true })}
         />
         <p className="h-6 text-red-600">{errors.password?.message}</p>
-      </div>
-
-      <div className={styles['box-input']}>
-        <label className="w-full text-secondary" htmlFor="repeatPassword">
-          Repeat password
-        </label>
-        <input
-          id="repeatPassword"
-          type="password"
-          className={styles.input}
-          {...register('repeatPassword', { required: true })}
-        />
-        <p className="h-6 text-red-600 bg-amber-900">{errors.repeatPassword?.message}</p>
       </div>
 
       <button className={styles.button} disabled={!isValid} type="submit">

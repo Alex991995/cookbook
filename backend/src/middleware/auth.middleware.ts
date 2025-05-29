@@ -12,11 +12,14 @@ export class AuthMiddleware {
   async execute(req: Request, res: Response, next: NextFunction) {
     const [, , route] = req.originalUrl.trim().split('/');
 
+    const token = req.headers.cookie?.split(';')[0].split('=')[1];
+
     if (route === 'auth') {
       return next();
     }
-
-    const [type, token] = req.headers.authorization?.split(' ') ?? [];
+    if (!token) {
+      return next();
+    }
 
     try {
       const { email } = await this.decodeJWT(token);
