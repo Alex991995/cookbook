@@ -1,6 +1,17 @@
 .section {
   background: linear-gradient(0.25turn, #f1f7f7, #e2ebf0);
-
+  height: 100vh;
   display: flex;
   justify-content: space-between;
+}
+
+@media (max-width: 1087px) {
+  .img {
+    width: 51%;
+  }
+}
+@media (max-width: 700px) {
+  .img {
+    display: none;
+  }
 }

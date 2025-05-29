@@ -9,12 +9,12 @@
   margin-bottom: 128px;
   justify-content: space-evenly;
   align-items: center;
+  padding: 68px;
 }
 
 .input {
   border: 1px solid var(--color-secondary);
   border-radius: 8px;
-
   min-height: 45px;
   width: 100%;
   outline: none;
@@ -42,7 +42,6 @@
 
 .box-input {
   row-gap: 8px;
-  padding: 0 68px;
   align-items: center;
   flex-direction: column;
   display: flex;

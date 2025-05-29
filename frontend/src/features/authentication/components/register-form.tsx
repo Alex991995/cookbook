@@ -9,7 +9,7 @@ export default function RegisterForm() {
   const {
     register,
     handleSubmit,
-    // setError,
+    setError,
     formState: { errors, isValid },
   } = useForm<RegisterType>({
     mode: 'onBlur',
@@ -30,17 +30,20 @@ export default function RegisterForm() {
       const result = await response.json();
       console.log(result);
     } catch (error) {
-      console.log(error);
+      console.error(error);
+      setError('email', {
+        message: 'User already exists',
+      });
     }
   };
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
-      <div className="self-start pl-17">
+      <div className="self-start">
         <Logo fontSize="50px" width="180px" />
       </div>
 
-      <div className="self-start pl-17">
+      <div className="self-start ">
         <div className="text-4xl font-semibold">Join our community</div>
         <div className=" text-secondary">
           Already have an account?<span className="text-primary"> Sign In</span>
@@ -81,7 +84,7 @@ export default function RegisterForm() {
         <p className="h-6 text-red-600 bg-amber-900">{errors.repeatPassword?.message}</p>
       </div>
 
-      <button className={`${styles.button}`} disabled={!isValid} type="submit">
+      <button className={styles.button} disabled={!isValid} type="submit">
         Sign Up
       </button>
     </form>

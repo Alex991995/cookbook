@@ -12,7 +12,5 @@
 @layer base {
   html {
     font-family: var(--font-display);
-    
-    /* background-color: #ffc527; */
   }
 }
