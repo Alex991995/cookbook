@@ -26,8 +26,7 @@ export default function RegisterForm() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
-      console.log(result);
+      await response.json();
     } catch (error) {
       console.error(error);
       setError('email', {

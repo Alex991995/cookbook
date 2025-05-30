@@ -26,12 +26,11 @@ export default function LoginForm() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
-      console.log(result);
+      await response.json();
     } catch (error) {
       console.error(error);
       setError('email', {
-        message: 'User already exists',
+        message: 'Wrong credentials',
       });
     }
   };

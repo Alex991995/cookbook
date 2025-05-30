@@ -19,7 +19,6 @@ export class AuthController {
     this.router.post(
       '/login',
       async ({ body }: Request<object, object, LoginDTO>, res, next: NextFunction) => {
-        console.log(body);
         try {
           LoginSchema.parse(body);
           const result = await this.authService.loginUser(body);
@@ -31,7 +30,7 @@ export class AuthController {
             .cookie('access_token', result.jwt, {
               httpOnly: true,
             })
-            .send(result)
+            .send({ isAuthenticated: true })
             .end();
         } catch (error) {
           if (error instanceof ZodError) {
@@ -51,10 +50,9 @@ export class AuthController {
           if (!result) {
             next(new HttpError(422, 'User already exists'));
           } else {
-            res.send(result);
+            res.send({ isRegistered: true });
           }
         } catch (error) {
-          // console.log(error)
           if (error instanceof ZodError) {
             next(new CustomZodError(400, error.issues));
           }
