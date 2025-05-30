@@ -24,7 +24,10 @@ export class AccountController {
       const id = req.user.id;
 
       const result = await this.accountService.getInfoUser(id);
-      res.send(result);
+      if (result) {
+        const { password, ...user } = result;
+        res.send(user);
+      } else res.send(result);
     });
 
     this.router.put(
