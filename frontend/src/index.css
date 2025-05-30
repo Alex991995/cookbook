@@ -1,1 +1,16 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #f7b602;
+  --color-primary-hover: #ffc527;
+  --color-primary-active: #fcb903;
+  --color-secondary: #7b7b80;
+  --font-display: 'Nunito', 'sans-serif';
+}
+
+@layer base {
+  html {
+    font-family: var(--font-display);
+  }
+}

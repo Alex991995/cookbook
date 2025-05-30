@@ -30,10 +30,9 @@ export class AuthController {
             .cookie('access_token', result.jwt, {
               httpOnly: true,
             })
+            .send({ isAuthenticated: true })
             .end();
-        } 
-        
-        catch (error) {
+        } catch (error) {
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));
           }
@@ -51,7 +50,7 @@ export class AuthController {
           if (!result) {
             next(new HttpError(422, 'User already exists'));
           } else {
-            res.status(201).end();
+            res.send({ isRegistered: true });
           }
         } catch (error) {
           if (error instanceof ZodError) {
