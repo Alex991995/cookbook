@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import styles from '../styles/authentication.module.css';
 import Logo from '../../../components/logo';
 import { LoginSchema, type LoginType } from '../zod-scheme/register-schema';
-import { useGetUserQuery } from '../../../store/api/api';
+import Button from '../../../components/button';
 
 export default function LoginForm() {
   const {
@@ -16,8 +16,7 @@ export default function LoginForm() {
     mode: 'onBlur',
     resolver: zodResolver(LoginSchema),
   });
-  const { data } = useGetUserQuery();
-  console.log(data);
+
   const onSubmit: SubmitHandler<LoginType> = async data => {
     try {
       const response = await fetch('/api/auth/login', {
@@ -71,9 +70,7 @@ export default function LoginForm() {
         <p className="h-6 text-red-600">{errors.password?.message}</p>
       </div>
 
-      <button className={styles.button} disabled={!isValid} type="submit">
-        Sign Up
-      </button>
+      <Button text="Sign Up" disabled={!isValid} maxWidth="415px" />
     </form>
   );
 }

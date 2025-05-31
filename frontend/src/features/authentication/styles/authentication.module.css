@@ -26,18 +26,18 @@
 }
 
 .button {
-  background-color: var(--color-primary);
-  border-radius: 8px;
-  max-width: 415px;
-  min-height: 45px;
-  width: 100%;
+  /* background-color: var(--color-primary); */
+  /* border-radius: 8px; */
+  /* max-width: 415px; */
+  /* min-height: 45px;
+  width: 100%; */
 
-  &:hover {
+  /* &:hover {
     background-color: var(--color-primary-hover);
   }
   &:active {
     background-color: var(--color-primary-active);
-  }
+  } */
 }
 
 .box-input {

@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import styles from '../styles/authentication.module.css';
 import Logo from '../../../components/logo';
 import { RegisterSchema, type RegisterType } from '../zod-scheme/register-schema';
+import Button from '../../../components/button';
 
 export default function RegisterForm() {
   const {
@@ -82,9 +83,7 @@ export default function RegisterForm() {
         <p className="h-6 text-red-600 bg-amber-900">{errors.repeatPassword?.message}</p>
       </div>
 
-      <button className={styles.button} disabled={!isValid} type="submit">
-        Sign Up
-      </button>
+      <Button text="   Sign Up" disabled={!isValid} maxWidth="415px" />
     </form>
   );
 }
