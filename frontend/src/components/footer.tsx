@@ -6,8 +6,8 @@ import { Link } from 'react-router';
 
 function Footer() {
   return (
-    <footer>
-      <nav className="flex gap-x-9 items-baseline justify-center">
+    <footer className='flex justify-center mx-7'>
+      <nav className="flex gap-9 items-baseline justify-between basis-[1200px]">
         <div className="flex items-baseline ">
           <img className="mr-2 " src={sourcePear} alt="pear" />
           <Logo fontSize="24px" width="87px" />

@@ -3,13 +3,11 @@ import Header from '../components/header';
 import Footer from '../components/footer';
 
 function Layout() {
+
   return (
-    <div className="h-screen container-grid mx-auto">
+    <div className=" container-grid mx-auto ">
       <Header />
-
-  
-       <Outlet /> 
-
+      <Outlet />
       <Footer />
     </div>
   );

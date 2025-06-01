@@ -1,12 +1,13 @@
-import React from 'react'
-import SuggestSearch from '../../features/recipie/suggest-search/suggest-search'
+import PopularCookbook from '../../features/cookbook/components/popular-cookbook/popular-cookbook';
+import SuggestSearch from '../../features/recipie/suggest-search/suggest-search';
 
 function MainPage() {
   return (
-    <section>
+    <main>
       <SuggestSearch />
-    </section>
-  )
+      <PopularCookbook />
+    </main>
+  );
 }
 
-export default MainPage
+export default MainPage;

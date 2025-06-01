@@ -10,7 +10,7 @@ function SuggestSearch() {
     console.log(value);
   }
   return (
-    <div className={styles['suggest-container']}>
+    <section className={styles['suggest-container']}>
       <div className="container mx-auto  w-3/4">
         <p className="text-white text-[56px] max-w-[665px] ">
           Find Recipies and Сreate Your Favourite Сookbooks
@@ -31,7 +31,7 @@ function SuggestSearch() {
           </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 
