@@ -7,6 +7,8 @@ import Layout from '../layouts/main-layout';
 import MainPage from '../pages/main-page/main-page';
 import AccountLayout from '../layouts/account-layout';
 import AccountSetting from '../pages/account-setting/account-setting';
+import AccountRecipe from '../pages/account-recipe/account-recipe';
+import AccountCookbook from '../pages/account-cookbook/account-cookbook';
 
 export const router = createBrowserRouter([
   {
@@ -26,16 +28,26 @@ export const router = createBrowserRouter([
       {
         path: '/',
         element: <MainPage />,
+        errorElement: <ErrorBoundary />,
       },
       {
         path: '/account',
         element: <AccountLayout />,
-        children:[
+        errorElement: <ErrorBoundary />,
+        children: [
           {
             path: 'setting',
-            element: <AccountSetting />
-          }
-        ]
+            element: <AccountSetting />,
+          },
+          {
+            path: 'cookbook',
+            element: <AccountCookbook />,
+          },
+          {
+            path: 'recipe',
+            element: <AccountRecipe />,
+          },
+        ],
       },
     ],
   },

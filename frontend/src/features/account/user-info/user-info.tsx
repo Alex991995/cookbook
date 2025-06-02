@@ -12,9 +12,9 @@ function UserInfo() {
   let buttonForCreate;
 
   if (route === 'cookbook') {
-    return (buttonForCreate = <Button text="Create New CookBook" maxWidth="273px" />);
+    buttonForCreate = <Button text="Create New CookBook" maxWidth="273px" />;
   } else if (route === 'recipe') {
-    return (buttonForCreate = <Button text="Create New Recipe" maxWidth="273px" />);
+    buttonForCreate = <Button text="Create New Recipe" maxWidth="273px" />;
   }
 
   return (

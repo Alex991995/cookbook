@@ -1,23 +1,20 @@
 
-import Card from '../../ui/card/card';
-import meal from '../../assets/meal.jpg';
-import ButtonSecondary from '../../../../components/button-secondary';
+import Card from '../../features/cookbook/ui/card/card';
+import meal from '../../features/cookbook/assets/meal.jpg';
 
-function PopularCookbook() {
+function AccountCookbook() {
   return (
-    <section className='flex flex-col items-center gap-14 mb-5'>
-      <h2 className="text-4xl mt-24">Most Popular Cookbooks</h2>
-      <ul className='flex gap-8 flex-wrap justify-center'>
+    <div>
+      <ul className="flex gap-8 flex-wrap ">
         {arr.map(item => (
           <Card {...item} />
         ))}
       </ul>
-      <ButtonSecondary text='Show More' maxWidth='169px'/>
-    </section>
+    </div>
   );
 }
 
-export default PopularCookbook;
+export default AccountCookbook;
 
 const arr = [
   {
