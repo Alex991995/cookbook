@@ -1,0 +1,11 @@
+.suggest-container {
+  background: url('../assets/suggest-image.png') no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 100vh;
+  margin: 0 32px;
+  border-radius: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center
+}

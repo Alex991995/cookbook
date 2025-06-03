@@ -2,8 +2,9 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import styles from '../styles/authentication.module.css';
-import Logo from '../../../components/logo';
+import Logo from 'components/logo';
 import { RegisterSchema, type RegisterType } from '../zod-scheme/register-schema';
+import Button from 'components/button';
 
 export default function RegisterForm() {
   const {
@@ -38,7 +39,7 @@ export default function RegisterForm() {
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className="self-start">
-        <Logo fontSize="50px" width="180px" />
+        <Logo fontSize="50px" width="180px" color="white" />
       </div>
 
       <div className="self-start ">
@@ -82,9 +83,7 @@ export default function RegisterForm() {
         <p className="h-6 text-red-600 bg-amber-900">{errors.repeatPassword?.message}</p>
       </div>
 
-      <button className={styles.button} disabled={!isValid} type="submit">
-        Sign Up
-      </button>
+      <Button text="   Sign Up" disabled={!isValid} maxWidth="415px" />
     </form>
   );
 }

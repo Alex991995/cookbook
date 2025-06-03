@@ -2,8 +2,9 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import styles from '../styles/authentication.module.css';
-import Logo from '../../../components/logo';
+import Logo from 'components/logo';
 import { LoginSchema, type LoginType } from '../zod-scheme/register-schema';
+import Button from 'components/button';
 
 export default function LoginForm() {
   const {
@@ -38,7 +39,7 @@ export default function LoginForm() {
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className="self-start">
-        <Logo fontSize="50px" width="180px" />
+        <Logo fontSize="50px" width="180px" color="white"/>
       </div>
 
       <div className="self-start ">
@@ -69,9 +70,7 @@ export default function LoginForm() {
         <p className="h-6 text-red-600">{errors.password?.message}</p>
       </div>
 
-      <button className={styles.button} disabled={!isValid} type="submit">
-        Sign Up
-      </button>
+      <Button text="Sign Up" disabled={!isValid} maxWidth="415px" />
     </form>
   );
 }

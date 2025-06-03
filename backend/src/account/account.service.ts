@@ -13,6 +13,13 @@ export class AccountService {
       where: {
         id,
       },
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        image: true,
+        password: true,
+      },
     });
   }
 

@@ -1,0 +1,22 @@
+.card {
+  max-width: 392px;
+  padding: 24px;
+  background-color: white;
+  border-radius: 10px;
+  transition: transform ease 0.3s, box-shadow 0.3s ease;
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+}
+
+.meal {
+  align-items: center;
+  width: 344px;
+  height: 344px;
+  object-fit: cover;
+  border-top-left-radius: 50px;
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 50px;
+  border-bottom-left-radius: 10px;
+}
