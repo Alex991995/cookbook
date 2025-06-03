@@ -1,5 +1,6 @@
-import RegisterForm from '../../features/authentication/components/register-form';
-import source from '../../assets/signup-preview.png';
+
+import RegisterForm from 'features/authentication/components/register-form';
+import source from 'assets/signup-preview.png';
 
 import styles from './register.module.css';
 

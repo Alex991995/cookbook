@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router';
-import notfound from '../../assets/notfound.png';
+import notfound from 'assets/notfound.png';
 
 function NotFoundPage() {
   const navigate = useNavigate();

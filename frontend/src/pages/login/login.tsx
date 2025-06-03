@@ -1,6 +1,6 @@
 import styles from './login.module.css';
-import source from '../../assets/login-preview.png';
-import LoginForm from '../../features/authentication/components/login-form';
+import source from 'assets/login-preview.png';
+import LoginForm from 'features/authentication/components/login-form';
 
 
 function Login() {

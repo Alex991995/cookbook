@@ -1,7 +1,7 @@
 import styles from './card-recipes.module.css';
-import sourceViews from '../../../../assets/views.svg';
-import sourceHeart from '../../../../assets/heart_outline.svg';
-import sourceComment from '../../../../assets/comment.svg';
+import sourceViews from 'assets/views.svg';
+import sourceHeart from 'assets/heart_outline.svg';
+import sourceComment from 'assets/comment.svg';
 
 interface ICardRecipes {
   source: string;

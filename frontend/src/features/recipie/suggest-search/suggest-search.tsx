@@ -1,4 +1,4 @@
-import Button from '../../../components/button';
+import Button from 'components/button';
 import styles from './suggest-search.module.css';
 import search from '../assets/search.svg';
 import { useState } from 'react';

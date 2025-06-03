@@ -1,10 +1,10 @@
-import React from 'react';
+
 import breakfast from '../../assets/breakfast.png';
 import iceCream from '../../assets/ice-cream.jpg';
 import panckake from '../../assets/panckake.jpg';
 import fruie from '../../assets/fruie.png';
 import styles from './pick-by-us-cookbook.module.css';
-import ButtonSecondary from '../../../../components/button-secondary';
+import ButtonSecondary from 'components/button-secondary';
 
 function PickByUsCookbook() {
   return (

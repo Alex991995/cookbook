@@ -1,7 +1,7 @@
 
 import Card from '../../ui/card/card';
 import meal from '../../assets/meal.jpg';
-import ButtonSecondary from '../../../../components/button-secondary';
+import ButtonSecondary from 'components/button-secondary';
 
 function PopularCookbook() {
   return (

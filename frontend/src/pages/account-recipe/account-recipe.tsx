@@ -1,6 +1,6 @@
-import React from 'react';
-import CardRecipes from '../../features/recipie/ui/card-recipes/card-recipes';
-import meal from '../../features/cookbook/assets/meal.jpg';
+
+import CardRecipes from 'features/recipie/ui/card-recipes/card-recipes';
+import meal from 'features/cookbook/assets/meal.jpg';
 
 function AccountRecipe() {
   return (

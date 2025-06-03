@@ -1,6 +1,6 @@
-import source from '../../../assets/man.png';
-import Button from '../../../components/button';
-import { useGetUserQuery } from '../../../store/api/api';
+import source from 'assets/man.png';
+import Button from 'components/button';
+import { useGetUserQuery } from 'store/api/api';
 import { useLocation } from 'react-router';
 
 function UserInfo() {

@@ -1,5 +1,5 @@
 import styles from './card-trend-recipes.module.css';
-import sourceViews from '../../../../assets/views.svg';
+import sourceViews from 'assets/views.svg';
 
 interface ICardTrendRecipes {
   views: number;

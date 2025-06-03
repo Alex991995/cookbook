@@ -1,6 +1,6 @@
 
-import Card from '../../features/cookbook/ui/card/card';
-import meal from '../../features/cookbook/assets/meal.jpg';
+import Card from 'features/cookbook/ui/card/card';
+import meal from 'features/cookbook/assets/meal.jpg';
 
 function AccountCookbook() {
   return (
