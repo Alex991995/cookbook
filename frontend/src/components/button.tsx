@@ -3,11 +3,13 @@ interface IButton {
   maxWidth: string;
   disabled?: boolean;
   handleClick?: () => void;
+  type?: 'reset' | 'button' | 'submit' | undefined;
 }
 
-function Button({ text, maxWidth, disabled, handleClick }: IButton) {
+function Button({ text, maxWidth, disabled, handleClick, type }: IButton) {
   return (
     <button
+      type={type || 'submit'}
       onClick={handleClick}
       disabled={disabled}
       style={{ maxWidth }}

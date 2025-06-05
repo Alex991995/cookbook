@@ -9,7 +9,7 @@ function PopularCookbook() {
       <h2 className="text-4xl mt-24">Most Popular Cookbooks</h2>
       <ul className='flex gap-8 flex-wrap justify-center'>
         {arr.map(item => (
-          <Card {...item} />
+          <Card width='215px' {...item} />
         ))}
       </ul>
       <ButtonSecondary text='Show More' maxWidth='169px'/>

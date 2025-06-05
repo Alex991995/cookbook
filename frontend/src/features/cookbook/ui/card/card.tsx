@@ -12,16 +12,18 @@ interface ICard {
   nameCreator: string;
   numberLikes: number;
   numberComments: number;
+  width:string
 }
 
-function Card({ source, views, nameRecipe, nameCreator, numberLikes, numberComments }: ICard) {
+function Card({ source, views, nameRecipe, nameCreator, numberLikes, numberComments, width }: ICard) {
+  console.log('width',width)
   return (
-    <li className={styles.card}>
+    <li className={styles.card} >
       <div className="flex gap-2">
         <img src={sourceViews} alt="views" />
         <div>{views} views</div>
       </div>
-      <img className={styles.meal} src={source} alt="meal" />
+      <img className={styles.meal} style={{width}} src={source} alt="meal" />
 
       <div className='pt-2.5 pb-6'>
         <h4 className="text-2xl">{nameRecipe}</h4>

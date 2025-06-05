@@ -9,6 +9,7 @@ import AccountLayout from 'layouts/account-layout';
 import AccountSetting from 'pages/account-setting/account-setting';
 import AccountRecipe from 'pages/account-recipe/account-recipe';
 import AccountCookbook from 'pages/account-cookbook/account-cookbook';
+import CreateRecipePage from 'pages/create-recipe-page/create-recipe-page';
 
 export const router = createBrowserRouter([
   {
@@ -19,6 +20,11 @@ export const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: '/recipe/create',
+    element: <CreateRecipePage />,
     errorElement: <ErrorBoundary />,
   },
   {

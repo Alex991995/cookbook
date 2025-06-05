@@ -18,6 +18,7 @@ export default function RegisterForm() {
   });
 
   const onSubmit: SubmitHandler<RegisterType> = async data => {
+    console.log(data)
     try {
       const response = await fetch('/api/auth/register', {
         headers: {
@@ -83,7 +84,7 @@ export default function RegisterForm() {
         <p className="h-6 text-red-600 bg-amber-900">{errors.repeatPassword?.message}</p>
       </div>
 
-      <Button text="   Sign Up" disabled={!isValid} maxWidth="415px" />
+      <Button text="Sign Up" disabled={!isValid} maxWidth="415px" />
     </form>
   );
 }

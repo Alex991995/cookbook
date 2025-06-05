@@ -12,7 +12,6 @@
 
 .meal {
   align-items: center;
-  width: 215px;
   height: 215px;
   object-fit: cover;
   border-radius: 8px;

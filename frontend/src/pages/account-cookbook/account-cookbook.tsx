@@ -1,13 +1,13 @@
-
 import Card from 'features/cookbook/ui/card/card';
 import meal from 'features/cookbook/assets/meal.jpg';
 
 function AccountCookbook() {
   return (
-    <div>
-      <ul className="flex gap-8 flex-wrap ">
+
+    <div className='w-full'>
+      <ul className="grid gap-4 justify-items-center grid-cols-[repeat(auto-fill,_minmax(310px,_1fr))] ">
         {arr.map(item => (
-          <Card {...item} />
+          <Card width="310px" {...item} />
         ))}
       </ul>
     </div>

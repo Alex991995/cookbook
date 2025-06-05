@@ -2,6 +2,8 @@ import styles from './card-recipes.module.css';
 import sourceViews from 'assets/views.svg';
 import sourceHeart from 'assets/heart_outline.svg';
 import sourceComment from 'assets/comment.svg';
+import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
+import { RiChatDeleteFill } from 'react-icons/ri';
 
 interface ICardRecipes {
   source: string;
@@ -32,21 +34,25 @@ function CardRecipes({
           <p className="text-secondary">{nameCreator}</p>
           <p className="max-w-[438px] text-sm text-secondary">{description}</p>
         </div>
- 
+
         <div className="flex gap-9  items-baseline">
-          <div className="flex gap-2 items-baseline">
+          <div className="flex gap-2 ">
             <img src={sourceHeart} alt="likes" />
             <div className="text-xs">{numberLikes} likes</div>
           </div>
-          <div className="flex gap-2 items-baseline">
+          <div className="flex gap-2 ">
             <img src={sourceComment} alt="comments" />
             <div className="text-xs">{numberComments} comments</div>
           </div>
-          <div className="flex gap-2 items-baseline">
+          <div className="flex gap-2">
             <img src={sourceViews} alt="views" />
             <div className="text-xs">{views} views</div>
           </div>
         </div>
+      </div>
+      <div className='flex grow justify-end gap-4'>
+        <MdOutlineSystemUpdateAlt size={23}/>
+        <RiChatDeleteFill size={23}/>
       </div>
     </li>
   );
