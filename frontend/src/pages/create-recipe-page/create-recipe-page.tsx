@@ -3,7 +3,11 @@ import { FiPlus } from 'react-icons/fi';
 
 import { useForm, useFieldArray, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateRecipeSchema, type CreateRecipeType } from './zod-scheme/create-recipe';
+import {
+  CreateRecipeSchema,
+  type CreateRecipeType,
+  type CreateRecipeTypeForServer,
+} from './zod-scheme/create-recipe';
 import Button from 'components/button';
 import ButtonTransparent from 'components/button-transparent';
 import { useState } from 'react';
@@ -43,8 +47,8 @@ function CreateRecipePage() {
     name: 'directions',
   });
 
-  const [valueIngredient, setValueIngredient] = useState('');
-  const [valueDirection, setValueDirection] = useState('');
+  const [valueIngredient, setValueIngredient] = useState({ value: '' });
+  const [valueDirection, setValueDirection] = useState({ value: '' });
 
   function clearFields() {
     clearErrors();
@@ -53,28 +57,37 @@ function CreateRecipePage() {
     removeIngredients();
   }
 
-  function addValueToAppend() {
-    if (valueIngredient) {
-      appendIngredients(valueIngredient);
-      setValueIngredient('');
-    }
+  function addValueIngredientToAppend() {
+    appendIngredients(valueIngredient);
+    setValueIngredient({ value: '' });
   }
 
   function addValueDirectionToAppend() {
-    if (valueDirection) {
-      appendDirections(valueDirection);
-      setValueDirection('');
-    }
+    appendDirections(valueDirection);
+    setValueDirection({ value: '' });
   }
 
   const onSubmit: SubmitHandler<CreateRecipeType> = async data => {
     const { picture, ...body } = data;
+    const { title, estimated_time, description } = body;
     const file = picture[0];
-    console.log(body);
+    const arrDirections = body.directions.map(item => item.value);
+    const arrIngredients = body.ingredients.map(item => item.value);
+
+    const dataForServer: CreateRecipeTypeForServer = Object.assign(
+      {},
+      {
+        title,
+        estimated_time,
+        description,
+        directions: arrDirections,
+        ingredients: arrIngredients,
+      },
+    );
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('data', JSON.stringify(body));
+    formData.append('data', JSON.stringify(dataForServer));
 
     try {
       const response = await fetch('/api/recipe', {
@@ -148,8 +161,8 @@ function CreateRecipePage() {
           <div className="relative">
             <input
               className={styles.input}
-              value={valueIngredient}
-              onChange={e => setValueIngredient(e.target.value)}
+              value={valueIngredient.value}
+              onChange={e => setValueIngredient({ value: e.target.value })}
               type="text"
               placeholder="Fourth ingredient"
             />
@@ -159,7 +172,7 @@ function CreateRecipePage() {
                 text="Add ingredient"
                 maxWidth=""
                 type="button"
-                handleClick={addValueToAppend}
+                handleClick={addValueIngredientToAppend}
               />
             </div>
           </div>
@@ -171,7 +184,7 @@ function CreateRecipePage() {
                   readOnly
                   className="outline-none"
                   key={field.id}
-                  {...register(`ingredients.${index}`)}
+                  {...register(`ingredients.${index}.value`)}
                 />
 
                 <BsX size={25} onClick={() => removeIngredients(index)} />
@@ -185,8 +198,8 @@ function CreateRecipePage() {
           <div className="relative">
             <input
               className={styles.input}
-              value={valueDirection}
-              onChange={e => setValueDirection(e.target.value)}
+              value={valueDirection.value}
+              onChange={e => setValueDirection({ value: e.target.value })}
               type="text"
               placeholder="Directions"
             />
@@ -210,7 +223,7 @@ function CreateRecipePage() {
                   readOnly
                   className="outline-none"
                   key={field.id}
-                  {...register(`directions.${index}`)}
+                  {...register(`directions.${index}.value`)}
                 />
 
                 <BsX size={25} onClick={() => removeDirections(index)} />

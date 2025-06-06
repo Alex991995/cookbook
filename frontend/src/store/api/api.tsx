@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { IUser } from '../../types/user';
+import type { IUser, ArrayRecipe } from '../../types/user';
 
 const baseUrl = '/api';
 
@@ -11,6 +11,9 @@ export const cookbookApi = createApi({
     getUser: builder.query<IUser, void>({
       query: () => `/account/settings`,
     }),
+    getRecipeByTitle: builder.query<ArrayRecipe, string>({
+      query: title => `/recipe?title=${title}`,
+    }),
     // getAllMovie: builder.query({
     //   query: ({ debouncedValue, typeValue, yearValue, page }) =>
     //     `?s=${debouncedValue + apiKey}&type=${typeValue}&y=${yearValue}&page=${page}`,
@@ -21,4 +24,4 @@ export const cookbookApi = createApi({
   }),
 });
 
-export const { useGetUserQuery } = cookbookApi;
+export const { useGetUserQuery, useGetRecipeByTitleQuery } = cookbookApi;

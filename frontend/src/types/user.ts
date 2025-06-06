@@ -4,3 +4,22 @@ export interface IUser {
   name: string | null;
   image: string | null;
 }
+
+export interface ArrayRecipe {
+  data: Recipe[]
+}
+
+export interface Recipe {
+  id: string
+  title: string
+  description: string
+  ingredients: string[]
+  directions: string[]
+  views: number
+  estimated_time: string
+  image: string
+  user_id: string
+  createdAt: string
+  updatedAt: string
+}
+
