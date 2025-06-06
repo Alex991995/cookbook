@@ -11,9 +11,9 @@ export default defineConfig({
       components: '/src/components',
       layouts: '/src/layouts',
       pages: '/src/pages',
-      store: '/src/store'
-
-    }
+      store: '/src/store',
+      common: '/src/common',
+    },
   },
   server: {
     proxy: {

@@ -29,7 +29,8 @@
       "components/*": ["components/*"],
       "layouts/*": ["layouts/*"],
       "pages/*": ["pages/*"],
-      "store/*": ["store/*"]
+      "store/*": ["store/*"],
+      "common/*":["common/*"]
     }
   },
   "include": ["src"]

@@ -8,6 +8,8 @@ import Button from 'components/button';
 import ButtonTransparent from 'components/button-transparent';
 import { useState } from 'react';
 import { BsX } from 'react-icons/bs';
+import { getArrMinutes } from 'common/constants';
+const arrMinutes = getArrMinutes();
 
 function CreateRecipePage() {
   const {
@@ -15,40 +17,80 @@ function CreateRecipePage() {
     handleSubmit,
     reset,
     control,
+    setError,
     clearErrors,
-    // setError,
     formState: { errors, isValid },
   } = useForm<CreateRecipeType>({
     mode: 'onBlur',
     resolver: zodResolver(CreateRecipeSchema),
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const {
+    fields: fieldsIngredients,
+    append: appendIngredients,
+    remove: removeIngredients,
+  } = useFieldArray({
     control,
     name: 'ingredients',
   });
-  const [valueIngredient, setValueIngredient] = useState({ value: '' });
-  // const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const {
+    fields: fieldsDirections,
+    append: appendDirections,
+    remove: removeDirections,
+  } = useFieldArray({
+    control,
+    name: 'directions',
+  });
+
+  const [valueIngredient, setValueIngredient] = useState('');
+  const [valueDirection, setValueDirection] = useState('');
 
   function clearFields() {
     clearErrors();
     reset();
+    removeDirections();
+    removeIngredients();
   }
 
   function addValueToAppend() {
     if (valueIngredient) {
-      append(valueIngredient);
-      setValueIngredient({ value: '' });
+      appendIngredients(valueIngredient);
+      setValueIngredient('');
     }
   }
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    setValueIngredient({ value });
+  function addValueDirectionToAppend() {
+    if (valueDirection) {
+      appendDirections(valueDirection);
+      setValueDirection('');
+    }
   }
 
   const onSubmit: SubmitHandler<CreateRecipeType> = async data => {
-    console.log(data);
+    const { picture, ...body } = data;
+    const file = picture[0];
+    console.log(body);
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('data', JSON.stringify(body));
+
+    try {
+      const response = await fetch('/api/recipe', {
+        method: 'POST',
+        body: formData,
+      });
+
+      await response.json();
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        setError('title', {
+          message: error.message,
+        });
+      }
+    }
   };
 
   return (
@@ -58,7 +100,7 @@ function CreateRecipePage() {
       <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
         <div className={styles['box-input']}>
           <h3 className={styles.title}>
-            Recipe title<span className="text-red-700">*</span>{' '}
+            Recipe title<span className="text-red-700">*</span>
           </h3>
           <input
             className={styles.input}
@@ -82,62 +124,103 @@ function CreateRecipePage() {
           <p className="h-6 text-red-600">{errors.picture?.message}</p>
         </div>
         <div>
+          <h3 className={styles.title}>Estimated time</h3>
+          <select {...register('estimated_time')}>
+            {arrMinutes.map(value => (
+              <option key={value} value={value}>
+                {value}
+              </option>
+            ))}
+          </select>
+          <p className="h-6 text-red-600">{errors.estimated_time?.message}</p>
+        </div>
+        <div>
           <h3 className={styles.title}>Description</h3>
           <textarea
             placeholder="Description"
             className={`${styles.input} min-h-36`}
-            {...register('description', { required: true })}
+            {...register('description')}
           />
           <p className="h-6 text-red-600">{errors.description?.message}</p>
         </div>
-
-        <div className="relative">
-          <input
-            className={styles.input}
-            value={valueIngredient.value}
-            onChange={handleChange}
-            type="text"
-            placeholder="Fourth ingredient"
-          />
-
-          <div className="absolute right-0 mr-2 top-1/6 ">
-            <Button
-              text="Add ingredient"
-              maxWidth=""
-              type="button"
-              handleClick={addValueToAppend}
+        <div>
+          <h3 className={styles.title}>Ingredients</h3>
+          <div className="relative">
+            <input
+              className={styles.input}
+              value={valueIngredient}
+              onChange={e => setValueIngredient(e.target.value)}
+              type="text"
+              placeholder="Fourth ingredient"
             />
-          </div>
-        </div>
 
-        <ul className="flex flex-col gap-2">
-          {fields.map((field, index) => (
-            <li className="flex ">
-              <input
-                readOnly
-                className="outline-none"
-                key={field.id}
-                {...register(`ingredients.${index}.value`)}
+            <div className="absolute right-0 mr-2 top-1/6 ">
+              <Button
+                text="Add ingredient"
+                maxWidth=""
+                type="button"
+                handleClick={addValueToAppend}
               />
+            </div>
+          </div>
+          <p className="h-6 text-red-600">{errors.ingredients?.message}</p>
+          <ul className="flex flex-col gap-2">
+            {fieldsIngredients.map((field, index) => (
+              <li className="flex " key={field.id}>
+                <input
+                  readOnly
+                  className="outline-none"
+                  key={field.id}
+                  {...register(`ingredients.${index}`)}
+                />
 
-              <BsX size={25} onClick={() => remove(index)} />
-            </li>
-          ))}
-        </ul>
-
+                <BsX size={25} onClick={() => removeIngredients(index)} />
+              </li>
+            ))}
+          </ul>
+        </div>
         <div>
           <h3 className={styles.title}>Directions</h3>
-          <input
-            className={styles.input}
-            placeholder="Directions"
-            type="text"
-            {...register('directions', { required: true })}
-          />
+
+          <div className="relative">
+            <input
+              className={styles.input}
+              value={valueDirection}
+              onChange={e => setValueDirection(e.target.value)}
+              type="text"
+              placeholder="Directions"
+            />
+
+            <div className="absolute right-0 mr-2 top-1/6 ">
+              <Button
+                text="Add directions"
+                maxWidth=""
+                type="button"
+                handleClick={addValueDirectionToAppend}
+              />
+            </div>
+          </div>
+
           <p className="h-6 text-red-600">{errors.directions?.message}</p>
+
+          <ul className="flex flex-col gap-2">
+            {fieldsDirections.map((field, index) => (
+              <li className="flex " key={field.id}>
+                <input
+                  readOnly
+                  className="outline-none"
+                  key={field.id}
+                  {...register(`directions.${index}`)}
+                />
+
+                <BsX size={25} onClick={() => removeDirections(index)} />
+              </li>
+            ))}
+          </ul>
         </div>
         <div className="flex justify-end">
           <ButtonTransparent text="Cancel" maxWidth="100px" handleClick={clearFields} />
-          <Button text="Save" maxWidth="90px" />
+          <Button text="Save" type="submit" paddingX="0" disabled={!isValid} maxWidth="90px" />
         </div>
       </form>
     </section>
