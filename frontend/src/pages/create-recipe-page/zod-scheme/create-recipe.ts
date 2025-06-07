@@ -10,8 +10,8 @@ export const CreateRecipeSchema = z.object({
   picture: z.instanceof(FileList).refine(file => file?.length == 1, 'File is required.'),
   estimated_time: z.string(),
 
-  ingredients: z.array(valueObjects),
-  directions: z.array(valueObjects),
+  ingredients: z.array(valueObjects).nonempty(),
+  directions: z.array(valueObjects).nonempty(),
 });
 
 export type CreateRecipeType = z.infer<typeof CreateRecipeSchema>;

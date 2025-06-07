@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Button from 'components/button';
 import ButtonTransparent from 'components/button-transparent';
 import { useState } from 'react';
-import { BsX } from 'react-icons/bs';
 import { CreateCookbookSchema, type CreateCookbookType } from './zod-scheme/create-cookbook';
 import { useGetRecipeByTitleQuery } from 'store/api/api';
 import type { Recipe } from 'types';
@@ -43,7 +42,7 @@ function CreateCookbookPage() {
       // setValueRecipe(newValue.value);
       if (recipe) {
         setSelectedRecipes(prevSate => [...prevSate, recipe]);
-        append({ id: recipe.id });
+        append({ id: recipe.id, value: recipe.title });
       }
     }
   }
@@ -129,16 +128,20 @@ function CreateCookbookPage() {
               const recipe = selectedRecipes[index];
 
               return (
-                <li className="flex" key={field.id}>
-                  <input
-                    readOnly
-                    className="outline-none"
-                    key={field.id}
-                    {...register(`recipesIDs.${index}.id`)}
-                  />
-
-                  <img className="w-[125px] h-[95px] object-cover" src={recipe.image} alt="" />
-                  <BsX size={25} onClick={() => remove(index)} />
+                <li className={styles['card-recipe']} key={field.id}>
+                  <div className="flex flex-1 bg-white p-3.5 gap-4">
+                    <img className="w-[125px] h-[95px] object-cover" src={recipe.image} alt="" />
+                    <div>
+                      <input
+                        readOnly
+                        className="outline-none"
+                        key={field.id}
+                        {...register(`recipesIDs.${index}.value`)}
+                      />
+                      <p>{recipe.description}</p>
+                    </div>
+                  </div>
+                  <button className='basis-44 cursor-pointer' onClick={() => remove(index)}>Remove</button>
                 </li>
               );
             })}

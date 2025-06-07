@@ -20,10 +20,17 @@ function CreateRecipePage() {
     control,
     setError,
     clearErrors,
+    trigger,
     formState: { errors, isValid },
   } = useForm<CreateRecipeType>({
-    mode: 'onBlur',
+    mode: 'onSubmit',
     resolver: zodResolver(CreateRecipeSchema),
+    defaultValues: {
+      title: '',
+      description: '',
+      picture: undefined,
+      estimated_time: '',
+    },
   });
 
   const {
@@ -48,6 +55,7 @@ function CreateRecipePage() {
   const [valueDirection, setValueDirection] = useState('');
 
   function clearFields() {
+    trigger("title")
     clearErrors();
     reset();
     removeDirections();
@@ -99,7 +107,9 @@ function CreateRecipePage() {
         body: formData,
       });
 
-      await response.json();
+      const res = await response.json();
+      clearFields();
+      console.log(res);
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -109,7 +119,7 @@ function CreateRecipePage() {
       }
     }
   };
-
+  console.log(errors);
   return (
     <section className="container mx-auto my-24">
       <h1 className="font-bold text-5xl mb-16">Create a new recipe</h1>
@@ -187,7 +197,7 @@ function CreateRecipePage() {
               <li className="flex " key={field.id}>
                 <input
                   readOnly
-                  className="outline-none"
+                  className="outline-none w-full"
                   key={field.id}
                   {...register(`ingredients.${index}.value`)}
                 />
@@ -226,7 +236,7 @@ function CreateRecipePage() {
               <li className="flex " key={field.id}>
                 <input
                   readOnly
-                  className="outline-none"
+                  className="outline-none w-full"
                   key={field.id}
                   {...register(`directions.${index}.value`)}
                 />
