@@ -42,7 +42,7 @@ export class CookbookController {
           const cookbook = JSON.parse(data) as CookbookDto;
           cookbook.image = filePath;
           CookbookScheme.parse(cookbook);
-
+console.log(cookbook)
           const result = await this.cookbookService.createCookbook(cookbook, user_id);
           res.send(result);
         } catch (error) {

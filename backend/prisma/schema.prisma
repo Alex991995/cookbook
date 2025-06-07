@@ -31,7 +31,7 @@ model Recipe {
   title          String
   description    String?
   ingredients    String[]
-  direction      String[]
+  directions     String[]
   views          Int      @default(0)
   estimated_time Int
   image          String

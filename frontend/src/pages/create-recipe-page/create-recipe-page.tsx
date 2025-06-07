@@ -3,16 +3,13 @@ import { FiPlus } from 'react-icons/fi';
 
 import { useForm, useFieldArray, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  CreateRecipeSchema,
-  type CreateRecipeType,
-  type CreateRecipeTypeForServer,
-} from './zod-scheme/create-recipe';
+import { CreateRecipeSchema, type CreateRecipeType } from './zod-scheme/create-recipe';
 import Button from 'components/button';
 import ButtonTransparent from 'components/button-transparent';
 import { useState } from 'react';
 import { BsX } from 'react-icons/bs';
 import { getArrMinutes } from 'common/constants';
+import type { CreateRecipeTypeForServer } from 'types';
 const arrMinutes = getArrMinutes();
 
 function CreateRecipePage() {
@@ -47,8 +44,8 @@ function CreateRecipePage() {
     name: 'directions',
   });
 
-  const [valueIngredient, setValueIngredient] = useState({ value: '' });
-  const [valueDirection, setValueDirection] = useState({ value: '' });
+  const [valueIngredient, setValueIngredient] = useState('');
+  const [valueDirection, setValueDirection] = useState('');
 
   function clearFields() {
     clearErrors();
@@ -58,18 +55,25 @@ function CreateRecipePage() {
   }
 
   function addValueIngredientToAppend() {
-    appendIngredients(valueIngredient);
-    setValueIngredient({ value: '' });
+    if (valueIngredient.trim()) {
+      appendIngredients({ value: valueIngredient });
+      setValueIngredient('');
+    }
   }
 
   function addValueDirectionToAppend() {
-    appendDirections(valueDirection);
-    setValueDirection({ value: '' });
+    if (valueDirection.trim()) {
+      appendDirections({ value: valueDirection });
+      setValueDirection('');
+    }
   }
 
   const onSubmit: SubmitHandler<CreateRecipeType> = async data => {
     const { picture, ...body } = data;
+
     const { title, estimated_time, description } = body;
+    const estimated_timeTypeNumber = +estimated_time.split(' ')[0];
+
     const file = picture[0];
     const arrDirections = body.directions.map(item => item.value);
     const arrIngredients = body.ingredients.map(item => item.value);
@@ -78,7 +82,7 @@ function CreateRecipePage() {
       {},
       {
         title,
-        estimated_time,
+        estimated_time: estimated_timeTypeNumber,
         description,
         directions: arrDirections,
         ingredients: arrIngredients,
@@ -145,6 +149,7 @@ function CreateRecipePage() {
               </option>
             ))}
           </select>
+
           <p className="h-6 text-red-600">{errors.estimated_time?.message}</p>
         </div>
         <div>
@@ -161,8 +166,8 @@ function CreateRecipePage() {
           <div className="relative">
             <input
               className={styles.input}
-              value={valueIngredient.value}
-              onChange={e => setValueIngredient({ value: e.target.value })}
+              value={valueIngredient}
+              onChange={e => setValueIngredient(e.target.value)}
               type="text"
               placeholder="Fourth ingredient"
             />
@@ -198,8 +203,8 @@ function CreateRecipePage() {
           <div className="relative">
             <input
               className={styles.input}
-              value={valueDirection.value}
-              onChange={e => setValueDirection({ value: e.target.value })}
+              value={valueDirection}
+              onChange={e => setValueDirection(e.target.value)}
               type="text"
               placeholder="Directions"
             />

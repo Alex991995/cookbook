@@ -23,3 +23,21 @@ export interface Recipe {
   updatedAt: string
 }
 
+export interface CreateCookbookTypeForServer {
+  title: string;
+  description?: string;
+  recipes: string[];
+}
+
+export interface CreateRecipeTypeForServer {
+  title: string;
+  description?: string;
+  estimated_time: number;
+
+  ingredients: string[];
+  directions: string[];
+}
+
+
+
+

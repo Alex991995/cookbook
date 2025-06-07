@@ -16,11 +16,3 @@ export const CreateRecipeSchema = z.object({
 
 export type CreateRecipeType = z.infer<typeof CreateRecipeSchema>;
 
-export interface CreateRecipeTypeForServer {
-  title: string;
-  description?: string;
-  estimated_time: string;
-
-  ingredients: string[];
-  directions: string[];
-}

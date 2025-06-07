@@ -23,7 +23,6 @@ export class RecipeController {
   constructor(
     private recipeService: RecipeService,
     private commentRecipeService: CommentRecipeService,
-
   ) {
     this.router = Router();
     this.upload = multer({ storage });
@@ -37,9 +36,10 @@ export class RecipeController {
         if (!req.file) {
           return next(new HttpError(400, 'Image is required'));
         }
+console.log(req.file)
         const id = req.user.id;
         const recipeStringify = req.body.data;
-
+        console.log(recipeStringify);
         const fileName = req.file.filename;
         const filePath = `${uploadsRecipePath}/${fileName}`;
 
@@ -172,7 +172,6 @@ export class RecipeController {
       } else {
         next(new HttpError(404, 'Record to update does not exist.'));
       }
-
     });
 
     return this.router;

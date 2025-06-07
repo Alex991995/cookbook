@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { IUser, ArrayRecipe } from '../../types/user';
+import type { IUser, ArrayRecipe } from '../../types';
 
 const baseUrl = '/api';
 

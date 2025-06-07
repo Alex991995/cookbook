@@ -6,11 +6,12 @@ import { zodResolver } from '@hookform/resolvers/zod';
 
 import Button from 'components/button';
 import ButtonTransparent from 'components/button-transparent';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { BsX } from 'react-icons/bs';
 import { CreateCookbookSchema, type CreateCookbookType } from './zod-scheme/create-cookbook';
 import { useGetRecipeByTitleQuery } from 'store/api/api';
-import type { ArrayRecipe, Recipe } from 'types/user';
+import type { Recipe } from 'types';
+import Select, { type SingleValue } from 'react-select';
 
 function CreateCookbookPage() {
   const {
@@ -28,54 +29,53 @@ function CreateCookbookPage() {
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: 'recipes',
+    name: 'recipesIDs',
   });
 
-  const [valueRecipe, setValueRecipe] = useState('');
-  const { data: allRecipe } = useGetRecipeByTitleQuery(valueRecipe);
+  // const [valueRecipe, setValueRecipe] = useState('');
+  const { data: allRecipe } = useGetRecipeByTitleQuery('');
   const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
+  const options = allRecipe?.data.map(item => ({ value: item.title, label: item.title }));
 
-  function addValueRecipeToAppend() {
-    const recipe = allRecipe?.data.find(item => item.title === valueRecipe);
-    if (recipe) {
-      setSelectedRecipes(prevSate => [...prevSate, recipe]);
-      append({ value: valueRecipe });
+  function handleSelectChange(newValue: SingleValue<{ value: string; label: string }>) {
+    if (newValue) {
+      const recipe = allRecipe?.data.find(item => item.title === newValue.value);
+      // setValueRecipe(newValue.value);
+      if (recipe) {
+        setSelectedRecipes(prevSate => [...prevSate, recipe]);
+        append({ id: recipe.id });
+      }
     }
   }
 
+  function clearFields() {
+    clearErrors();
+    reset();
+    remove();
+  }
+
   const onSubmit: SubmitHandler<CreateCookbookType> = async data => {
-    //   const { picture, ...body } = data;
-    //   const { title, estimated_time, description } = body;
-    //   const file = picture[0];
-    //   const arrDirections = body.directions.map(item => item.value);
-    //   const arrIngredients = body.ingredients.map(item => item.value);
-    //   const dataForServer: CreateRecipeTypeForServer = Object.assign(
-    //     {},
-    //     {
-    //       title,
-    //       estimated_time,
-    //       description,
-    //       directions: arrDirections,
-    //       ingredients: arrIngredients,
-    //     },
-    //   );
-    //   const formData = new FormData();
-    //   formData.append('file', file);
-    //   formData.append('data', JSON.stringify(dataForServer));
-    //   try {
-    //     const response = await fetch('/api/recipe', {
-    //       method: 'POST',
-    //       body: formData,
-    //     });
-    //     await response.json();
-    //   } catch (error) {
-    //     console.error(error);
-    //     if (error instanceof Error) {
-    //       setError('title', {
-    //         message: error.message,
-    //       });
-    //     }
-    //   }
+    console.log(data);
+    const { picture, ...body } = data;
+    const file = picture[0];
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('data', JSON.stringify(body));
+    try {
+      const response = await fetch('/api/cookbook', {
+        method: 'POST',
+        body: formData,
+      });
+      await response.json();
+    } catch (error) {
+      console.error(error);
+      if (error instanceof Error) {
+        setError('title', {
+          message: error.message,
+        });
+      }
+    }
   };
 
   return (
@@ -121,53 +121,32 @@ function CreateCookbookPage() {
         <div>
           <h3 className={styles.title}>Recipes</h3>
           <div className="relative">
-            <input
-              className={styles.input}
-              value={valueRecipe}
-              onChange={e => setValueRecipe(e.target.value)}
-              type="text"
-              list="recipe"
-              placeholder="Recipe title"
-            />
-            <datalist id="recipe">
-              {allRecipe?.data.map(item => (
-                <option value={item.title} />
-              ))}
-            </datalist>
-            <div className="absolute right-0 mr-2 top-1/6 ">
-              <Button
-                text="Add ingredient"
-                maxWidth=""
-                type="button"
-                handleClick={addValueRecipeToAppend}
-              />
-            </div>
+            <Select options={options} onChange={handleSelectChange} isClearable />
           </div>
-          <p className="h-6 text-red-600">{errors.recipes?.message}</p>
+          <p className="h-6 text-red-600">{errors.recipesIDs?.message}</p>
           <ul className="flex flex-col gap-2">
-            {fields.map((field, index) => (
-              <li className="flex" key={field.id}>
-                {field.value}
-                <input
-                  readOnly
-                  className="outline-none"
-                  key={field.id}
-                  {...register(`recipes.${index}.value`)}
-                />
+            {fields.map((field, index) => {
+              const recipe = selectedRecipes[index];
 
-                <BsX size={25} onClick={() => remove(index)} />
-              </li>
-            ))}
-            {selectedRecipes.map(item => (
-              <li>
-                <img className="w-[125px] h-[95px] object-cover" src={item.image} alt="" />
-              </li>
-            ))}
+              return (
+                <li className="flex" key={field.id}>
+                  <input
+                    readOnly
+                    className="outline-none"
+                    key={field.id}
+                    {...register(`recipesIDs.${index}.id`)}
+                  />
+
+                  <img className="w-[125px] h-[95px] object-cover" src={recipe.image} alt="" />
+                  <BsX size={25} onClick={() => remove(index)} />
+                </li>
+              );
+            })}
           </ul>
         </div>
 
         <div className="flex justify-end">
-          {/* <ButtonTransparent text="Cancel" maxWidth="100px" handleClick={clearFields} /> */}
+          <ButtonTransparent text="Cancel" maxWidth="100px" handleClick={clearFields} />
           <Button text="Save" type="submit" paddingX="0" disabled={!isValid} maxWidth="90px" />
         </div>
       </form>

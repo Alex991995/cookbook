@@ -2,9 +2,9 @@ export interface RecipeDto {
   title: string;
   description: string | null;
   ingredients: string[];
-  direction: string[];
+  directions: string[];
   views: number;
-  estimated_time: number;
+  estimated_time: string;
   image: string;
 }
 
