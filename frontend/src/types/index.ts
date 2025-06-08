@@ -3,24 +3,25 @@ export interface IUser {
   email: string;
   name: string | null;
   image: string | null;
+  description?: string;
 }
 
 export interface ArrayRecipe {
-  data: Recipe[]
+  data: Recipe[];
 }
 
 export interface Recipe {
-  id: string
-  title: string
-  description: string
-  ingredients: string[]
-  directions: string[]
-  views: number
-  estimated_time: string
-  image: string
-  user_id: string
-  createdAt: string
-  updatedAt: string
+  id: string;
+  title: string;
+  description: string;
+  ingredients: string[];
+  directions: string[];
+  views: number;
+  estimated_time: string;
+  image: string;
+  user_id: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CreateCookbookTypeForServer {
@@ -37,7 +38,3 @@ export interface CreateRecipeTypeForServer {
   ingredients: string[];
   directions: string[];
 }
-
-
-
-

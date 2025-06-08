@@ -1,4 +1,4 @@
-import source from 'assets/man.png';
+import defaultImage from 'assets/icon-user.png';
 import Button from 'components/button';
 import { useGetUserQuery } from 'store/api/api';
 import { useLocation } from 'react-router';
@@ -20,12 +20,15 @@ function UserInfo() {
   return (
     <div className="flex w-full justify-between items-center">
       <div className="flex gap-8 mt-24 ">
-        <img src={source} alt="user" className="w-[160px] h-[160px] object-cover rounded-[102px]" />
+        <img
+          src={data?.image || defaultImage}
+          alt="user"
+          className="w-[160px] h-[160px] object-cover rounded-[102px]"
+        />
         <div>
-          <h1 className="text-4xl mb-3.5">{data?.name || 'John Doe'}</h1>
+          <h1 className="text-4xl mb-3.5">{data?.name}</h1>
           <p className="max-w-96 text-2xl text-secondary">
-            I don’t know about you but I love pizza. Especially when that pizza comes with Papa
-            John’s very own garlic pizza sticks.
+            {data?.description || 'We are waiting forward your description'}
           </p>
         </div>
       </div>
