@@ -16,7 +16,7 @@ interface ICard {
 }
 
 function Card({ source, views, nameRecipe, nameCreator, numberLikes, numberComments, width }: ICard) {
-  console.log('width',width)
+
   return (
     <li className={styles.card} >
       <div className="flex gap-2">

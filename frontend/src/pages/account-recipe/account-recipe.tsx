@@ -1,59 +1,34 @@
-
+import Modal from 'components/modal';
+import FormUpdateRecipe from 'features/recipie/form-update-recipe/form-update-recipe';
 import CardRecipes from 'features/recipie/ui/card-recipes/card-recipes';
-import meal from 'features/cookbook/assets/meal.jpg';
+import { useState } from 'react';
+
+import { useGetAllRecipesQuery } from 'store/api/api';
+import type { Recipe } from 'types';
 
 function AccountRecipe() {
+  const { data: recipes } = useGetAllRecipesQuery();
+  const [openModel, setOpenModel] = useState(false);
+  const [recipeForUpdate, setRecipeForUpdate] = useState();
+
+  function f(recipe: Recipe) {
+    setOpenModel(true);
+    setRecipeForUpdate(recipe);
+  }
+
+  // const [openModel, setOpenModel] = useState(false);
   return (
     <div className="w-full">
       <ul className="flex flex-col gap-8 ">
-        {arr.map(item => (
-          <CardRecipes {...item} />
+        {recipes?.data.map(item => (
+          <CardRecipes f={f} key={item.id} {...item} />
         ))}
       </ul>
+      <Modal onClose={() => setOpenModel(false)} isOpened={openModel}>
+        <FormUpdateRecipe recipe={recipeForUpdate}/>
+      </Modal>
     </div>
   );
 }
 
 export default AccountRecipe;
-
-const description =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Leo non ac eros, velit dapibus consequat vestibulum sapien pharetra. Bibendum vel sollicitudin at purus egestas tincidunt. Vulputate ac, ullamcorper etiam interdum vitae semper.';
-
-const arr = [
-  {
-    source: meal,
-    views: 2,
-    nameRecipe: 'pancka',
-    nameCreator: 'Jon',
-    description,
-    numberLikes: 233,
-    numberComments: 333,
-  },
-  {
-    source: meal,
-    views: 2,
-    nameRecipe: 'pancka',
-    nameCreator: 'Jon',
-    numberLikes: 233,
-    numberComments: 333,
-    description,
-  },
-  {
-    source: meal,
-    views: 2,
-    nameRecipe: 'pancka',
-    nameCreator: 'Jon',
-    numberLikes: 233,
-    numberComments: 333,
-    description,
-  },
-  {
-    source: meal,
-    views: 2,
-    nameRecipe: 'pancka',
-    nameCreator: 'Jon',
-    numberLikes: 233,
-    numberComments: 333,
-    description,
-  },
-];

@@ -68,13 +68,11 @@ model Cookbook {
 }
 
 model Recipe_Likes {
-  id           String @id @default(uuid())
-  number_likes Int    @default(0)
-  recipe_id    String
-  user_id      String
+  id        String @id @default(uuid())
+  recipe_id String
+  user_id   String
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
   recipe Recipe @relation(fields: [recipe_id], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [user_id], references: [id])
@@ -97,13 +95,11 @@ model CommentRecipe {
 }
 
 model Cookbook_Likes {
-  id           String @id @default(uuid())
-  number_likes Int    @default(0)
-  cookbook_id  String
-  user_id      String
+  id          String @id @default(uuid())
+  cookbook_id String
+  user_id     String
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
   cookbook Cookbook @relation(fields: [cookbook_id], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [user_id], references: [id])

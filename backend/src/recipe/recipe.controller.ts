@@ -36,7 +36,7 @@ export class RecipeController {
         if (!req.file) {
           return next(new HttpError(400, 'Image is required'));
         }
-console.log(req.file)
+        console.log(req.file)
         const id = req.user.id;
         const recipeStringify = req.body.data;
         console.log(recipeStringify);
@@ -51,7 +51,6 @@ console.log(req.file)
           const result = await this.recipeService.createRecipe(id, recipe);
 
           if (result) {
-            // await this.likeRecipeService.createLike(result.id, id);
             res.send({ result });
           } else {
             console.error(result);
@@ -163,16 +162,16 @@ console.log(req.file)
       });
     });
 
-    this.router.put('/like/:id', async (req, res, next) => {
-      const id = req.params.id;
+    // this.router.put('/like/:id', async (req, res, next) => {
+    //   const id = req.params.id;
 
-      const result = await this.recipeService.addLike(id);
-      if (result) {
-        res.status(204).send();
-      } else {
-        next(new HttpError(404, 'Record to update does not exist.'));
-      }
-    });
+    //   const result = await this.recipeService.addLike(id);
+    //   if (result) {
+    //     res.status(204).send();
+    //   } else {
+    //     next(new HttpError(404, 'Record to update does not exist.'));
+    //   }
+    // });
 
     return this.router;
   }

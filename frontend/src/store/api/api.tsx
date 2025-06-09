@@ -11,6 +11,9 @@ export const cookbookApi = createApi({
     getUser: builder.query<IUser, void>({
       query: () => `/account/settings`,
     }),
+    getAllRecipes: builder.query<ArrayRecipe, void>({
+      query: () => `/recipe/all`,
+    }),
     getRecipeByTitle: builder.query<ArrayRecipe, string>({
       query: title => `/recipe?title=${title}`,
     }),
@@ -24,4 +27,4 @@ export const cookbookApi = createApi({
   }),
 });
 
-export const { useGetUserQuery, useGetRecipeByTitleQuery } = cookbookApi;
+export const { useGetUserQuery, useGetRecipeByTitleQuery, useGetAllRecipesQuery } = cookbookApi;

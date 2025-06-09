@@ -148,16 +148,16 @@ console.log(cookbook)
       });
     });
 
-    this.router.put('/like/:id', async (req, res, next) => {
-      const id = req.params.id;
+    // this.router.put('/like/:id', async (req, res, next) => {
+    //   const id = req.params.id;
 
-      const result = await this.cookbookService.addLike(id);
-      if (result) {
-        res.status(204).send();
-      } else {
-        next(new HttpError(404, 'Record to update does not exist.'));
-      }
-    });
+    //   const result = await this.cookbookService.addLike(id);
+    //   if (result) {
+    //     res.status(204).send();
+    //   } else {
+    //     next(new HttpError(404, 'Record to update does not exist.'));
+    //   }
+    // });
 
     return this.router;
   }

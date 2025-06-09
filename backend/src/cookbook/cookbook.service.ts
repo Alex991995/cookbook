@@ -12,9 +12,6 @@ export class CookbookService {
         ...cookbook,
         user_id,
         recipes: { connect: recipesIDs },
-        Cookbook_Likes: {
-          create: { user_id },
-        },
       },
     });
     return result;
@@ -69,19 +66,19 @@ export class CookbookService {
     }
   }
 
-  async addLike(id: string) {
-    try {
-      await this.prismaService.client.cookbook_Likes.update({
-        where: {
-          id,
-        },
-        data: { number_likes: { increment: 1 } },
-      });
+  // async addLike(id: string) {
+  //   try {
+  //     await this.prismaService.client.cookbook_Likes.update({
+  //       where: {
+  //         id,
+  //       },
+  //       data: { number_likes: { increment: 1 } },
+  //     });
 
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
+  //     return true;
+  //   } catch (err) {
+  //     console.log(err);
+  //     return false;
+  //   }
+  // }
 }

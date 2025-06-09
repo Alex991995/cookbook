@@ -22,7 +22,16 @@ export interface Recipe {
   user_id: string;
   createdAt: string;
   updatedAt: string;
+  user?: IUserCreator;
+  _count: ICount;
 }
+
+interface ICount {
+  likes: number;
+  comment: number;
+}
+
+
 
 export interface CreateCookbookTypeForServer {
   title: string;
@@ -37,4 +46,8 @@ export interface CreateRecipeTypeForServer {
 
   ingredients: string[];
   directions: string[];
+}
+
+export interface IUserCreator {
+  name: string;
 }
