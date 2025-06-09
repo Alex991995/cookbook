@@ -20,7 +20,6 @@ function CreateRecipePage() {
     control,
     setError,
     clearErrors,
-    trigger,
     formState: { errors, isValid },
   } = useForm<CreateRecipeType>({
     mode: 'onSubmit',
@@ -55,7 +54,7 @@ function CreateRecipePage() {
   const [valueDirection, setValueDirection] = useState('');
 
   function clearFields() {
-    trigger("title")
+
     clearErrors();
     reset();
     removeDirections();
@@ -77,6 +76,7 @@ function CreateRecipePage() {
   }
 
   const onSubmit: SubmitHandler<CreateRecipeType> = async data => {
+    console.log(data)
     const { picture, ...body } = data;
 
     const { title, estimated_time, description } = body;

@@ -14,7 +14,7 @@ export const RecipeScheme = z
     // ingredients: z.array(valueObjects).min(1),
     // directions: z.array(valueObjects).min(1),
     // views: z.number(),
-    estimated_time: z.string(),
+    estimated_time: z.number(),
   })
   .required();
 

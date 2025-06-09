@@ -4,7 +4,7 @@ export interface RecipeDto {
   ingredients: string[];
   directions: string[];
   views: number;
-  estimated_time: string;
+  estimated_time: number;
   image: string;
 }
 

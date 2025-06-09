@@ -38,18 +38,23 @@ export class AccountController {
         const data = req.body.data;
 
         const fileName = req.file?.filename;
+
         const filePath = `${uploadsAccountPath}/${fileName}`;
 
         try {
           const credentials = JSON.parse(data) as UpdateAccountDto;
-          credentials.image = filePath;
+          if (fileName) {
+            credentials.image = filePath;
+          }
+
           UpdateAccountScheme.parse(credentials);
           const result = await this.accountService.updateCredentials(id, credentials);
+
 
           if (!result) {
             return next(new HttpError(401, 'Wrong credentials'));
           } else if (typeof result == 'boolean') {
-            res.status(204).send();
+            res.send({ message: ' changes have been changed' });
           } else {
             res
               .cookie('access_token', result.jwt, {
@@ -58,6 +63,7 @@ export class AccountController {
               .end();
           }
         } catch (error) {
+          console.log(error);
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));
           }

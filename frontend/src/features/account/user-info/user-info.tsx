@@ -1,20 +1,33 @@
 import defaultImage from 'assets/icon-user.png';
 import Button from 'components/button';
 import { useGetUserQuery } from 'store/api/api';
-import { useLocation } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 
 function UserInfo() {
   const { data } = useGetUserQuery();
   const location = useLocation();
+  const navigate = useNavigate();
   const pathname = location.pathname.split('/');
   const [, , route] = pathname;
 
   let buttonForCreate;
 
   if (route === 'cookbook') {
-    buttonForCreate = <Button text="Create New CookBook" maxWidth="273px" />;
+    buttonForCreate = (
+      <Button
+        text="Create New CookBook"
+        maxWidth="273px"
+        handleClick={() => navigate('/cookbook/create')}
+      />
+    );
   } else if (route === 'recipe') {
-    buttonForCreate = <Button text="Create New Recipe" maxWidth="273px" />;
+    buttonForCreate = (
+      <Button
+        text="Create New Recipe"
+        maxWidth="273px"
+        handleClick={() => navigate('/recipe/create')}
+      />
+    );
   }
 
   return (

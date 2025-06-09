@@ -43,7 +43,7 @@
 }
 
 .option {
-  background-color: white;
+  background-color: #FFFFFF;
   padding: 4px;
   color: blue;
   margin-bottom: 1px;
@@ -56,4 +56,5 @@
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+  border-radius: 10px;
 }

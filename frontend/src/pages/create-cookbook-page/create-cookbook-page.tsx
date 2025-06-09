@@ -130,7 +130,7 @@ function CreateCookbookPage() {
               return (
                 <li className={styles['card-recipe']} key={field.id}>
                   <div className="flex flex-1 bg-white p-3.5 gap-4">
-                    <img className="w-[125px] h-[95px] object-cover" src={recipe.image} alt="" />
+                    <img className="w-[125px] h-[95px] object-cover rounded-2xl" src={recipe.image} alt="" />
                     <div>
                       <input
                         readOnly
