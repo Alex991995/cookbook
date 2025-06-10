@@ -31,8 +31,6 @@ interface ICount {
   comment: number;
 }
 
-
-
 export interface CreateCookbookTypeForServer {
   title: string;
   description?: string;
@@ -47,6 +45,16 @@ export interface CreateRecipeTypeForServer {
   ingredients: string[];
   directions: string[];
 }
+
+export interface UpdateRecipeTypeForServer {
+  id?: string;
+  title?: string;
+  description?: string;
+  estimated_time?: number;
+  ingredients?: string[];
+  directions?: string[];
+}
+
 
 export interface IUserCreator {
   name: string;

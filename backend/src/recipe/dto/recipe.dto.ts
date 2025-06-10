@@ -3,7 +3,6 @@ export interface RecipeDto {
   description: string | null;
   ingredients: string[];
   directions: string[];
-  views: number;
   estimated_time: number;
   image: string;
 }

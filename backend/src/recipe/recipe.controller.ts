@@ -36,7 +36,7 @@ export class RecipeController {
         if (!req.file) {
           return next(new HttpError(400, 'Image is required'));
         }
-        console.log(req.file)
+        console.log(req.file);
         const id = req.user.id;
         const recipeStringify = req.body.data;
         console.log(recipeStringify);
@@ -95,16 +95,33 @@ export class RecipeController {
 
     this.router.put(
       '/:id',
-      async (req: Request<{ id: string }, object, UpdateRecipeDto>, res, next) => {
-        const body = req.body;
+      this.upload.single('file'),
+      async (
+        req: Request<{ id: string }, object, { data: string }>,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        // async (req: Request<{ id: string }, object, UpdateRecipeDto>, res, next) => {
+        const user_id = req.user.id;
         const id = req.params.id;
+        const data = req.body.data;
 
+        const fileName = req.file?.filename;
+
+        const filePath = `${uploadsRecipePath}/${fileName}`;
+        console.log(fileName);
+        console.log(data);
         try {
-          UpdateRecipeScheme.parse(body);
-          const result = await this.recipeService.updateRecipe(id, body);
+          const credentials = JSON.parse(data) as UpdateRecipeDto;
+          if (fileName) {
+            credentials.image = filePath;
+          }
+
+          UpdateRecipeScheme.parse(credentials);
+          const result = await this.recipeService.updateRecipe(id, credentials);
 
           if (result) {
-            res.status(204).send();
+            res.send(result);
           } else {
             next(new HttpError(404, 'Record to update not found'));
           }

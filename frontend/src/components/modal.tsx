@@ -4,10 +4,10 @@ import styles from '../styles/modal.module.css';
 interface IModal {
   isOpened: boolean;
   onClose: () => void;
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-function Modal({ isOpened, children, onClose }:IModal) {
+function Modal({ isOpened, children, onClose }: IModal) {
   if (!isOpened) {
     return null;
   }
@@ -20,7 +20,7 @@ function Modal({ isOpened, children, onClose }:IModal) {
           <span className={`${styles['close-button']}`} onClick={onClose}>
             X
           </span>
-          <div className={`${styles['close-modal-content']}`}>{children}</div>
+          <div>{children}</div>
         </div>
       </div>
     </div>,

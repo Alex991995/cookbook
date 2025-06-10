@@ -1,0 +1,26 @@
+.form {
+  display: flex;
+  width: 700px;
+  gap: 120px;
+}
+
+.title {
+  font-size: 24px;
+}
+
+.meal {
+  align-items: center;
+  width: 215px;
+  height: 178px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.input {
+  width: 100%;
+  background-color: white;
+
+  border-radius: 10px;
+  padding: 5px 9px;
+}
+

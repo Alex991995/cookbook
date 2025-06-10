@@ -9,23 +9,22 @@ import type { Recipe } from 'types';
 function AccountRecipe() {
   const { data: recipes } = useGetAllRecipesQuery();
   const [openModel, setOpenModel] = useState(false);
-  const [recipeForUpdate, setRecipeForUpdate] = useState();
+  const [recipeForUpdate, setRecipeForUpdate] = useState<Recipe>();
 
-  function f(recipe: Recipe) {
+  function updateRecipe(recipe: Recipe) {
     setOpenModel(true);
     setRecipeForUpdate(recipe);
   }
 
-  // const [openModel, setOpenModel] = useState(false);
   return (
     <div className="w-full">
       <ul className="flex flex-col gap-8 ">
         {recipes?.data.map(item => (
-          <CardRecipes f={f} key={item.id} {...item} />
+          <CardRecipes updateRecipe={updateRecipe} key={item.id} {...item} />
         ))}
       </ul>
       <Modal onClose={() => setOpenModel(false)} isOpened={openModel}>
-        <FormUpdateRecipe recipe={recipeForUpdate}/>
+        <FormUpdateRecipe recipe={recipeForUpdate!} />
       </Modal>
     </div>
   );

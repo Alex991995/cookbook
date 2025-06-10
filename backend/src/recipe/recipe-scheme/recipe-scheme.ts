@@ -24,7 +24,6 @@ export const UpdateRecipeScheme = z
     description: z.string().nullable(),
     ingredients: z.string().array(),
     direction: z.string().array(),
-    views: z.number(),
     estimated_time: z.number(),
     image: z.string(),
   })

@@ -5,15 +5,17 @@ import sourceComment from 'assets/comment.svg';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
 import { RiChatDeleteFill } from 'react-icons/ri';
 import type { Recipe } from 'types';
-// import Modal from 'components/modal';
 
-function CardRecipes(recipe: Recipe) {
-  const { views, image, title, description, user, _count, f } = recipe;
-  // const [openModel, setOpenModel] = useState(false);
+interface RecipeWithUpdate extends Recipe {
+  updateRecipe: (recipe: Recipe) => void;
+}
+
+function CardRecipes(recipe: RecipeWithUpdate) {
+  const { views, image, title, description, user, _count, updateRecipe } = recipe;
 
   return (
     <>
-      <li f={f} className={styles.card}>
+      <li className={styles.card}>
         <img className={styles.meal} src={image} alt="meal" />
 
         <div className="flex flex-col justify-between">
@@ -39,7 +41,7 @@ function CardRecipes(recipe: Recipe) {
           </div>
         </div>
         <div className="flex grow justify-end gap-4">
-          <MdOutlineSystemUpdateAlt onClick={() => f(recipe)} size={23} />
+          <MdOutlineSystemUpdateAlt onClick={() => updateRecipe(recipe)} size={23} />
           <RiChatDeleteFill size={23} />
         </div>
       </li>
