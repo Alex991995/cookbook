@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
 const valueObjects = z.object({
-  id: z.string(), 
-  value: z.string(), 
+  id: z.string(),
 });
 
 export const CreateCookbookSchema = z.object({
@@ -13,6 +12,3 @@ export const CreateCookbookSchema = z.object({
 });
 
 export type CreateCookbookType = z.infer<typeof CreateCookbookSchema>;
-
-
-

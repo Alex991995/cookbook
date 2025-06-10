@@ -56,9 +56,9 @@ model Cookbook {
   image       String
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-
-  user_id String
-  recipes Recipe[]
+  views       Int      @default(0)
+  user_id     String
+  recipes     Recipe[]
 
   user            User              @relation(fields: [user_id], references: [id])
   commentCookbook CommentCookbook[]

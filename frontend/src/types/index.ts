@@ -26,6 +26,25 @@ export interface Recipe {
   _count: ICount;
 }
 
+export interface ArrayCookbook {
+  data: Cookbook[];
+}
+
+export interface Cookbook {
+  views: number;
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  _count: CountCookbook;
+  user: IUserCreator;
+}
+
+export interface CountCookbook {
+  Cookbook_Likes: number;
+  commentCookbook: number;
+}
+
 interface ICount {
   likes: number;
   comment: number;
@@ -54,7 +73,6 @@ export interface UpdateRecipeTypeForServer {
   ingredients?: string[];
   directions?: string[];
 }
-
 
 export interface IUserCreator {
   name: string;

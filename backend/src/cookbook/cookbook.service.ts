@@ -45,8 +45,23 @@ export class CookbookService {
       where: {
         user_id: id,
       },
-      include: {
-        Cookbook_Likes: true,
+      select: {
+        views: true,
+        id: true,
+        title: true,
+        description: true,
+        image: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            Cookbook_Likes: true,
+            commentCookbook: true,
+          },
+        },
       },
     });
   }

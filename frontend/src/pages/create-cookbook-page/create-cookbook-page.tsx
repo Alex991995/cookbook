@@ -31,7 +31,6 @@ function CreateCookbookPage() {
     name: 'recipesIDs',
   });
 
-  // const [valueRecipe, setValueRecipe] = useState('');
   const { data: allRecipe } = useGetAllRecipesQuery();
   const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
   const options = allRecipe?.data.map(item => ({ value: item.title, label: item.title }));
@@ -39,10 +38,10 @@ function CreateCookbookPage() {
   function handleSelectChange(newValue: SingleValue<{ value: string; label: string }>) {
     if (newValue) {
       const recipe = allRecipe?.data.find(item => item.title === newValue.value);
-      // setValueRecipe(newValue.value);
+
       if (recipe) {
         setSelectedRecipes(prevSate => [...prevSate, recipe]);
-        append({ id: recipe.id, value: recipe.title });
+        append({ id: recipe.id });
       }
     }
   }
@@ -66,7 +65,8 @@ function CreateCookbookPage() {
         method: 'POST',
         body: formData,
       });
-      await response.json();
+      const res = await response.json();
+      console.log(res);
     } catch (error) {
       console.error(error);
       if (error instanceof Error) {
@@ -130,18 +130,25 @@ function CreateCookbookPage() {
               return (
                 <li className={styles['card-recipe']} key={field.id}>
                   <div className="flex flex-1 bg-white p-3.5 gap-4">
-                    <img className="w-[125px] h-[95px] object-cover rounded-2xl" src={recipe.image} alt="" />
+                    <img
+                      className="w-[125px] h-[95px] object-cover rounded-2xl"
+                      src={recipe.image}
+                      alt="recipe-image"
+                    />
                     <div>
                       <input
                         readOnly
-                        className="outline-none"
+                        className="outline-none hidden"
                         key={field.id}
-                        {...register(`recipesIDs.${index}.value`)}
+                        {...register(`recipesIDs.${index}.id`)}
                       />
+                      <h2>{recipe.title}</h2>
                       <p>{recipe.description}</p>
                     </div>
                   </div>
-                  <button className='basis-44 cursor-pointer' onClick={() => remove(index)}>Remove</button>
+                  <button className="basis-44 cursor-pointer" onClick={() => remove(index)}>
+                    Remove
+                  </button>
                 </li>
               );
             })}

@@ -7,7 +7,11 @@ import { HttpError } from '@/errors/http-error';
 import { storage } from '@/common/storage-multer';
 
 import { CookbookService } from './cookbook.service';
-import { CommentCookbookScheme, CookbookScheme, UpdateCookbookScheme } from './cookbook-scheme/cookbook-scheme';
+import {
+  CommentCookbookScheme,
+  CookbookScheme,
+  UpdateCookbookScheme,
+} from './cookbook-scheme/cookbook-scheme';
 import { CookbookDto, UpdateCookbookDto } from './dto/cookbook.dto';
 import { uploadsCookbookPath } from '@/common/constants';
 import { CommentCookbookService } from './comment-cookbook/comment-cookbook.service';
@@ -42,10 +46,11 @@ export class CookbookController {
           const cookbook = JSON.parse(data) as CookbookDto;
           cookbook.image = filePath;
           CookbookScheme.parse(cookbook);
-console.log(cookbook)
+
           const result = await this.cookbookService.createCookbook(cookbook, user_id);
           res.send(result);
         } catch (error) {
+          console.log(error)
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));
           }
