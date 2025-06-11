@@ -40,7 +40,7 @@ export class CookbookService {
     });
   }
 
-  async fetchAllCookbooks(id: string) {
+  async fetchAllUserCookbooks(id: string) {
     return await this.prismaService.client.cookbook.findMany({
       where: {
         user_id: id,
@@ -61,6 +61,34 @@ export class CookbookService {
             Cookbook_Likes: true,
             commentCookbook: true,
           },
+        },
+      },
+    });
+  }
+
+  async fetchAllCookbooks() {
+    return await this.prismaService.client.cookbook.findMany({
+      select: {
+        views: true,
+        id: true,
+        title: true,
+        description: true,
+        image: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            Cookbook_Likes: true,
+            commentCookbook: true,
+          },
+        },
+      },
+      orderBy: {
+        Cookbook_Likes: {
+          _count: 'desc',
         },
       },
     });

@@ -1,14 +1,15 @@
 import styles from './card.module.css';
-import sourceViews from '../../../../assets/views.svg';
-import sourceHeart from '../../../../assets/heart_outline.svg';
-import sourceComment from '../../../../assets/comment.svg';
+import sourceViews from 'assets/views.svg';
+import sourceHeart from 'assets/heart_outline.svg';
+import sourceComment from 'assets/comment.svg';
 import type { Cookbook } from 'types';
 
 interface ICookbookWidth extends Cookbook {
-  width: string;
+  width?: string;
 }
 
 function Card({ image, views, title, user, _count, width }: ICookbookWidth) {
+
   return (
     <li className={styles.card}>
       <div className="flex gap-2">

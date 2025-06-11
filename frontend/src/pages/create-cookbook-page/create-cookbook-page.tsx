@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Button from 'components/button';
 import { useState } from 'react';
 import { CreateCookbookSchema, type CreateCookbookType } from './zod-scheme/create-cookbook';
-import { useGetAllRecipesQuery } from 'store/api/api';
+import { useGetAllUserRecipesQuery } from 'store/api/api';
 import type { Recipe } from 'types';
 import Select, { type SingleValue } from 'react-select';
 
@@ -28,7 +28,7 @@ function CreateCookbookPage() {
     name: 'recipesIDs',
   });
 
-  const { data: allRecipe } = useGetAllRecipesQuery();
+  const { data: allRecipe } = useGetAllUserRecipesQuery();
   const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
   const options = allRecipe?.data.map(item => ({ value: item.title, label: item.title }));
 

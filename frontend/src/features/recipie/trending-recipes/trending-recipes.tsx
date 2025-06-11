@@ -1,9 +1,9 @@
 import styles from './trending-recipes.module.css';
 import CardTrendRecipes from '../ui/card-trend-recipes/card-trend-recipes';
-import { useGetAllRecipesQuery } from 'store/api/api';
+import { useGetAllUserRecipesQuery } from 'store/api/api';
 
 function TrendingRecipes() {
-  const { data: allRecipes } = useGetAllRecipesQuery();
+  const { data: allRecipes } = useGetAllUserRecipesQuery();
   return (
     <section className="px-8">
       <div className={styles.background}>

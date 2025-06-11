@@ -1,12 +1,8 @@
+import { setActive } from 'common/helpers';
 import { NavLink } from 'react-router';
 
 function LinksAccountLayout() {
-  function setActive({ isActive }: { isActive: boolean }) {
-    if (isActive) {
-      return 'border-b-2  border-primary font-semibold text-black';
-    }
-    return '';
-  }
+  
 
   return (
     <div className={`text-secondary flex gap-10 text-2xl  `}>

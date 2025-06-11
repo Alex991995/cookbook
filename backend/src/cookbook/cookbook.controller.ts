@@ -58,9 +58,16 @@ export class CookbookController {
       },
     );
 
-    this.router.get('/all', async (req, res, next) => {
+     this.router.get('/all', async (req, res, next) => {
+      const result = await this.cookbookService.fetchAllCookbooks();
+      res.send({
+        data: result,
+      });
+    });
+
+    this.router.get('/all-user', async (req, res, next) => {
       const user_id = req.user.id;
-      const result = await this.cookbookService.fetchAllCookbooks(user_id);
+      const result = await this.cookbookService.fetchAllUserCookbooks(user_id);
       res.send({
         data: result,
       });
