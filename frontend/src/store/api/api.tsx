@@ -16,10 +16,10 @@ export const cookbookApi = createApi({
     getRecipeByTitle: builder.query<ArrayRecipe, string>({
       query: title => `/recipe?title=${title}`,
     }),
-    getAllCookbooks: builder.query<ArrayCookbook, void>({
+    getAllUserCookbooks: builder.query<ArrayCookbook, void>({
       query: () => `/cookbook/all`,
     }),
   }),
 });
 
-export const { useGetUserQuery, useGetRecipeByTitleQuery, useGetAllRecipesQuery, useGetAllCookbooksQuery } = cookbookApi;
+export const { useGetUserQuery, useGetRecipeByTitleQuery, useGetAllRecipesQuery, useGetAllUserCookbooksQuery } = cookbookApi;

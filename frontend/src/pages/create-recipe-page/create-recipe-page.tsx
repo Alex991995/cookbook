@@ -5,7 +5,7 @@ import { useForm, useFieldArray, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CreateRecipeSchema, type CreateRecipeType } from './zod-scheme/create-recipe';
 import Button from 'components/button';
-import ButtonTransparent from 'components/button-transparent';
+
 import { useState } from 'react';
 import { BsX } from 'react-icons/bs';
 import { getArrMinutes } from 'common/constants';
@@ -54,7 +54,6 @@ function CreateRecipePage() {
   const [valueDirection, setValueDirection] = useState('');
 
   function clearFields() {
-
     clearErrors();
     reset();
     removeDirections();
@@ -76,7 +75,7 @@ function CreateRecipePage() {
   }
 
   const onSubmit: SubmitHandler<CreateRecipeType> = async data => {
-    console.log(data)
+    console.log(data);
     const { picture, ...body } = data;
 
     const { title, estimated_time, description } = body;
@@ -247,7 +246,6 @@ function CreateRecipePage() {
           </ul>
         </div>
         <div className="flex justify-end">
-          <ButtonTransparent text="Cancel" maxWidth="100px" handleClick={clearFields} />
           <Button text="Save" type="submit" paddingX="0" disabled={!isValid} maxWidth="90px" />
         </div>
       </form>

@@ -1,8 +1,8 @@
 import Card from 'features/cookbook/ui/card/card';
-import { useGetAllCookbooksQuery } from 'store/api/api';
+import { useGetAllUserCookbooksQuery } from 'store/api/api';
 
 function AccountCookbook() {
-  const { data: allCookbooks } = useGetAllCookbooksQuery();
+  const { data: allCookbooks } = useGetAllUserCookbooksQuery();
 
   return (
     <div className="w-full">

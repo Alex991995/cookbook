@@ -8,9 +8,8 @@ export const UpdateRecipeSchema = z
   .object({
     title: z.string(),
     description: z.string(),
-    picture: z.instanceof(FileList),
+    picture:z.union([ z.instanceof(FileList), z.undefined()]),
     estimated_time: z.string(),
-
     ingredients: z.array(valueObjects),
     directions: z.array(valueObjects),
   }).required()

@@ -6,7 +6,7 @@ import { useForm, useFieldArray, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Button from 'components/button';
-
+import ButtonTransparent from 'components/button-transparent';
 import { useState } from 'react';
 import { BsX } from 'react-icons/bs';
 import { getArrMinutes } from 'common/constants';
@@ -43,6 +43,7 @@ function FormUpdateRecipe({ recipe }: IFormUpdateRecipe) {
     },
   });
 
+
   const {
     fields: fieldsIngredients,
     append: appendIngredients,
@@ -66,9 +67,14 @@ function FormUpdateRecipe({ recipe }: IFormUpdateRecipe) {
 
   function clearFields() {
     clearErrors();
-    reset();
-    removeDirections();
-    removeIngredients();
+    reset({
+      title: recipe.title,
+      estimated_time: stringEstimated_time,
+      description: recipe.description,
+      ingredients: ingredientsObject,
+      directions: directionsObject,
+      picture: undefined
+    });
   }
 
   function addValueIngredientToAppend() {
@@ -122,7 +128,7 @@ function FormUpdateRecipe({ recipe }: IFormUpdateRecipe) {
       });
 
       const res = await response.json();
-      clearFields();
+      // clearFields();
       console.log(res);
     } catch (error) {
       console.error(error);
@@ -194,6 +200,7 @@ function FormUpdateRecipe({ recipe }: IFormUpdateRecipe) {
           </div>
 
           <div className="flex justify-end">
+            <ButtonTransparent text="Clear" handleClick={clearFields} />
             <Button text="Save" type="submit" paddingX="0" disabled={!isValid} maxWidth="90px" />
           </div>
         </div>

@@ -5,7 +5,6 @@ import { useForm, useFieldArray, type SubmitHandler } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import Button from 'components/button';
-import ButtonTransparent from 'components/button-transparent';
 import { useState } from 'react';
 import { CreateCookbookSchema, type CreateCookbookType } from './zod-scheme/create-cookbook';
 import { useGetAllRecipesQuery } from 'store/api/api';
@@ -16,10 +15,8 @@ function CreateCookbookPage() {
   const {
     register,
     handleSubmit,
-    reset,
     control,
     setError,
-    clearErrors,
     formState: { errors, isValid },
   } = useForm<CreateCookbookType>({
     mode: 'onBlur',
@@ -46,11 +43,11 @@ function CreateCookbookPage() {
     }
   }
 
-  function clearFields() {
-    clearErrors();
-    reset();
-    remove();
-  }
+  // function clearFields() {
+  //   clearErrors();
+  //   reset();
+  //   remove();
+  // }
 
   const onSubmit: SubmitHandler<CreateCookbookType> = async data => {
     console.log(data);
@@ -156,7 +153,6 @@ function CreateCookbookPage() {
         </div>
 
         <div className="flex justify-end">
-          <ButtonTransparent text="Cancel" maxWidth="100px" handleClick={clearFields} />
           <Button text="Save" type="submit" paddingX="0" disabled={!isValid} maxWidth="90px" />
         </div>
       </form>

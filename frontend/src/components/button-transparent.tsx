@@ -1,10 +1,10 @@
 interface IButton {
   text: string;
-  maxWidth: string;
+  maxWidth?: string;
   handleClick?: () => void;
 }
 
-function ButtonTransparent({ text, maxWidth,  handleClick }: IButton) {
+function ButtonTransparent({ text, maxWidth = 'auto',  handleClick }: IButton) {
   return (
     <button
       onClick={handleClick}
