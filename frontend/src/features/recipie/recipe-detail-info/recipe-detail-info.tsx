@@ -7,9 +7,9 @@ interface IRecipeDetailInfo {
 }
 
 function RecipeDetailInfo({ recipe }: IRecipeDetailInfo) {
-  console.log(recipe);
+
   return (
-    <div className="flex">
+    <div className="flex bg-white">
       <img
         className="w-[445px] h-[680px] object-cover justify-between"
         src={recipe?.image}

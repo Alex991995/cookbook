@@ -28,25 +28,13 @@ function CardRecipes(recipe: RecipeWithUpdate) {
           </div>
 
           <div className="flex gap-9  items-baseline">
-            <ReactionCounter likes={_count.likes} views={views} comment={_count.comment}/>
-            {/* <div className="flex gap-2 ">
-              <img src={sourceHeart} alt="likes" />
-              <div className="text-xs">{_count.likes} likes</div>
-            </div>
-            <div className="flex gap-2 ">
-              <img src={sourceComment} alt="comments" />
-              <div className="text-xs">{_count.comment} comments</div>
-            </div>
-            <div className="flex gap-2">
-              <img src={sourceViews} alt="views" />
-              <div className="text-xs">{views} views</div>
-            </div> */}
+            <ReactionCounter likes={_count.likes} views={views} comment={_count.comment} />
           </div>
         </div>
         <div className="flex grow justify-end gap-4">
           {ifAccountRecipeRoute ? (
             <>
-              <MdOutlineSystemUpdateAlt onClick={() =>  updateRecipe!(recipe)} size={23} />
+              <MdOutlineSystemUpdateAlt onClick={() => updateRecipe!(recipe)} size={23} />
               <RiChatDeleteFill size={23} />{' '}
             </>
           ) : null}

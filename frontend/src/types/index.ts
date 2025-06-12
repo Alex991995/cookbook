@@ -75,3 +75,8 @@ export interface UpdateRecipeTypeForServer {
 export interface IUserCreator {
   name: string;
 }
+
+export interface IResultCreatedComment {
+  id: string;
+  description: string;
+}

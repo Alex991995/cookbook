@@ -7,6 +7,11 @@ export class CommentRecipeService {
     try {
       const result = await this.prismaService.client.commentRecipe.create({
         data: { description, recipe_id },
+        omit: {
+          createdAt: true,
+          updatedAt: true,
+          recipe_id: true,
+        },
       });
       return result;
     } catch (err) {
@@ -14,6 +19,8 @@ export class CommentRecipeService {
       return false;
     }
   }
+
+ 
 
   async getAllCommentsByRecipeId(recipe_id: string) {
     return await this.prismaService.client.commentRecipe.findMany({
