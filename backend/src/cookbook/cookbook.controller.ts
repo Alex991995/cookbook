@@ -75,6 +75,7 @@ export class CookbookController {
 
     this.router.get('/:id', async (req, res, next) => {
       const id = req.params.id;
+
       const result = await this.cookbookService.getCookbook(id);
       res.send({
         data: result,

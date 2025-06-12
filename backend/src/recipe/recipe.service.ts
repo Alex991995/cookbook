@@ -100,6 +100,32 @@ export class RecipeService {
     return result;
   }
 
+  async getUniqueRecipeByID(id: string) {
+    return await this.prismaService.client.recipe.findUnique({
+      where: {
+        id,
+      },
+      omit: {
+        user_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+          },
+        },
+      },
+    });
+  }
+
   async getRecipeByTitle(title: string) {
     return await this.prismaService.client.recipe.findMany({
       where: {

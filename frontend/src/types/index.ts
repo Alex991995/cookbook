@@ -20,8 +20,6 @@ export interface Recipe {
   estimated_time: string;
   image: string;
   user_id: string;
-  createdAt: string;
-  updatedAt: string;
   user?: IUserCreator;
   _count: ICount;
 }

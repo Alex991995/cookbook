@@ -36,10 +36,9 @@ export class RecipeController {
         if (!req.file) {
           return next(new HttpError(400, 'Image is required'));
         }
-        console.log(req.file);
         const id = req.user.id;
         const recipeStringify = req.body.data;
-        console.log(recipeStringify);
+
         const fileName = req.file.filename;
         const filePath = `${uploadsRecipePath}/${fileName}`;
 
@@ -69,7 +68,7 @@ export class RecipeController {
       async (req: Request<object, object, object, { sort: string; time: string }>, res, next) => {
         const { sort, time } = req.query;
 
-        const recipes = await this.recipeService.getAllRecipe(sort, +time );
+        const recipes = await this.recipeService.getAllRecipe(sort, +time);
 
         res.send({
           data: recipes,
@@ -105,6 +104,13 @@ export class RecipeController {
         }
       },
     );
+
+    this.router.get('/:id', async (req, res, next) => {
+      const id = req.params.id;
+
+      const result = await this.recipeService.getUniqueRecipeByID(id);
+      res.send(result);
+    });
 
     this.router.put(
       '/:id',

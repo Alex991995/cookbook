@@ -1,11 +1,12 @@
 import styles from './card-recipes.module.css';
-import sourceViews from 'assets/views.svg';
-import sourceHeart from 'assets/heart_outline.svg';
-import sourceComment from 'assets/comment.svg';
+// import sourceViews from 'assets/views.svg';
+// import sourceHeart from 'assets/heart_outline.svg';
+// import sourceComment from 'assets/comment.svg';
 import { MdOutlineSystemUpdateAlt } from 'react-icons/md';
 import { RiChatDeleteFill } from 'react-icons/ri';
 import type { Recipe } from 'types';
-
+import { Link } from 'react-router';
+import ReactionCounter from 'components/reaction-counter';
 interface RecipeWithUpdate extends Recipe {
   updateRecipe?: (recipe: Recipe) => void;
   route: string;
@@ -16,7 +17,7 @@ function CardRecipes(recipe: RecipeWithUpdate) {
   const ifAccountRecipeRoute = route === '/account/recipe';
   return (
     <>
-      <li className={styles.card}>
+      <Link to={recipe.id} className={styles.card}>
         <img className={styles.meal} src={image} alt="meal" />
 
         <div className="flex flex-col justify-between">
@@ -27,7 +28,8 @@ function CardRecipes(recipe: RecipeWithUpdate) {
           </div>
 
           <div className="flex gap-9  items-baseline">
-            <div className="flex gap-2 ">
+            <ReactionCounter likes={_count.likes} views={views} comment={_count.comment}/>
+            {/* <div className="flex gap-2 ">
               <img src={sourceHeart} alt="likes" />
               <div className="text-xs">{_count.likes} likes</div>
             </div>
@@ -38,7 +40,7 @@ function CardRecipes(recipe: RecipeWithUpdate) {
             <div className="flex gap-2">
               <img src={sourceViews} alt="views" />
               <div className="text-xs">{views} views</div>
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="flex grow justify-end gap-4">
@@ -49,7 +51,7 @@ function CardRecipes(recipe: RecipeWithUpdate) {
             </>
           ) : null}
         </div>
-      </li>
+      </Link>
     </>
   );
 }
