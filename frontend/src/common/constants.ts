@@ -8,3 +8,5 @@ export function getArrMinutes() {
   }
   return arrMinutes;
 }
+
+export const arrSort = ['popularity', 'views', 'comment'];

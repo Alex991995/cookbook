@@ -13,8 +13,10 @@ export const cookbookApi = createApi({
     getAllUserRecipes: builder.query<ArrayRecipe, void>({
       query: () => `/recipe/all-user`,
     }),
-    getAllRecipes: builder.query<ArrayRecipe, void>({
-      query: () => `/recipe/all`,
+    getAllRecipes: builder.query<ArrayRecipe, { sort: string; time: string }>({
+      query: ({ sort, time }) => `/recipe/all?sort=${sort}&time=${time}`,
+      keepUnusedDataFor: 0,
+
     }),
     getRecipeByTitle: builder.query<ArrayRecipe, string>({
       query: title => `/recipe?title=${title}`,

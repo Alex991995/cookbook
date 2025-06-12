@@ -20,7 +20,7 @@ export class RecipeService {
     }
   }
 
-  async getAllRecipeByUserId(user_id: string) {
+  async getAllUserRecipeByUserId(user_id: string) {
     const result = await this.prismaService.client.recipe.findMany({
       where: {
         user_id,
@@ -30,6 +30,59 @@ export class RecipeService {
         createdAt: true,
         updatedAt: true,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+          },
+        },
+      },
+    });
+    return result;
+  }
+
+  async getAllRecipe(sort: string, time: number) {
+    let obj = {};
+    if (sort === 'comment') {
+      obj = {
+        comment: {
+          _count: 'desc',
+        },
+      };
+    } else if (sort === 'popularity') {
+      obj = {
+        likes: {
+          _count: 'desc',
+        },
+      };
+    } else {
+      obj = { views: 'desc' };
+    }
+
+    const result = await this.prismaService.client.recipe.findMany({
+      where: {
+        estimated_time: {
+          lte: time,
+        },
+      },
+
+      omit: {
+        user_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: [
+        {
+          ...obj,
+        },
+      ],
+
       include: {
         user: {
           select: {

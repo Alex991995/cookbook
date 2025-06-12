@@ -64,10 +64,23 @@ export class RecipeController {
       },
     );
 
-    this.router.get('/all', async (req, res, next) => {
+    this.router.get(
+      '/all',
+      async (req: Request<object, object, object, { sort: string; time: string }>, res, next) => {
+        const { sort, time } = req.query;
+
+        const recipes = await this.recipeService.getAllRecipe(sort, +time );
+
+        res.send({
+          data: recipes,
+        });
+      },
+    );
+
+    this.router.get('/all-user', async (req, res, next) => {
       const id = req.user.id;
 
-      const recipes = await this.recipeService.getAllRecipeByUserId(id);
+      const recipes = await this.recipeService.getAllUserRecipeByUserId(id);
 
       res.send({
         data: recipes,
@@ -101,7 +114,6 @@ export class RecipeController {
         res: Response,
         next: NextFunction,
       ) => {
-        // async (req: Request<{ id: string }, object, UpdateRecipeDto>, res, next) => {
         const user_id = req.user.id;
         const id = req.params.id;
         const data = req.body.data;
@@ -109,8 +121,7 @@ export class RecipeController {
         const fileName = req.file?.filename;
 
         const filePath = `${uploadsRecipePath}/${fileName}`;
-        console.log(fileName);
-        console.log(data);
+
         try {
           const credentials = JSON.parse(data) as UpdateRecipeDto;
           if (fileName) {

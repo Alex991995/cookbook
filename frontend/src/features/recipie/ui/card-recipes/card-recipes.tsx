@@ -7,12 +7,13 @@ import { RiChatDeleteFill } from 'react-icons/ri';
 import type { Recipe } from 'types';
 
 interface RecipeWithUpdate extends Recipe {
-  updateRecipe: (recipe: Recipe) => void;
+  updateRecipe?: (recipe: Recipe) => void;
+  route: string;
 }
 
 function CardRecipes(recipe: RecipeWithUpdate) {
-  const { views, image, title, description, user, _count, updateRecipe } = recipe;
-
+  const { views, image, title, description, user, _count, updateRecipe, route } = recipe;
+  const ifAccountRecipeRoute = route === '/account/recipe';
   return (
     <>
       <li className={styles.card}>
@@ -41,8 +42,12 @@ function CardRecipes(recipe: RecipeWithUpdate) {
           </div>
         </div>
         <div className="flex grow justify-end gap-4">
-          <MdOutlineSystemUpdateAlt onClick={() => updateRecipe(recipe)} size={23} />
-          <RiChatDeleteFill size={23} />
+          {ifAccountRecipeRoute ? (
+            <>
+              <MdOutlineSystemUpdateAlt onClick={() =>  updateRecipe!(recipe)} size={23} />
+              <RiChatDeleteFill size={23} />{' '}
+            </>
+          ) : null}
         </div>
       </li>
     </>

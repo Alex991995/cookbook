@@ -1,9 +1,11 @@
 import styles from './trending-recipes.module.css';
 import CardTrendRecipes from '../ui/card-trend-recipes/card-trend-recipes';
 import { useGetAllUserRecipesQuery } from 'store/api/api';
+import { useNavigate } from 'react-router';
 
 function TrendingRecipes() {
   const { data: allRecipes } = useGetAllUserRecipesQuery();
+  const navigate = useNavigate();
   return (
     <section className="px-8">
       <div className={styles.background}>
@@ -15,7 +17,7 @@ function TrendingRecipes() {
             <CardTrendRecipes {...item} />
           ))}
         </ul>
-        <button className="py-4 px-8 bg-white text-primary rounded-2xl hover:text-primary-hover mb-4">
+        <button onClick={() => navigate('/recipe')} className="py-4 px-8 bg-white text-primary rounded-2xl hover:text-primary-hover mb-4">
           Show All Recipes
         </button>
       </div>
