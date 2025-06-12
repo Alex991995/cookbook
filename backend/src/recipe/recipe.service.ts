@@ -10,9 +10,6 @@ export class RecipeService {
         data: {
           ...recipe,
           user_id,
-          likes: {
-            create: { user_id },
-          },
         },
       });
 
@@ -23,8 +20,8 @@ export class RecipeService {
     }
   }
 
-  async getAllRecipeByUserId(user_id: string) {
-    return await this.prismaService.client.recipe.findMany({
+  async getAllUserRecipeByUserId(user_id: string) {
+    const result = await this.prismaService.client.recipe.findMany({
       where: {
         user_id,
       },
@@ -33,7 +30,74 @@ export class RecipeService {
         createdAt: true,
         updatedAt: true,
       },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+          },
+        },
+      },
     });
+    return result;
+  }
+
+  async getAllRecipe(sort: string, time: number) {
+    let obj = {};
+    if (sort === 'comment') {
+      obj = {
+        comment: {
+          _count: 'desc',
+        },
+      };
+    } else if (sort === 'popularity') {
+      obj = {
+        likes: {
+          _count: 'desc',
+        },
+      };
+    } else {
+      obj = { views: 'desc' };
+    }
+
+    const result = await this.prismaService.client.recipe.findMany({
+      where: {
+        estimated_time: {
+          lte: time,
+        },
+      },
+
+      omit: {
+        user_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: [
+        {
+          ...obj,
+        },
+      ],
+
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+          },
+        },
+      },
+    });
+    return result;
   }
 
   async getRecipeByTitle(title: string) {
@@ -73,19 +137,19 @@ export class RecipeService {
     }
   }
 
-  async addLike(id: string) {
-    try {
-      await this.prismaService.client.recipe_Likes.update({
-        where: {
-          id,
-        },
-        data: { number_likes: { increment: 1 } },
-      });
+  // async addLike(id: string) {
+  //   try {
+  //     await this.prismaService.client.recipe_Likes.update({
+  //       where: {
+  //         id,
+  //       },
+  //       data: { number_likes: { increment: 1 } },
+  //     });
 
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
+  //     return true;
+  //   } catch (err) {
+  //     console.log(err);
+  //     return false;
+  //   }
+  // }
 }

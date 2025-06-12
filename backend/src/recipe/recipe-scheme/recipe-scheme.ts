@@ -1,12 +1,19 @@
 import { z } from 'zod';
 
+const valueObjects = z.object({
+  value: z.string(),
+});
+
 export const RecipeScheme = z
   .object({
     title: z.string(),
     description: z.string().nullable(),
-    ingredients: z.string().array(),
-    direction: z.string().array(),
-    views: z.number(),
+    ingredients: z.array(z.string()),
+    directions: z.array(z.string()),
+
+    // ingredients: z.array(valueObjects).min(1),
+    // directions: z.array(valueObjects).min(1),
+    // views: z.number(),
     estimated_time: z.number(),
   })
   .required();
@@ -17,7 +24,6 @@ export const UpdateRecipeScheme = z
     description: z.string().nullable(),
     ingredients: z.string().array(),
     direction: z.string().array(),
-    views: z.number(),
     estimated_time: z.number(),
     image: z.string(),
   })

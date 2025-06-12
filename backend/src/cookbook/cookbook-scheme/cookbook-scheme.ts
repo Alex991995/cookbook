@@ -4,7 +4,6 @@ export const CookbookScheme = z
   .object({
     title: z.string(),
     description: z.string().nullable(),
-    image: z.string(),
     recipesIDs: z.array(
       z
         .object({

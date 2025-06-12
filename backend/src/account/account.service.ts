@@ -24,6 +24,7 @@ export class AccountService {
   }
 
   async updateCredentials(id: string, credentials: UpdateAccountDto) {
+    console.log(credentials);
     const { newPassword, oldPassword, ...otherCred } = credentials;
     const user = await this.getInfoUser(id);
     if (!user) {
@@ -33,12 +34,15 @@ export class AccountService {
     try {
       if (oldPassword && newPassword) {
         const isMatchPassword = await bcrypt.compare(oldPassword, user.password);
+
         if (isMatchPassword) {
+
+          const hashPassword = await bcrypt.hash(newPassword, SALT);
           await this.prismaService.client.user.update({
             where: {
               id,
             },
-            data: { ...otherCred, password: newPassword },
+            data: { ...otherCred, password: hashPassword },
           });
         }
       } else {
@@ -46,7 +50,7 @@ export class AccountService {
           where: {
             id,
           },
-          data: { ...otherCred, password: oldPassword },
+          data: { ...otherCred },
         });
       }
       if (otherCred.email && otherCred.email !== user.email) {

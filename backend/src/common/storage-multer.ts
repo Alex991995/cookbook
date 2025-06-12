@@ -5,10 +5,11 @@ import fs from 'fs';
 export const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let arrayPath = req.originalUrl.split('/');
+    console.log(arrayPath)
     const [comma, root, route] = arrayPath;
 
     const path = `uploads/${route}`;
-
+    
     fs.mkdirSync(path, { recursive: true });
     cb(null, path);
   },

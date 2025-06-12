@@ -1,13 +1,14 @@
-
 import Card from 'features/cookbook/ui/card/card';
-import meal from 'features/cookbook/assets/meal.jpg';
+import { useGetAllUserCookbooksQuery } from 'store/api/api';
 
 function AccountCookbook() {
+  const { data: allCookbooks } = useGetAllUserCookbooksQuery();
+
   return (
-    <div>
-      <ul className="flex gap-8 flex-wrap ">
-        {arr.map(item => (
-          <Card {...item} />
+    <div className="w-full">
+      <ul className="grid gap-4 justify-items-center grid-cols-[repeat(auto-fill,_minmax(310px,_1fr))] ">
+        {allCookbooks?.data.map(item => (
+          <Card key={item.id} width="310px" {...item} />
         ))}
       </ul>
     </div>
@@ -15,38 +16,3 @@ function AccountCookbook() {
 }
 
 export default AccountCookbook;
-
-const arr = [
-  {
-    source: meal,
-    views: 2,
-    nameRecipe: 'pancka',
-    nameCreator: 'Jon',
-    numberLikes: 233,
-    numberComments: 333,
-  },
-  {
-    source: meal,
-    views: 2,
-    nameRecipe: 'pancka',
-    nameCreator: 'Jon',
-    numberLikes: 233,
-    numberComments: 333,
-  },
-  {
-    source: meal,
-    views: 2,
-    nameRecipe: 'pancka',
-    nameCreator: 'Jon',
-    numberLikes: 233,
-    numberComments: 333,
-  },
-  {
-    source: meal,
-    views: 2,
-    nameRecipe: 'pancka',
-    nameCreator: 'Jon',
-    numberLikes: 233,
-    numberComments: 333,
-  },
-];

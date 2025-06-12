@@ -1,0 +1,12 @@
+.box {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  margin-top: 10px;
+  gap: 60px;
+}
+
+.list {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 350px);
+}

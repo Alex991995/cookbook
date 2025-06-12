@@ -9,9 +9,11 @@
   --font-display: 'Nunito', 'sans-serif';
 }
 
+
 @layer base {
   html {
     font-family: var(--font-display);
+    background-color: #FCFAF8;
   }
 }
 

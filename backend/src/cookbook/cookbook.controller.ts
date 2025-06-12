@@ -7,7 +7,11 @@ import { HttpError } from '@/errors/http-error';
 import { storage } from '@/common/storage-multer';
 
 import { CookbookService } from './cookbook.service';
-import { CommentCookbookScheme, CookbookScheme, UpdateCookbookScheme } from './cookbook-scheme/cookbook-scheme';
+import {
+  CommentCookbookScheme,
+  CookbookScheme,
+  UpdateCookbookScheme,
+} from './cookbook-scheme/cookbook-scheme';
 import { CookbookDto, UpdateCookbookDto } from './dto/cookbook.dto';
 import { uploadsCookbookPath } from '@/common/constants';
 import { CommentCookbookService } from './comment-cookbook/comment-cookbook.service';
@@ -46,6 +50,7 @@ export class CookbookController {
           const result = await this.cookbookService.createCookbook(cookbook, user_id);
           res.send(result);
         } catch (error) {
+          console.log(error)
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));
           }
@@ -53,9 +58,16 @@ export class CookbookController {
       },
     );
 
-    this.router.get('/all', async (req, res, next) => {
+     this.router.get('/all', async (req, res, next) => {
+      const result = await this.cookbookService.fetchAllCookbooks();
+      res.send({
+        data: result,
+      });
+    });
+
+    this.router.get('/all-user', async (req, res, next) => {
       const user_id = req.user.id;
-      const result = await this.cookbookService.fetchAllCookbooks(user_id);
+      const result = await this.cookbookService.fetchAllUserCookbooks(user_id);
       res.send({
         data: result,
       });
@@ -148,16 +160,16 @@ export class CookbookController {
       });
     });
 
-    this.router.put('/like/:id', async (req, res, next) => {
-      const id = req.params.id;
+    // this.router.put('/like/:id', async (req, res, next) => {
+    //   const id = req.params.id;
 
-      const result = await this.cookbookService.addLike(id);
-      if (result) {
-        res.status(204).send();
-      } else {
-        next(new HttpError(404, 'Record to update does not exist.'));
-      }
-    });
+    //   const result = await this.cookbookService.addLike(id);
+    //   if (result) {
+    //     res.status(204).send();
+    //   } else {
+    //     next(new HttpError(404, 'Record to update does not exist.'));
+    //   }
+    // });
 
     return this.router;
   }

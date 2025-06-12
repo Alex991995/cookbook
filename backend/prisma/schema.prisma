@@ -9,11 +9,12 @@ datasource db {
 }
 
 model User {
-  id       String  @id @default(uuid())
-  email    String  @unique
-  name     String?
-  password String
-  image    String?
+  id          String  @id @default(uuid())
+  email       String  @unique
+  name        String?
+  password    String
+  image       String?
+  description String?
 
   recipe         Recipe[]
   cookbook       Cookbook[]
@@ -31,7 +32,7 @@ model Recipe {
   title          String
   description    String?
   ingredients    String[]
-  direction      String[]
+  directions     String[]
   views          Int      @default(0)
   estimated_time Int
   image          String
@@ -55,9 +56,9 @@ model Cookbook {
   image       String
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-
-  user_id String
-  recipes Recipe[]
+  views       Int      @default(0)
+  user_id     String
+  recipes     Recipe[]
 
   user            User              @relation(fields: [user_id], references: [id])
   commentCookbook CommentCookbook[]
@@ -67,13 +68,11 @@ model Cookbook {
 }
 
 model Recipe_Likes {
-  id           String @id @default(uuid())
-  number_likes Int    @default(0)
-  recipe_id    String
-  user_id      String
+  id        String @id @default(uuid())
+  recipe_id String
+  user_id   String
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
   recipe Recipe @relation(fields: [recipe_id], references: [id], onDelete: Cascade)
   user   User   @relation(fields: [user_id], references: [id])
@@ -96,13 +95,11 @@ model CommentRecipe {
 }
 
 model Cookbook_Likes {
-  id           String @id @default(uuid())
-  number_likes Int    @default(0)
-  cookbook_id  String
-  user_id      String
+  id          String @id @default(uuid())
+  cookbook_id String
+  user_id     String
 
   createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
 
   cookbook Cookbook @relation(fields: [cookbook_id], references: [id], onDelete: Cascade)
   user     User     @relation(fields: [user_id], references: [id])

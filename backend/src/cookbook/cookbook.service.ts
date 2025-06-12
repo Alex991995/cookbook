@@ -12,9 +12,6 @@ export class CookbookService {
         ...cookbook,
         user_id,
         recipes: { connect: recipesIDs },
-        Cookbook_Likes: {
-          create: { user_id },
-        },
       },
     });
     return result;
@@ -43,13 +40,56 @@ export class CookbookService {
     });
   }
 
-  async fetchAllCookbooks(id: string) {
+  async fetchAllUserCookbooks(id: string) {
     return await this.prismaService.client.cookbook.findMany({
       where: {
         user_id: id,
       },
-      include: {
-        Cookbook_Likes: true,
+      select: {
+        views: true,
+        id: true,
+        title: true,
+        description: true,
+        image: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            Cookbook_Likes: true,
+            commentCookbook: true,
+          },
+        },
+      },
+    });
+  }
+
+  async fetchAllCookbooks() {
+    return await this.prismaService.client.cookbook.findMany({
+      select: {
+        views: true,
+        id: true,
+        title: true,
+        description: true,
+        image: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            Cookbook_Likes: true,
+            commentCookbook: true,
+          },
+        },
+      },
+      orderBy: {
+        Cookbook_Likes: {
+          _count: 'desc',
+        },
       },
     });
   }
@@ -69,19 +109,19 @@ export class CookbookService {
     }
   }
 
-  async addLike(id: string) {
-    try {
-      await this.prismaService.client.cookbook_Likes.update({
-        where: {
-          id,
-        },
-        data: { number_likes: { increment: 1 } },
-      });
+  // async addLike(id: string) {
+  //   try {
+  //     await this.prismaService.client.cookbook_Likes.update({
+  //       where: {
+  //         id,
+  //       },
+  //       data: { number_likes: { increment: 1 } },
+  //     });
 
-      return true;
-    } catch (err) {
-      console.log(err);
-      return false;
-    }
-  }
+  //     return true;
+  //   } catch (err) {
+  //     console.log(err);
+  //     return false;
+  //   }
+  // }
 }

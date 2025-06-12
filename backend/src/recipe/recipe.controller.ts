@@ -23,7 +23,6 @@ export class RecipeController {
   constructor(
     private recipeService: RecipeService,
     private commentRecipeService: CommentRecipeService,
-
   ) {
     this.router = Router();
     this.upload = multer({ storage });
@@ -37,9 +36,10 @@ export class RecipeController {
         if (!req.file) {
           return next(new HttpError(400, 'Image is required'));
         }
+        console.log(req.file);
         const id = req.user.id;
         const recipeStringify = req.body.data;
-
+        console.log(recipeStringify);
         const fileName = req.file.filename;
         const filePath = `${uploadsRecipePath}/${fileName}`;
 
@@ -51,7 +51,6 @@ export class RecipeController {
           const result = await this.recipeService.createRecipe(id, recipe);
 
           if (result) {
-            // await this.likeRecipeService.createLike(result.id, id);
             res.send({ result });
           } else {
             console.error(result);
@@ -65,10 +64,23 @@ export class RecipeController {
       },
     );
 
-    this.router.get('/all', async (req, res, next) => {
+    this.router.get(
+      '/all',
+      async (req: Request<object, object, object, { sort: string; time: string }>, res, next) => {
+        const { sort, time } = req.query;
+
+        const recipes = await this.recipeService.getAllRecipe(sort, +time );
+
+        res.send({
+          data: recipes,
+        });
+      },
+    );
+
+    this.router.get('/all-user', async (req, res, next) => {
       const id = req.user.id;
 
-      const recipes = await this.recipeService.getAllRecipeByUserId(id);
+      const recipes = await this.recipeService.getAllUserRecipeByUserId(id);
 
       res.send({
         data: recipes,
@@ -96,16 +108,31 @@ export class RecipeController {
 
     this.router.put(
       '/:id',
-      async (req: Request<{ id: string }, object, UpdateRecipeDto>, res, next) => {
-        const body = req.body;
+      this.upload.single('file'),
+      async (
+        req: Request<{ id: string }, object, { data: string }>,
+        res: Response,
+        next: NextFunction,
+      ) => {
+        const user_id = req.user.id;
         const id = req.params.id;
+        const data = req.body.data;
+
+        const fileName = req.file?.filename;
+
+        const filePath = `${uploadsRecipePath}/${fileName}`;
 
         try {
-          UpdateRecipeScheme.parse(body);
-          const result = await this.recipeService.updateRecipe(id, body);
+          const credentials = JSON.parse(data) as UpdateRecipeDto;
+          if (fileName) {
+            credentials.image = filePath;
+          }
+
+          UpdateRecipeScheme.parse(credentials);
+          const result = await this.recipeService.updateRecipe(id, credentials);
 
           if (result) {
-            res.status(204).send();
+            res.send(result);
           } else {
             next(new HttpError(404, 'Record to update not found'));
           }
@@ -163,17 +190,16 @@ export class RecipeController {
       });
     });
 
-    this.router.put('/like/:id', async (req, res, next) => {
-      const id = req.params.id;
+    // this.router.put('/like/:id', async (req, res, next) => {
+    //   const id = req.params.id;
 
-      const result = await this.recipeService.addLike(id);
-      if (result) {
-        res.status(204).send();
-      } else {
-        next(new HttpError(404, 'Record to update does not exist.'));
-      }
-
-    });
+    //   const result = await this.recipeService.addLike(id);
+    //   if (result) {
+    //     res.status(204).send();
+    //   } else {
+    //     next(new HttpError(404, 'Record to update does not exist.'));
+    //   }
+    // });
 
     return this.router;
   }

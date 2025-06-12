@@ -12,7 +12,10 @@ export class AuthMiddleware {
   async execute(req: Request, res: Response, next: NextFunction) {
     const [, , route] = req.originalUrl.trim().split('/');
 
-    const token = req.headers.cookie?.split(';')[0].split('=')[1];
+    const cookies = req.headers.cookie?.replace(/\s/g, '').split(';');
+
+    const access_token = cookies?.find(item => item.startsWith('access_token'));
+    const token = access_token?.split('=')[1];
 
     if (route === 'auth') {
       return next();
