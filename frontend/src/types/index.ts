@@ -73,10 +73,26 @@ export interface UpdateRecipeTypeForServer {
 }
 
 export interface IUserCreator {
+  image?: string;
   name: string;
 }
 
 export interface IResultCreatedComment {
   id: string;
   description: string;
+}
+
+export interface ArrayCommentRecipe {
+  data: CommentRecipe[];
+}
+
+export interface CommentRecipe {
+  id: string;
+  description: string;
+  createdAt:string
+  recipe: InfoUser;
+}
+
+export interface InfoUser {
+  user: IUserCreator;
 }

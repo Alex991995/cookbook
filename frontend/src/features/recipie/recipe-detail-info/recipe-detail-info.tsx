@@ -7,7 +7,6 @@ interface IRecipeDetailInfo {
 }
 
 function RecipeDetailInfo({ recipe }: IRecipeDetailInfo) {
-
   return (
     <div className="flex bg-white">
       <img
@@ -17,29 +16,32 @@ function RecipeDetailInfo({ recipe }: IRecipeDetailInfo) {
       />
       <div className="w-full p-11 flex flex-col justify-between">
         <div>
-          <h2 className='font-bold text-4xl'>{recipe?.title}</h2>
-          <h3 className='text-primary text-[20px]'>{recipe?.user?.name}</h3>
+          <h2 className="font-bold text-4xl">{recipe?.title}</h2>
+          <h3 className="text-primary text-[20px]">{recipe?.user?.name}</h3>
         </div>
         <div>
-          <h3 className='font-semibold text-2xl mb-2.5'>Description</h3>
+          <h3 className="font-semibold text-2xl mb-2.5">Description</h3>
           <p>{recipe?.description}</p>
         </div>
         <div className="flex justify-between">
           <div>
-            <h3 className='font-semibold text-2xl mb-2.5'>Directions</h3>
+            <h3 className="font-semibold text-2xl mb-2.5">Directions</h3>
             <ul>
               {recipe?.directions.map((item, i) => (
-                <li>
-                <span className='font-bold'>Step {i + 1}</span>: <span className='text-secondary'>{item}</span>  
+                <li key={item}>
+                  <span className="font-bold">Step {i + 1}</span>:{' '}
+                  <span className="text-secondary">{item}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <div className='flex-[0_1_50%]'>
-            <h3 className='font-semibold text-2xl mb-2.5'>Ingredients</h3>
+          <div className="flex-[0_1_50%]">
+            <h3 className="font-semibold text-2xl mb-2.5">Ingredients</h3>
             <ul className="list-disc [&>li::marker]:text-primary">
               {recipe?.ingredients.map(item => (
-                <li className="text-secondary">{item}</li>
+                <li key={item} className="text-secondary">
+                  {item}
+                </li>
               ))}
             </ul>
           </div>

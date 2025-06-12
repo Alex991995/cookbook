@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { IUser, ArrayRecipe, ArrayCookbook, Recipe, IResultCreatedComment } from '../../types';
+import type { IUser, ArrayRecipe, ArrayCookbook, Recipe, IResultCreatedComment, ArrayCommentRecipe } from '../../types';
 
 const baseUrl = '/api';
 
@@ -23,22 +23,32 @@ export const cookbookApi = createApi({
 
     getUniqueRecipeByID: builder.query<Recipe, string>({
       query: id => `/recipe/${id}`,
+      keepUnusedDataFor: 0,
     }),
 
     getAllUserCookbooks: builder.query<ArrayCookbook, void>({
       query: () => `/cookbook/all-user`,
     }),
+
     getAllCookbooks: builder.query<ArrayCookbook, void>({
       query: () => `/cookbook/all`,
     }),
-    // { description: string; recipe_id: string }
 
-    createRecipePost: builder.mutation<IResultCreatedComment, { description: string; recipe_id: string }>({
+     getAllCommentRecipe: builder.query<ArrayCommentRecipe, string>({
+      query: (id) => `/recipe/comment/${id}`,
+       keepUnusedDataFor: 0,
+    }),
+
+    createCommentRecipe: builder.mutation<
+      IResultCreatedComment,
+      { description: string; recipe_id: string }
+    >({
       query: obj => ({
         url: `/recipe/comment`,
         method: 'POST',
         body: obj,
       }),
+      
     }),
   }),
 });
@@ -52,5 +62,6 @@ export const {
   useGetAllCookbooksQuery,
   useGetAllUserCookbooksQuery,
 
-  useCreateRecipePostMutation,
+  useCreateCommentRecipeMutation,
+  useGetAllCommentRecipeQuery
 } = cookbookApi;

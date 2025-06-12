@@ -20,8 +20,6 @@ export class CommentRecipeService {
     }
   }
 
- 
-
   async getAllCommentsByRecipeId(recipe_id: string) {
     return await this.prismaService.client.commentRecipe.findMany({
       where: {
@@ -29,6 +27,8 @@ export class CommentRecipeService {
       },
       select: {
         description: true,
+        id: true,
+        createdAt: true,
         recipe: {
           select: {
             user: {
