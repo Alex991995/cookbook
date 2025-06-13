@@ -94,6 +94,18 @@ export interface CommentRecipe {
   recipe: InfoUser;
 }
 
+
+export interface ArrayCommentCookbook {
+  data: CommentCookbook[];
+}
+
+export interface CommentCookbook {
+  id: string;
+  description: string;
+  createdAt: string;
+  cookbook: InfoUser;
+}
+
 export interface InfoUser {
   user: IUserCreator;
 }

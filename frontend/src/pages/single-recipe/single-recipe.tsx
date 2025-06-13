@@ -11,7 +11,7 @@ import {
 
 function SingleRecipe() {
   const { id } = useParams();
-  const [createPost] = useCreateCommentRecipeMutation();
+  const [createComment] = useCreateCommentRecipeMutation();
   const { data, refetch } = useGetUniqueRecipeByIDQuery(id || '');
   const { data: comments, refetch: refetchComments } = useGetAllCommentRecipeQuery(id || '');
   const [value, setValue] = useState('');
@@ -19,7 +19,7 @@ function SingleRecipe() {
   const numberOfComments = data?._count.comment || 0;
 
   function handleClick() {
-    createPost({ description: value, recipe_id: id! });
+    createComment({ description: value, recipe_id: id! });
     setValue('');
     refetch();
     refetchComments();
