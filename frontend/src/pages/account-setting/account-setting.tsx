@@ -83,8 +83,8 @@ function AccountSetting() {
             />
           </label>
 
-          <div className="flex gap-2 items-center">
-            <h1 className="text-4xl mb-3.5">{data?.name}</h1>
+          <div className="flex flex-col gap-2 items-center ">
+            <h1 className="text-4xl mb-3.5 self-start">{data?.name}</h1>
             {showInputDescription ? (
               <>
                 <input

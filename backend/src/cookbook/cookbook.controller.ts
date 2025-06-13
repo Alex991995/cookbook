@@ -161,6 +161,7 @@ export class CookbookController {
     );
 
     this.router.get('/comment/:id', async (req, res) => {
+
       const result = await this.commentCookbookService.getAllCommentsByCookbookId(req.params.id);
 
       res.send({

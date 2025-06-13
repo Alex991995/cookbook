@@ -5,6 +5,7 @@ import styles from '../styles/authentication.module.css';
 import Logo from 'components/logo';
 import { RegisterSchema, type RegisterType } from '../zod-scheme/register-schema';
 import Button from 'components/button';
+import  { useNavigate } from 'react-router';
 
 export default function RegisterForm() {
   const {
@@ -16,9 +17,9 @@ export default function RegisterForm() {
     mode: 'onBlur',
     resolver: zodResolver(RegisterSchema),
   });
+  const navigate = useNavigate()
 
   const onSubmit: SubmitHandler<RegisterType> = async data => {
-    console.log(data)
     try {
       const response = await fetch('/api/auth/register', {
         headers: {
@@ -29,6 +30,7 @@ export default function RegisterForm() {
       });
 
       await response.json();
+      navigate('/login')
     } catch (error) {
       console.error(error);
       setError('email', {

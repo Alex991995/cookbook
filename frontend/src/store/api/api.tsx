@@ -1,5 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { IUser, ArrayRecipe, ArrayCookbook, Recipe, IResultCreatedComment, ArrayCommentRecipe, Cookbook, ArrayCommentCookbook } from '../../types';
+import type {
+  IUser,
+  ArrayRecipe,
+  ArrayCookbook,
+  Recipe,
+  IResultCreatedComment,
+  ArrayCommentRecipe,
+  Cookbook,
+  ArrayCommentCookbook,
+} from '../../types';
 
 const baseUrl = '/api';
 
@@ -10,6 +19,13 @@ export const cookbookApi = createApi({
     getUser: builder.query<IUser, void>({
       query: () => `/account/settings`,
     }),
+    logOut: builder.mutation<any, void>({
+      query: () => ({
+        url: `/auth/logout`,
+        method: 'POST',
+      }),
+    }),
+
     getAllUserRecipes: builder.query<ArrayRecipe, void>({
       query: () => `/recipe/all-user`,
     }),
@@ -35,18 +51,18 @@ export const cookbookApi = createApi({
     }),
 
     getUniqueCookbookByID: builder.query<Cookbook, string>({
-      query: (id) => `/cookbook/${id}`,
+      query: id => `/cookbook/${id}`,
       keepUnusedDataFor: 0,
     }),
 
-     getAllCommentRecipe: builder.query<ArrayCommentRecipe, string>({
-      query: (id) => `/recipe/comment/${id}`,
-       keepUnusedDataFor: 0,
+    getAllCommentRecipe: builder.query<ArrayCommentRecipe, string>({
+      query: id => `/recipe/comment/${id}`,
+      keepUnusedDataFor: 0,
     }),
 
-     getAllCommentCookbook: builder.query<ArrayCommentCookbook, string>({
-      query: (id) => `/cookbook/comment/${id}`,
-       keepUnusedDataFor: 0,
+    getAllCommentCookbook: builder.query<ArrayCommentCookbook, string>({
+      query: id => `/cookbook/comment/${id}`,
+      keepUnusedDataFor: 0,
     }),
 
     createCommentRecipe: builder.mutation<
@@ -58,7 +74,6 @@ export const cookbookApi = createApi({
         method: 'POST',
         body: obj,
       }),
-      
     }),
 
     createCommentCookbook: builder.mutation<
@@ -70,13 +85,13 @@ export const cookbookApi = createApi({
         method: 'POST',
         body: obj,
       }),
-      
     }),
   }),
 });
 
 export const {
   useGetUserQuery,
+  useLogOutMutation,
 
   useGetRecipeByTitleQuery,
   useGetAllUserRecipesQuery,
