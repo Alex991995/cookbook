@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { IUser, ArrayRecipe, ArrayCookbook, Recipe, IResultCreatedComment, ArrayCommentRecipe } from '../../types';
+import type { IUser, ArrayRecipe, ArrayCookbook, Recipe, IResultCreatedComment, ArrayCommentRecipe, Cookbook } from '../../types';
 
 const baseUrl = '/api';
 
@@ -34,6 +34,10 @@ export const cookbookApi = createApi({
       query: () => `/cookbook/all`,
     }),
 
+    getUniqueCookbookByID: builder.query<Cookbook, string>({
+      query: (id) => `/cookbook/${id}`,
+    }),
+
      getAllCommentRecipe: builder.query<ArrayCommentRecipe, string>({
       query: (id) => `/recipe/comment/${id}`,
        keepUnusedDataFor: 0,
@@ -55,12 +59,15 @@ export const cookbookApi = createApi({
 
 export const {
   useGetUserQuery,
+
   useGetRecipeByTitleQuery,
   useGetAllUserRecipesQuery,
   useGetAllRecipesQuery,
   useGetUniqueRecipeByIDQuery,
+
   useGetAllCookbooksQuery,
   useGetAllUserCookbooksQuery,
+  useGetUniqueCookbookByIDQuery,
 
   useCreateCommentRecipeMutation,
   useGetAllCommentRecipeQuery

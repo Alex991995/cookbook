@@ -35,7 +35,7 @@ function CardRecipes(recipe: RecipeWithUpdate) {
           {ifAccountRecipeRoute ? (
             <>
               <MdOutlineSystemUpdateAlt onClick={() => updateRecipe!(recipe)} size={23} />
-              <RiChatDeleteFill size={23} />{' '}
+              <RiChatDeleteFill size={23} />
             </>
           ) : null}
         </div>

@@ -14,6 +14,7 @@ import CreateCookbookPage from 'pages/create-cookbook-page/create-cookbook-page'
 import Cookbook from 'pages/cookbook/cookbook';
 import Recipe from 'pages/recipe/recipe';
 import SingleRecipe from 'pages/single-recipe/single-recipe';
+import SingleCookbook from 'pages/single-cookbook/single-cookbook';
 
 export const router = createBrowserRouter([
   {
@@ -36,9 +37,14 @@ export const router = createBrowserRouter([
     element: <CreateCookbookPage />,
     errorElement: <ErrorBoundary />,
   },
-   {
+  {
     path: '/recipe/:id',
     element: <SingleRecipe />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: '/cookbook/:id',
+    element: <SingleCookbook />,
     errorElement: <ErrorBoundary />,
   },
   {

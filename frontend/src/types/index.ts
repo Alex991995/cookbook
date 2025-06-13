@@ -36,6 +36,7 @@ export interface Cookbook {
   image: string;
   _count: CountCookbook;
   user: IUserCreator;
+  recipes: Recipe[];
 }
 
 export interface CountCookbook {
@@ -89,7 +90,7 @@ export interface ArrayCommentRecipe {
 export interface CommentRecipe {
   id: string;
   description: string;
-  createdAt:string
+  createdAt: string;
   recipe: InfoUser;
 }
 

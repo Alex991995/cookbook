@@ -50,7 +50,7 @@ export class CookbookController {
           const result = await this.cookbookService.createCookbook(cookbook, user_id);
           res.send(result);
         } catch (error) {
-          console.log(error)
+          console.log(error);
           if (error instanceof ZodError) {
             return next(new CustomZodError(400, error.issues));
           }
@@ -58,12 +58,24 @@ export class CookbookController {
       },
     );
 
-     this.router.get('/all', async (req, res, next) => {
+    this.router.get('/all', async (req, res, next) => {
       const result = await this.cookbookService.fetchAllCookbooks();
       res.send({
         data: result,
       });
     });
+
+    this.router.post(
+      '/add-cookbook',
+      async (req: Request<object, object, { id: string }>, res, next) => {
+        const user_id = req.user.id;
+        const id = req.body.id;
+        const result = await this.cookbookService.addCookbookToUSer(id, user_id);
+        res.send({
+          data: result,
+        });
+      },
+    );
 
     this.router.get('/all-user', async (req, res, next) => {
       const user_id = req.user.id;
@@ -77,9 +89,7 @@ export class CookbookController {
       const id = req.params.id;
 
       const result = await this.cookbookService.getCookbook(id);
-      res.send({
-        data: result,
-      });
+      res.send(result);
     });
 
     this.router.put(
@@ -90,9 +100,6 @@ export class CookbookController {
         res: Response,
         next: NextFunction,
       ) => {
-        // if (!req.file) {
-        //   return next(new HttpError(400, 'Image is required'));
-        // }
         const id = req.params.id;
         const data = req.body.data;
         const user_id = req.user.id;

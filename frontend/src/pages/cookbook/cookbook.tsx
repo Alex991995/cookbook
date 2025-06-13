@@ -5,7 +5,7 @@ import { useState } from 'react';
 import LinksMainLayout from 'components/links-main-layout';
 
 function Cookbook() {
-  const { data: allRecipes } = useGetAllCookbooksQuery();
+  const { data:cookbooks } = useGetAllCookbooksQuery();
   const arrSort = ['popularity', 'views', 'comment'];
 
   const [sort, setSort] = useState(arrSort[0]);
@@ -44,7 +44,7 @@ function Cookbook() {
         <div>
           <LinksMainLayout />
           <ul className={styles.list}>
-            {allRecipes?.data.map(item => (
+            {cookbooks?.data.map(item => (
               <Card key={item.id} {...item} />
             ))}
           </ul>

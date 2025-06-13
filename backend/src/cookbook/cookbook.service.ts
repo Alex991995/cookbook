@@ -28,6 +28,23 @@ export class CookbookService {
     });
     return result;
   }
+  async addCookbookToUSer(id: string, user_id: string) {
+    return await this.prismaService.client.user.update({
+      where: {
+        id: user_id,
+      },
+      data: {
+        cookbook: {
+          connect: {
+            id,
+          },
+        },
+      },
+      include: {
+        cookbook: true,
+      },
+    });
+  }
 
   async getCookbook(id: string) {
     return await this.prismaService.client.cookbook.findUnique({
@@ -35,7 +52,23 @@ export class CookbookService {
         id,
       },
       include: {
-        recipes: true,
+        recipes: {
+          include: {
+            _count: {
+              select: {
+                likes: true,
+                comment: true,
+              },
+            },
+          },
+        },
+        user: true,
+        _count: {
+          select: {
+            Cookbook_Likes: true,
+            commentCookbook: true,
+          },
+        },
       },
     });
   }

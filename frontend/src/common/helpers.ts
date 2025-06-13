@@ -8,8 +8,14 @@ export function setActive({ isActive }: { isActive: boolean }) {
 export function getWhenCreatedInMinutes(createdAt?: string) {
   if (createdAt) {
     const date = new Date(createdAt).getTime();
-    const createdTime = Date.now() - date;
-    return new Date(createdTime).getMinutes();
+    const timeDifferenceMs = Date.now() - date;
+    return Math.floor(timeDifferenceMs / (1000 * 60));
   }
   return 0;
+}
+
+export function convertMinutesToHours(minutes: number) {
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+  return { hours, remainingMinutes };
 }
