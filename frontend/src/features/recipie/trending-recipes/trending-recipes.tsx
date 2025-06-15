@@ -1,10 +1,10 @@
 import styles from './trending-recipes.module.css';
 import CardTrendRecipes from '../ui/card-trend-recipes/card-trend-recipes';
-import { useGetAllUserRecipesQuery } from 'store/api/api';
+import { useGetTrendRecipesQuery } from 'store/api/api';
 import { useNavigate } from 'react-router';
 
 function TrendingRecipes() {
-  const { data: allRecipes } = useGetAllUserRecipesQuery();
+  const { data: allRecipes } = useGetTrendRecipesQuery();
 
   const navigate = useNavigate();
   return (

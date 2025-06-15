@@ -76,6 +76,16 @@ export class RecipeController {
       },
     );
 
+    this.router.get('/all-without-sort', async (req, res, next) => {
+      const { sort, time } = req.query;
+
+      const recipes = await this.recipeService.getAllRecipeWithoutSort();
+
+      res.send({
+        data: recipes,
+      });
+    });
+
     this.router.get('/all-user', async (req, res, next) => {
       const id = req.user.id;
 
@@ -104,6 +114,13 @@ export class RecipeController {
         }
       },
     );
+
+    this.router.get('/trend', async (req, res, next) => {
+      const recipes = await this.recipeService.getTrendUserRecipe();
+      res.send({
+        data: recipes,
+      });
+    });
 
     this.router.get('/:id', async (req, res, next) => {
       const id = req.params.id;
@@ -197,8 +214,8 @@ export class RecipeController {
     });
 
     this.router.post('/like/:id', async (req, res, next) => {
-      const user_id = req.user.id
-      const recipe_id = req.params.id
+      const user_id = req.user.id;
+      const recipe_id = req.params.id;
 
       const result = await this.recipeService.addLike(user_id, recipe_id);
       if (result) {
@@ -209,8 +226,8 @@ export class RecipeController {
     });
 
     this.router.post('/views/:id', async (req, res, next) => {
-      const user_id = req.user.id
-      const recipe_id = req.params.id
+      const user_id = req.user.id;
+      const recipe_id = req.params.id;
 
       const result = await this.recipeService.addViews(user_id, recipe_id);
       if (result) {

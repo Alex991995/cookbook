@@ -9,18 +9,23 @@ export class AccountService {
   constructor(private prismaService: PrismaService) {}
 
   async getInfoUser(id: string) {
-    return await this.prismaService.client.user.findUnique({
-      where: {
-        id,
-      },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        image: true,
-        password: true,
-      },
-    });
+    try {
+      return await this.prismaService.client.user.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          image: true,
+          password: true,
+        },
+      });
+    } catch (error) {
+      console.log(error)
+      return false
+    }
   }
 
   async updateCredentials(id: string, credentials: UpdateAccountDto) {
@@ -36,7 +41,6 @@ export class AccountService {
         const isMatchPassword = await bcrypt.compare(oldPassword, user.password);
 
         if (isMatchPassword) {
-
           const hashPassword = await bcrypt.hash(newPassword, SALT);
           await this.prismaService.client.user.update({
             where: {

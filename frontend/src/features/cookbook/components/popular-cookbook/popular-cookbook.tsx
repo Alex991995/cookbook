@@ -1,9 +1,9 @@
 import Card from '../../ui/card/card';
 import ButtonSecondary from 'components/button-secondary';
-import { useGetAllUserCookbooksQuery } from 'store/api/api';
+import { useGetPopularCookbooksQuery } from 'store/api/api';
 
 function PopularCookbook() {
-  const { data:allCookbook } = useGetAllUserCookbooksQuery();
+  const { data:allCookbook } = useGetPopularCookbooksQuery();
   return (
     <section className="flex flex-col items-center gap-14 mb-5">
       <h2 className="text-4xl mt-24">Most Popular Cookbooks</h2>

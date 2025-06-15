@@ -42,7 +42,7 @@ export default function LoginForm() {
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className="self-start">
-        <Logo fontSize="50px" width="180px" color="white" />
+        <Logo fontSize="50px" width="180px" color="black" />
       </div>
 
       <div className="self-start ">

@@ -6,16 +6,14 @@ import { useNavigate } from 'react-router';
 import { useGetUserQuery, useLogOutMutation } from 'store/api/api';
 import Button from './button';
 
-
 function Header() {
   const navigate = useNavigate();
-  const { data, refetch } = useGetUserQuery();
+  const { data } = useGetUserQuery();
   const [logOut] = useLogOutMutation();
 
   function handleClick() {
     logOut();
-    refetch();
-    navigate('/');
+    navigate('/login', { replace: true });
   }
 
   return (

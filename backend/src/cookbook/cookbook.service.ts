@@ -93,7 +93,7 @@ export class CookbookService {
           select: {
             Cookbook_Likes: true,
             commentCookbook: true,
-            views:true
+            views: true,
           },
         },
       },
@@ -117,7 +117,7 @@ export class CookbookService {
           select: {
             Cookbook_Likes: true,
             commentCookbook: true,
-            views:true
+            views: true,
           },
         },
       },
@@ -126,6 +126,36 @@ export class CookbookService {
           _count: 'desc',
         },
       },
+    });
+  }
+
+  async fetchAllPopularCookbooks() {
+    return await this.prismaService.client.cookbook.findMany({
+      select: {
+        views: true,
+        id: true,
+        title: true,
+        description: true,
+        image: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            Cookbook_Likes: true,
+            commentCookbook: true,
+            views: true,
+          },
+        },
+      },
+      orderBy: {
+        Cookbook_Likes: {
+          _count: 'desc',
+        },
+      },
+      take: 4,
     });
   }
 

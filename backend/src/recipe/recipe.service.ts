@@ -48,6 +48,37 @@ export class RecipeService {
     return result;
   }
 
+  async getTrendUserRecipe() {
+    const result = await this.prismaService.client.recipe.findMany({
+      omit: {
+        user_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+            views: true,
+          },
+        },
+      },
+      orderBy: {
+        views: {
+          _count: 'desc',
+        },
+      },
+      take: 4,
+    });
+    return result;
+  }
+
   async getAllRecipe(sort: string, time: number) {
     let obj = {};
     if (sort === 'comment') {
@@ -87,6 +118,32 @@ export class RecipeService {
           ...obj,
         },
       ],
+
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+            views: true,
+          },
+        },
+      },
+    });
+    return result;
+  }
+
+  async getAllRecipeWithoutSort() {
+    const result = await this.prismaService.client.recipe.findMany({
+      omit: {
+        user_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
 
       include: {
         user: {

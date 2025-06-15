@@ -13,7 +13,7 @@ function AccountRecipe() {
   const [recipeForUpdate, setRecipeForUpdate] = useState<Recipe>();
    const location = useLocation();
 
-
+console.log(recipes)
   function updateRecipe(recipe: Recipe) {
     setOpenModel(true);
     setRecipeForUpdate(recipe);

@@ -15,10 +15,11 @@ const baseUrl = '/api';
 export const cookbookApi = createApi({
   reducerPath: 'cookbookApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
+  tagTypes: ['User', 'Recipe', 'Cookbook', 'CommentCookbook', 'CommentRecipe'],
   endpoints: builder => ({
     getUser: builder.query<IUser, void>({
       query: () => `/account/settings`,
-       keepUnusedDataFor: 0,
+      providesTags: ['User'],
     }),
 
     logOut: builder.mutation<null, void>({
@@ -26,6 +27,11 @@ export const cookbookApi = createApi({
         url: `/auth/logout`,
         method: 'POST',
       }),
+      invalidatesTags: ['User'],
+    }),
+
+    getTrendRecipes: builder.query<ArrayRecipe, void>({
+      query: () => `/recipe/trend`,
     }),
 
     getAllUserRecipes: builder.query<ArrayRecipe, void>({
@@ -35,6 +41,12 @@ export const cookbookApi = createApi({
       query: ({ sort, time }) => `/recipe/all?sort=${sort}&time=${time}`,
       keepUnusedDataFor: 0,
     }),
+
+    getRecipesWithoutSort: builder.query<ArrayRecipe, void>({
+      query: () => `/recipe/all-without-sort`,
+      keepUnusedDataFor: 0,
+    }),
+
     getRecipeByTitle: builder.query<ArrayRecipe, string>({
       query: title => `/recipe?title=${title}`,
     }),
@@ -52,6 +64,10 @@ export const cookbookApi = createApi({
       query: () => `/cookbook/all`,
     }),
 
+    getPopularCookbooks: builder.query<ArrayCookbook, void>({
+      query: () => `/cookbook/most-popular`,
+    }),
+
     getUniqueCookbookByID: builder.query<Cookbook, string>({
       query: id => `/cookbook/${id}`,
       keepUnusedDataFor: 0,
@@ -59,12 +75,12 @@ export const cookbookApi = createApi({
 
     getAllCommentRecipe: builder.query<ArrayCommentRecipe, string>({
       query: id => `/recipe/comment/${id}`,
-      keepUnusedDataFor: 0,
+      providesTags: ['CommentRecipe'],
     }),
 
     getAllCommentCookbook: builder.query<ArrayCommentCookbook, string>({
       query: id => `/cookbook/comment/${id}`,
-      keepUnusedDataFor: 0,
+      providesTags: ['CommentCookbook'],
     }),
 
     createCommentRecipe: builder.mutation<
@@ -76,6 +92,7 @@ export const cookbookApi = createApi({
         method: 'POST',
         body: obj,
       }),
+      invalidatesTags: ['CommentRecipe'],
     }),
 
     createCommentCookbook: builder.mutation<
@@ -87,6 +104,7 @@ export const cookbookApi = createApi({
         method: 'POST',
         body: obj,
       }),
+      invalidatesTags: ['CommentCookbook'],
     }),
 
     addLikeToRecipe: builder.mutation<null, string>({
@@ -120,7 +138,6 @@ export const cookbookApi = createApi({
         body: id,
       }),
     }),
-
   }),
 });
 
@@ -128,14 +145,17 @@ export const {
   useGetUserQuery,
   useLogOutMutation,
 
+  useGetRecipesWithoutSortQuery,
   useGetRecipeByTitleQuery,
   useGetAllUserRecipesQuery,
   useGetAllRecipesQuery,
   useGetUniqueRecipeByIDQuery,
+  useGetTrendRecipesQuery,
 
   useGetAllCookbooksQuery,
   useGetAllUserCookbooksQuery,
   useGetUniqueCookbookByIDQuery,
+  useGetPopularCookbooksQuery,
 
   useCreateCommentRecipeMutation,
   useCreateCommentCookbookMutation,
@@ -145,5 +165,5 @@ export const {
   useAddLikeToRecipeMutation,
   useAddLikeToCookbookMutation,
   useAddViewsToRecipeMutation,
-  useAddViewsToCookbookMutation
+  useAddViewsToCookbookMutation,
 } = cookbookApi;
