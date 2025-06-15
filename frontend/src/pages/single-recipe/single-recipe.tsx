@@ -4,6 +4,7 @@ import RecipeDetailInfo from 'features/recipie/recipe-detail-info/recipe-detail-
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import {
+  useAddLikeToRecipeMutation,
   useCreateCommentRecipeMutation,
   useGetAllCommentRecipeQuery,
   useGetUniqueRecipeByIDQuery,
@@ -14,6 +15,7 @@ function SingleRecipe() {
   const [createComment] = useCreateCommentRecipeMutation();
   const { data, refetch } = useGetUniqueRecipeByIDQuery(id || '');
   const { data: comments, refetch: refetchComments } = useGetAllCommentRecipeQuery(id || '');
+  const [addLike] = useAddLikeToRecipeMutation();
   const [value, setValue] = useState('');
 
   const numberOfComments = data?._count.comment || 0;
@@ -25,11 +27,19 @@ function SingleRecipe() {
     refetchComments();
   }
 
- 
+
+  function handleClickLike(recipe_id?: string) {
+    if (recipe_id) {
+      addLike(recipe_id);
+      refetch();
+    }
+  }
+
+  
 
   return (
     <section>
-      <RecipeDetailInfo recipe={data} />
+      <RecipeDetailInfo handleClickLike={handleClickLike} recipe={data} />
       <div className="container mx-auto">
         <div className="flex flex-col gap-8 mt-24 mb-24 ">
           <h1 className="font-semibold text-4xl">Comments ({numberOfComments})</h1>

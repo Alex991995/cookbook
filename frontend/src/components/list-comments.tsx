@@ -1,5 +1,5 @@
 import anonymous from 'assets/icon-user.png';
-import { convertMinutesToHours, getWhenCreatedInMinutes } from 'common/helpers';
+import { convertMinutesToHours, getWhenCreatedInMinutes, } from 'common/helpers';
 
 interface IListComments {
   image?: string;

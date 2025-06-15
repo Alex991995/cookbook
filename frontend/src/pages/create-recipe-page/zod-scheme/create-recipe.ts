@@ -5,17 +5,13 @@ const valueObjects = z.object({
 });
 
 export const CreateRecipeSchema = z.object({
-  title: z
-    .string({
-      required_error: 'Mobile number is required.',
-    })
-    .min(4),
+  title: z.string().min(4),
   description: z.string().optional(),
   picture: z.instanceof(FileList).refine(file => file?.length == 1, 'File is required.'),
   estimated_time: z.string(),
 
-  ingredients: z.array(valueObjects).nonempty(),
-  directions: z.array(valueObjects).nonempty(),
-});
+  ingredients: z.array(valueObjects).min(1),
+  directions: z.array(valueObjects).min(1),
+}).required();
 
 export type CreateRecipeType = z.infer<typeof CreateRecipeSchema>;

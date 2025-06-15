@@ -5,6 +5,7 @@ import CardRecipes from 'features/recipie/ui/card-recipes/card-recipes';
 import { useState } from 'react';
 import { useParams } from 'react-router';
 import {
+  useAddLikeToCookbookMutation,
   useCreateCommentCookbookMutation,
   useGetAllCommentCookbookQuery,
   useGetUniqueCookbookByIDQuery,
@@ -15,20 +16,29 @@ function SingleCookbook() {
   const { data: cookbook, refetch: refetchCookbook } = useGetUniqueCookbookByIDQuery(id || '');
   const { data: comments, refetch: refetchComments } = useGetAllCommentCookbookQuery(id || '');
   const [createComment] = useCreateCommentCookbookMutation();
+  const [addLike] = useAddLikeToCookbookMutation()
   const [value, setValue] = useState('');
 
   const numberOfComments = cookbook?._count.commentCookbook || 0;
-  console.log(comments);
+
   function handleClick() {
     createComment({ description: value, cookbook_id: id! });
     setValue('');
     refetchCookbook();
     refetchComments();
   }
+  console.log(cookbook)
+
+   function handleClickLike(cookbook_id?: string) {
+    if (cookbook_id) {
+      addLike(cookbook_id);
+      refetchCookbook();
+    }
+  }
 
   return (
     <section className="container mx-auto">
-      <CookbookDetailInfo data={cookbook} />
+      <CookbookDetailInfo data={cookbook} handleClickLike={handleClickLike}/>
       <ul className="flex flex-col gap-8 mt-28">
         <h2 className="font-semibold text-4xl">Recipes</h2>
         {cookbook?.recipes.map(item => (

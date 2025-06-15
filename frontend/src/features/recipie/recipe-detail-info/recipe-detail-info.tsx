@@ -1,12 +1,13 @@
 import ReactionCounter from 'components/reaction-counter';
-import React from 'react';
+
 import type { Recipe } from 'types';
 
 interface IRecipeDetailInfo {
   recipe?: Recipe;
+  handleClickLike(recipe_id?: string): void;
 }
 
-function RecipeDetailInfo({ recipe }: IRecipeDetailInfo) {
+function RecipeDetailInfo({ recipe, handleClickLike }: IRecipeDetailInfo) {
   return (
     <div className="flex bg-white">
       <img
@@ -48,6 +49,8 @@ function RecipeDetailInfo({ recipe }: IRecipeDetailInfo) {
         </div>
         <div className="flex  gap-9  items-baseline">
           <ReactionCounter
+            handleClickLike={handleClickLike}
+            id={recipe?.id}
             views={recipe?.views || 0}
             comment={recipe?._count.comment || 0}
             likes={recipe?._count.likes || 0}

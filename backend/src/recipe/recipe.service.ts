@@ -163,19 +163,17 @@ export class RecipeService {
     }
   }
 
-  // async addLike(id: string) {
-  //   try {
-  //     await this.prismaService.client.recipe_Likes.update({
-  //       where: {
-  //         id,
-  //       },
-  //       data: { number_likes: { increment: 1 } },
-  //     });
-
-  //     return true;
-  //   } catch (err) {
-  //     console.log(err);
-  //     return false;
-  //   }
-  // }
+  async addLike(user_id: string, recipe_id: string) {
+    try {
+      return await this.prismaService.client.recipe_Likes.create({
+        data: {
+          user_id,
+          recipe_id,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
 }

@@ -4,11 +4,11 @@ import CardRecipes from 'features/recipie/ui/card-recipes/card-recipes';
 import { useState } from 'react';
 import { useLocation } from 'react-router';
 
-import { useGetAllRecipesQuery } from 'store/api/api';
+import { useGetAllUserRecipesQuery } from 'store/api/api';
 import type { Recipe } from 'types';
 
 function AccountRecipe() {
-  const { data: recipes } = useGetAllRecipesQuery();
+  const { data: recipes } = useGetAllUserRecipesQuery();
   const [openModel, setOpenModel] = useState(false);
   const [recipeForUpdate, setRecipeForUpdate] = useState<Recipe>();
    const location = useLocation();

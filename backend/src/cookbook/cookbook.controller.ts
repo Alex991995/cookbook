@@ -161,7 +161,6 @@ export class CookbookController {
     );
 
     this.router.get('/comment/:id', async (req, res) => {
-
       const result = await this.commentCookbookService.getAllCommentsByCookbookId(req.params.id);
 
       res.send({
@@ -169,16 +168,17 @@ export class CookbookController {
       });
     });
 
-    // this.router.put('/like/:id', async (req, res, next) => {
-    //   const id = req.params.id;
+    this.router.post('/like/:id', async (req, res, next) => {
+      const user_id = req.user.id;
+      const cookbook = req.params.id;
 
-    //   const result = await this.cookbookService.addLike(id);
-    //   if (result) {
-    //     res.status(204).send();
-    //   } else {
-    //     next(new HttpError(404, 'Record to update does not exist.'));
-    //   }
-    // });
+      const result = await this.cookbookService.addLike(user_id, cookbook);
+      if (result) {
+        res.sendStatus(204).end();
+      } else {
+        next(new HttpError(404, 'User has already liked this recipe'));
+      }
+    });
 
     return this.router;
   }

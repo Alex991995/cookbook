@@ -2,18 +2,28 @@ import sourceViews from 'assets/views.svg';
 import sourceHeart from 'assets/heart_outline.svg';
 import sourceComment from 'assets/comment.svg';
 
+type HandleClickLike = ((id?: string) => void) | undefined;
+
 interface IReactionCounter {
+  id?: string;
   likes: number;
   comment: number;
   views?: number;
   fontSize?: string;
+  handleClickLike: HandleClickLike;
 }
 
-function ReactionCounter({ likes, comment, views, fontSize }: IReactionCounter) {
-
+function ReactionCounter({
+  id,
+  likes,
+  comment,
+  views,
+  fontSize,
+  handleClickLike,
+}: IReactionCounter) {
   return (
     <>
-      <div className="flex gap-2 ">
+      <div onClick={() => handleClickLike && handleClickLike(id)} className="flex gap-2 ">
         <img src={sourceHeart} alt="likes" />
         <div style={{ fontSize }} className="text-xs">
           {likes} likes

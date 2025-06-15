@@ -4,9 +4,10 @@ import type { Cookbook } from 'types';
 
 interface ICookbookDetailInfo {
   data?: Cookbook;
+  handleClickLike(cookbook_id?: string): void;
 }
 
-function CookbookDetailInfo({ data }: ICookbookDetailInfo) {
+function CookbookDetailInfo({ data, handleClickLike }: ICookbookDetailInfo) {
   return (
     <div className="flex flex-col gap-4">
       <h3 className="font-bold text-[54px] mt-20">{data?.title}</h3>
@@ -19,15 +20,17 @@ function CookbookDetailInfo({ data }: ICookbookDetailInfo) {
         </div>
       </div>
       <div className="flex items-center justify-between">
-        <div className='flex gap-24'>
+        <div className="flex gap-24">
           <ReactionCounter
-          likes={data?._count.Cookbook_Likes || 0}
-          comment={data?._count.commentCookbook || 0}
-          views={undefined}
-          fontSize="20px"
-        />
+            id={data?.id}
+            handleClickLike={handleClickLike}
+            likes={data?._count.Cookbook_Likes || 0}
+            comment={data?._count.commentCookbook || 0}
+            views={undefined}
+            fontSize="20px"
+          />
         </div>
-        
+
         <Button text="Clone to my cookbooks" maxWidth="210px" paddingX="0" />
       </div>
     </div>

@@ -13,13 +13,14 @@ import type {
 const baseUrl = '/api';
 
 export const cookbookApi = createApi({
-  reducerPath: 'movieApi',
+  reducerPath: 'cookbookApi',
   baseQuery: fetchBaseQuery({ baseUrl }),
   endpoints: builder => ({
     getUser: builder.query<IUser, void>({
       query: () => `/account/settings`,
     }),
-    logOut: builder.mutation<any, void>({
+
+    logOut: builder.mutation<null, void>({
       query: () => ({
         url: `/auth/logout`,
         method: 'POST',
@@ -86,6 +87,22 @@ export const cookbookApi = createApi({
         body: obj,
       }),
     }),
+
+    addLikeToRecipe: builder.mutation<null, string>({
+      query: id => ({
+        url: `/recipe/like/${id}`,
+        method: 'POST',
+        body: id,
+      }),
+    }),
+
+    addLikeToCookbook: builder.mutation<null, string>({
+      query: id => ({
+        url: `/cookbook/like/${id}`,
+        method: 'POST',
+        body: id,
+      }),
+    }),
   }),
 });
 
@@ -106,4 +123,7 @@ export const {
   useCreateCommentCookbookMutation,
   useGetAllCommentRecipeQuery,
   useGetAllCommentCookbookQuery,
+
+  useAddLikeToRecipeMutation,
+  useAddLikeToCookbookMutation,
 } = cookbookApi;

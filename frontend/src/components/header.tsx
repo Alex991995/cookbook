@@ -9,16 +9,16 @@ import Button from './button';
 function Header() {
   const navigate = useNavigate();
   const { data } = useGetUserQuery();
-  const [logOut, result] = useLogOutMutation();
+  const [logOut] = useLogOutMutation();
 
   function handleClick() {
     logOut();
-    console.log(result)
+
   }
 
   return (
     <header className="shadow-[0_0_25px_0_rgba(0,0,0,0.12)] py-6">
-      <nav className="flex justify-around ">
+      <nav className="flex justify-around items-center">
         <div className="flex gap-x-9 items-baseline">
           <div className="flex items-baseline cursor-pointer" onClick={() => navigate('/')}>
             <img className="mr-2 " src={source} alt="pear" />
@@ -31,7 +31,7 @@ function Header() {
           {data ? (
             <>
               <Link to="/account/setting">
-                <img src={data.image || defaultImage} className="w-16 rounded-2xl" alt="" />
+                <img src={data.image || defaultImage} className="w-16 h-16 rounded-2xl object-cover" alt="" />
               </Link>
               <Button text="Log Out" maxWidth="120px" paddingX="0" handleClick={handleClick} />
             </>
