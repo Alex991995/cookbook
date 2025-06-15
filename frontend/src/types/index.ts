@@ -16,7 +16,6 @@ export interface Recipe {
   description: string;
   ingredients: string[];
   directions: string[];
-  views: number;
   estimated_time: string;
   image: string;
   user_id: string;
@@ -29,7 +28,6 @@ export interface ArrayCookbook {
 }
 
 export interface Cookbook {
-  views: number;
   id: string;
   title: string;
   description: string;
@@ -42,11 +40,13 @@ export interface Cookbook {
 export interface CountCookbook {
   Cookbook_Likes: number;
   commentCookbook: number;
+  views: number;
 }
 
 interface ICount {
   likes: number;
   comment: number;
+  views: number;
 }
 
 export interface CreateCookbookTypeForServer {
@@ -93,7 +93,6 @@ export interface CommentRecipe {
   createdAt: string;
   recipe: InfoUser;
 }
-
 
 export interface ArrayCommentCookbook {
   data: CommentCookbook[];

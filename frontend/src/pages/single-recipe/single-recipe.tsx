@@ -1,10 +1,11 @@
 import Button from 'components/button';
 import ListComments from 'components/list-comments';
 import RecipeDetailInfo from 'features/recipie/recipe-detail-info/recipe-detail-info';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   useAddLikeToRecipeMutation,
+  useAddViewsToRecipeMutation,
   useCreateCommentRecipeMutation,
   useGetAllCommentRecipeQuery,
   useGetUniqueRecipeByIDQuery,
@@ -12,6 +13,7 @@ import {
 
 function SingleRecipe() {
   const { id } = useParams();
+  const [addViews] = useAddViewsToRecipeMutation();
   const [createComment] = useCreateCommentRecipeMutation();
   const { data, refetch } = useGetUniqueRecipeByIDQuery(id || '');
   const { data: comments, refetch: refetchComments } = useGetAllCommentRecipeQuery(id || '');
@@ -27,7 +29,6 @@ function SingleRecipe() {
     refetchComments();
   }
 
-
   function handleClickLike(recipe_id?: string) {
     if (recipe_id) {
       addLike(recipe_id);
@@ -35,7 +36,9 @@ function SingleRecipe() {
     }
   }
 
-  
+  useEffect(() => {
+    addViews(id || '');
+  }, [addViews, id]);
 
   return (
     <section>

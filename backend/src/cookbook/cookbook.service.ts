@@ -93,6 +93,7 @@ export class CookbookService {
           select: {
             Cookbook_Likes: true,
             commentCookbook: true,
+            views:true
           },
         },
       },
@@ -116,6 +117,7 @@ export class CookbookService {
           select: {
             Cookbook_Likes: true,
             commentCookbook: true,
+            views:true
           },
         },
       },
@@ -145,6 +147,20 @@ export class CookbookService {
   async addLike(user_id: string, cookbook_id: string) {
     try {
       return await this.prismaService.client.cookbook_Likes.create({
+        data: {
+          user_id,
+          cookbook_id,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  async addViews(user_id: string, cookbook_id: string) {
+    try {
+      return await this.prismaService.client.views_Cookbook.create({
         data: {
           user_id,
           cookbook_id,

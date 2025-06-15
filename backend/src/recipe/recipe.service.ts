@@ -40,6 +40,7 @@ export class RecipeService {
           select: {
             likes: true,
             comment: true,
+            views: true,
           },
         },
       },
@@ -62,7 +63,11 @@ export class RecipeService {
         },
       };
     } else {
-      obj = { views: 'desc' };
+      obj = {
+        views: {
+          _count: 'desc',
+        },
+      };
     }
 
     const result = await this.prismaService.client.recipe.findMany({
@@ -93,6 +98,7 @@ export class RecipeService {
           select: {
             likes: true,
             comment: true,
+            views: true,
           },
         },
       },
@@ -120,6 +126,7 @@ export class RecipeService {
           select: {
             likes: true,
             comment: true,
+            views: true,
           },
         },
       },
@@ -166,6 +173,20 @@ export class RecipeService {
   async addLike(user_id: string, recipe_id: string) {
     try {
       return await this.prismaService.client.recipe_Likes.create({
+        data: {
+          user_id,
+          recipe_id,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
+
+  async addViews(user_id: string, recipe_id: string) {
+    try {
+      return await this.prismaService.client.views_Recipe.create({
         data: {
           user_id,
           recipe_id,

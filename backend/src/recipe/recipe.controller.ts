@@ -208,6 +208,18 @@ export class RecipeController {
       }
     });
 
+    this.router.post('/views/:id', async (req, res, next) => {
+      const user_id = req.user.id
+      const recipe_id = req.params.id
+
+      const result = await this.recipeService.addViews(user_id, recipe_id);
+      if (result) {
+        res.sendStatus(204).end();
+      } else {
+        next(new HttpError(404, 'User has already liked this recipe'));
+      }
+    });
+
     return this.router;
   }
 }

@@ -170,13 +170,25 @@ export class CookbookController {
 
     this.router.post('/like/:id', async (req, res, next) => {
       const user_id = req.user.id;
-      const cookbook = req.params.id;
+      const cookbook_id = req.params.id;
 
-      const result = await this.cookbookService.addLike(user_id, cookbook);
+      const result = await this.cookbookService.addLike(user_id, cookbook_id);
       if (result) {
         res.sendStatus(204).end();
       } else {
         next(new HttpError(404, 'User has already liked this recipe'));
+      }
+    });
+
+    this.router.post('/views/:id', async (req, res, next) => {
+      const user_id = req.user.id;
+      const cookbook_id = req.params.id;
+
+      const result = await this.cookbookService.addViews(user_id, cookbook_id);
+      if (result) {
+        res.sendStatus(204).end();
+      } else {
+        next(new HttpError(404, 'User has already seen it'));
       }
     });
 

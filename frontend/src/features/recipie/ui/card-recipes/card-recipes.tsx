@@ -10,12 +10,12 @@ interface RecipeWithUpdate extends Recipe {
 }
 
 function CardRecipes(recipe: RecipeWithUpdate) {
-  const { views, image, title, description, user, _count, updateRecipe, route } = recipe;
+  const { image, title, description, user, _count, updateRecipe, route } = recipe;
   const ifAccountRecipeRoute = route === '/account/recipe';
   return (
     <>
       <li className={styles.card}>
-        <Link to={`/recipe/${recipe.id}`} >
+        <Link to={`/recipe/${recipe.id}`}>
           <img className={styles.meal} src={image} alt="meal" />
 
           <div className="flex flex-col justify-between">
@@ -26,7 +26,12 @@ function CardRecipes(recipe: RecipeWithUpdate) {
             </div>
 
             <div className="flex gap-9  items-baseline">
-              <ReactionCounter handleClickLike={undefined} likes={_count.likes} views={views} comment={_count.comment} />
+              <ReactionCounter
+                handleClickLike={undefined}
+                likes={_count.likes}
+                views={_count.views}
+                comment={_count.comment}
+              />
             </div>
           </div>
         </Link>

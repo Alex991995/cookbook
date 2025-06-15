@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 
 function TrendingRecipes() {
   const { data: allRecipes } = useGetAllUserRecipesQuery();
+
   const navigate = useNavigate();
   return (
     <section className="px-8">

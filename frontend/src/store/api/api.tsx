@@ -18,6 +18,7 @@ export const cookbookApi = createApi({
   endpoints: builder => ({
     getUser: builder.query<IUser, void>({
       query: () => `/account/settings`,
+       keepUnusedDataFor: 0,
     }),
 
     logOut: builder.mutation<null, void>({
@@ -103,6 +104,23 @@ export const cookbookApi = createApi({
         body: id,
       }),
     }),
+
+    addViewsToRecipe: builder.mutation<null, string>({
+      query: id => ({
+        url: `/recipe/views/${id}`,
+        method: 'POST',
+        body: id,
+      }),
+    }),
+
+    addViewsToCookbook: builder.mutation<null, string>({
+      query: id => ({
+        url: `/cookbook/views/${id}`,
+        method: 'POST',
+        body: id,
+      }),
+    }),
+
   }),
 });
 
@@ -126,4 +144,6 @@ export const {
 
   useAddLikeToRecipeMutation,
   useAddLikeToCookbookMutation,
+  useAddViewsToRecipeMutation,
+  useAddViewsToCookbookMutation
 } = cookbookApi;

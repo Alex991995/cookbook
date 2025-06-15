@@ -51,7 +51,7 @@ function RecipeDetailInfo({ recipe, handleClickLike }: IRecipeDetailInfo) {
           <ReactionCounter
             handleClickLike={handleClickLike}
             id={recipe?.id}
-            views={recipe?.views || 0}
+            views={recipe?._count.views || 0}
             comment={recipe?._count.comment || 0}
             likes={recipe?._count.likes || 0}
           />

@@ -2,10 +2,11 @@ import Button from 'components/button';
 import ListComments from 'components/list-comments';
 import CookbookDetailInfo from 'features/cookbook/components/cookbook-detail-info/cookbook-detail-info';
 import CardRecipes from 'features/recipie/ui/card-recipes/card-recipes';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {
   useAddLikeToCookbookMutation,
+  useAddViewsToCookbookMutation,
   useCreateCommentCookbookMutation,
   useGetAllCommentCookbookQuery,
   useGetUniqueCookbookByIDQuery,
@@ -13,10 +14,11 @@ import {
 
 function SingleCookbook() {
   const { id } = useParams();
+  const [addViews] = useAddViewsToCookbookMutation();
   const { data: cookbook, refetch: refetchCookbook } = useGetUniqueCookbookByIDQuery(id || '');
   const { data: comments, refetch: refetchComments } = useGetAllCommentCookbookQuery(id || '');
   const [createComment] = useCreateCommentCookbookMutation();
-  const [addLike] = useAddLikeToCookbookMutation()
+  const [addLike] = useAddLikeToCookbookMutation();
   const [value, setValue] = useState('');
 
   const numberOfComments = cookbook?._count.commentCookbook || 0;
@@ -27,18 +29,22 @@ function SingleCookbook() {
     refetchCookbook();
     refetchComments();
   }
-  console.log(cookbook)
+  console.log(cookbook);
 
-   function handleClickLike(cookbook_id?: string) {
+  function handleClickLike(cookbook_id?: string) {
     if (cookbook_id) {
       addLike(cookbook_id);
       refetchCookbook();
     }
   }
 
+  useEffect(() => {
+    addViews(id || '');
+  }, [addViews, id]);
+
   return (
     <section className="container mx-auto">
-      <CookbookDetailInfo data={cookbook} handleClickLike={handleClickLike}/>
+      <CookbookDetailInfo data={cookbook} handleClickLike={handleClickLike} />
       <ul className="flex flex-col gap-8 mt-28">
         <h2 className="font-semibold text-4xl">Recipes</h2>
         {cookbook?.recipes.map(item => (

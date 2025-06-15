@@ -10,6 +10,7 @@ import { CreateCookbookSchema, type CreateCookbookType } from './zod-scheme/crea
 import { useGetAllUserRecipesQuery } from 'store/api/api';
 import type { Recipe } from 'types';
 import Select, { type SingleValue } from 'react-select';
+import { useNavigate } from 'react-router';
 
 function CreateCookbookPage() {
   const {
@@ -27,7 +28,7 @@ function CreateCookbookPage() {
     control,
     name: 'recipesIDs',
   });
-
+  const navigate = useNavigate()
   const { data: allRecipe } = useGetAllUserRecipesQuery();
   const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
   const options = allRecipe?.data.map(item => ({ value: item.title, label: item.title }));
@@ -43,11 +44,7 @@ function CreateCookbookPage() {
     }
   }
 
-  // function clearFields() {
-  //   clearErrors();
-  //   reset();
-  //   remove();
-  // }
+
 
   const onSubmit: SubmitHandler<CreateCookbookType> = async data => {
     console.log(data);
@@ -63,6 +60,7 @@ function CreateCookbookPage() {
         body: formData,
       });
       const res = await response.json();
+      navigate('/account/cookbook')
       console.log(res);
     } catch (error) {
       console.error(error);

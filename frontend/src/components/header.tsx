@@ -6,14 +6,16 @@ import { useNavigate } from 'react-router';
 import { useGetUserQuery, useLogOutMutation } from 'store/api/api';
 import Button from './button';
 
+
 function Header() {
   const navigate = useNavigate();
-  const { data } = useGetUserQuery();
+  const { data, refetch } = useGetUserQuery();
   const [logOut] = useLogOutMutation();
 
   function handleClick() {
     logOut();
-
+    refetch();
+    navigate('/');
   }
 
   return (
@@ -31,7 +33,11 @@ function Header() {
           {data ? (
             <>
               <Link to="/account/setting">
-                <img src={data.image || defaultImage} className="w-16 h-16 rounded-2xl object-cover" alt="" />
+                <img
+                  src={data.image || defaultImage}
+                  className="w-16 h-16 rounded-2xl object-cover"
+                  alt=""
+                />
               </Link>
               <Button text="Log Out" maxWidth="120px" paddingX="0" handleClick={handleClick} />
             </>

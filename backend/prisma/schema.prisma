@@ -21,19 +21,21 @@ model User {
   likes          Recipe_Likes[]
   Cookbook_Likes Cookbook_Likes[]
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  Views_Recipe   Views_Recipe[]
+  Views_Cookbook Views_Cookbook[]
 
   @@map("user")
 }
 
 model Recipe {
-  id             String   @id @default(uuid())
-  title          String
-  description    String?
-  ingredients    String[]
-  directions     String[]
-  views          Int      @default(0)
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  ingredients String[]
+  directions  String[]
+
   estimated_time Int
   image          String
   user_id        String
@@ -45,9 +47,12 @@ model Recipe {
   comment   CommentRecipe[]
   likes     Recipe_Likes[]
   cookbooks Cookbook[]
+  views     Views_Recipe[]
 
   @@map("recipe")
 }
+
+
 
 model Cookbook {
   id          String   @id @default(uuid())
@@ -56,15 +61,39 @@ model Cookbook {
   image       String
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @updatedAt @map("updated_at")
-  views       Int      @default(0)
   user_id     String
   recipes     Recipe[]
 
   user            User              @relation(fields: [user_id], references: [id])
   commentCookbook CommentCookbook[]
   Cookbook_Likes  Cookbook_Likes[]
+  views           Views_Cookbook[]
 
   @@map("cookbook")
+}
+
+model Views_Cookbook {
+  user_id     String
+  cookbook_id String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [user_id], references: [id])
+  cookbook  Cookbook @relation(fields: [cookbook_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, cookbook_id])
+  @@map("views_cookbook")
+}
+
+model Views_Recipe {
+  user_id   String
+  recipe_id String
+
+  createdAt DateTime @default(now()) @map("created_at")
+  user      User     @relation(fields: [user_id], references: [id])
+  recipe    Recipe   @relation(fields: [recipe_id], references: [id], onDelete: Cascade)
+
+  @@unique([user_id, recipe_id])
+  @@map("views_recipe")
 }
 
 model Recipe_Likes {

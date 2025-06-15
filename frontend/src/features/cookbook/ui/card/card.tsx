@@ -9,12 +9,13 @@ interface ICookbookWidth extends Cookbook {
   width?: string;
 }
 
-function Card({ image, views, title, user, _count, width, id }: ICookbookWidth) {
+function Card({ image, title, user, _count, width, id }: ICookbookWidth) {
+
   return (
     <Link to={`/cookbook/${id}`} className={styles.card}>
       <div className="flex gap-2">
         <img src={sourceViews} alt="views" />
-        <div>{views} views</div>
+        <div>{_count.views} views</div>
       </div>
       <img className={styles.meal} style={{ width }} src={image} alt="meal" />
 
