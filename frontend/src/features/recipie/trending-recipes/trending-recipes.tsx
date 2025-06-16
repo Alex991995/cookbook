@@ -15,7 +15,7 @@ function TrendingRecipes() {
 
         <ul className="flex gap-8 mt-6 flex-wrap justify-center">
           {allRecipes?.data.map(item => (
-            <CardTrendRecipes {...item} />
+            <CardTrendRecipes key={item.id} {...item} />
           ))}
         </ul>
         <button onClick={() => navigate('/recipe')} className="py-4 px-8 bg-white text-primary rounded-2xl hover:text-primary-hover mb-4">

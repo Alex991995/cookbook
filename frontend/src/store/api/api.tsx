@@ -36,6 +36,7 @@ export const cookbookApi = createApi({
 
     getAllUserRecipes: builder.query<ArrayRecipe, void>({
       query: () => `/recipe/all-user`,
+      providesTags: ['Recipe'],
     }),
     getAllRecipes: builder.query<ArrayRecipe, { sort: string; time: string }>({
       query: ({ sort, time }) => `/recipe/all?sort=${sort}&time=${time}`,
@@ -58,6 +59,7 @@ export const cookbookApi = createApi({
 
     getAllUserCookbooks: builder.query<ArrayCookbook, void>({
       query: () => `/cookbook/all-user`,
+      providesTags: ['Cookbook'],
     }),
 
     getAllCookbooks: builder.query<ArrayCookbook, void>({
@@ -138,6 +140,30 @@ export const cookbookApi = createApi({
         body: id,
       }),
     }),
+
+    addRecipeToMyCookbook: builder.mutation<null, { cookbook_id: string; recipesID: string }>({
+      query: obj => ({
+        url: `/cookbook`,
+        method: 'PUT',
+        body: obj,
+      }),
+    }),
+
+    addExistedCookbookToUser: builder.mutation<null, string>({
+      query: id => ({
+        url: `/cookbook/add-cookbook/${id}`,
+        method: 'PUT',
+      }),
+      invalidatesTags: ['Cookbook'],
+    }),
+
+    deleteRecipe: builder.mutation<null, string>({
+      query: id => ({
+        url: `/recipe/${id}`,
+        method: 'DELETE',
+      }),
+      invalidatesTags: ['Recipe'],
+    }),
   }),
 });
 
@@ -151,11 +177,14 @@ export const {
   useGetAllRecipesQuery,
   useGetUniqueRecipeByIDQuery,
   useGetTrendRecipesQuery,
+  useDeleteRecipeMutation,
 
   useGetAllCookbooksQuery,
   useGetAllUserCookbooksQuery,
   useGetUniqueCookbookByIDQuery,
   useGetPopularCookbooksQuery,
+  useAddRecipeToMyCookbookMutation,
+  useAddExistedCookbookToUserMutation,
 
   useCreateCommentRecipeMutation,
   useCreateCommentCookbookMutation,

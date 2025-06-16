@@ -58,18 +58,7 @@ export class CookbookController {
       },
     );
 
-    this.router.post(
-      '/add-cookbook',
-      async (req: Request<object, object, { id: string }>, res, next) => {
-        const user_id = req.user.id;
-        const id = req.body.id;
-        const result = await this.cookbookService.addCookbookToUSer(id, user_id);
-        res.send({
-          data: result,
-        });
-      },
-    );
-
+  
     this.router.get('/all', async (req, res, next) => {
       const result = await this.cookbookService.fetchAllCookbooks();
       res.send({
@@ -80,12 +69,13 @@ export class CookbookController {
     this.router.get('/all-user', async (req, res, next) => {
       const user_id = req.user.id;
       const result = await this.cookbookService.fetchAllUserCookbooks(user_id);
+
       res.send({
         data: result,
       });
     });
 
-     this.router.get('/most-popular', async (req, res, next) => {
+    this.router.get('/most-popular', async (req, res, next) => {
       const result = await this.cookbookService.fetchAllPopularCookbooks();
       res.send({
         data: result,
@@ -100,32 +90,34 @@ export class CookbookController {
     });
 
     this.router.put(
-      '/:id',
-      this.upload.single('file'),
+      '/',
       async (
-        req: Request<{ id: string }, object, { data: string }>,
-        res: Response,
-        next: NextFunction,
+        req: Request<object, object, { cookbook_id: string; recipesID: string }>,
+        res,
+        next,
       ) => {
-        const id = req.params.id;
-        const data = req.body.data;
-        const user_id = req.user.id;
-
-        const fileName = req.file?.filename;
-        const filePath = `${uploadsCookbookPath}/${fileName}`;
-
-        try {
-          const cookbook = JSON.parse(data) as UpdateCookbookDto;
-          cookbook.image = filePath;
-          UpdateCookbookScheme.parse(cookbook);
-          const result = await this.cookbookService.updateCookbook(cookbook, id, user_id);
-
-          res.send(result);
-        } catch (error) {
-          next(new HttpError(404, 'Record to update not found'));
-        }
+        const { cookbook_id, recipesID } = req.body;
+        const result = await this.cookbookService.addRecipeToCookbook(cookbook_id, recipesID);
+        res.send(result);
       },
     );
+
+      this.router.put(
+      '/add-cookbook/:id',
+      async (req: Request<{ id: string }, object, object>, res, next) => {
+        const user_id = req.user.id;
+        // const id = req.body.id;
+     
+        const id = req.params.id;
+
+        const result = await this.cookbookService.addCookbookToUSer(id, user_id);
+        res.send({
+          data: result,
+        });
+      },
+    );
+
+
 
     this.router.delete('/:id', async (req, res, next) => {
       const id = req.params.id;

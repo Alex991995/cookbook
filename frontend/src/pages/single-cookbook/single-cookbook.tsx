@@ -1,25 +1,35 @@
 import Button from 'components/button';
+import Modal from 'components/modal';
+import FormAddRecipeToMyCookbook from 'features/cookbook/components/form-add-recipe-to-my-cookbook/form-add-recipe-to-my-cookbook';
+
 import ListComments from 'components/list-comments';
 import CookbookDetailInfo from 'features/cookbook/components/cookbook-detail-info/cookbook-detail-info';
 import CardRecipes from 'features/recipie/ui/card-recipes/card-recipes';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import {
+  useAddExistedCookbookToUserMutation,
   useAddLikeToCookbookMutation,
   useAddViewsToCookbookMutation,
   useCreateCommentCookbookMutation,
   useGetAllCommentCookbookQuery,
+  useGetAllUserCookbooksQuery,
   useGetUniqueCookbookByIDQuery,
 } from 'store/api/api';
+import type { Recipe } from 'types';
 
 function SingleCookbook() {
   const { id } = useParams();
   const [addViews] = useAddViewsToCookbookMutation();
+  const { data: userCookbooks } = useGetAllUserCookbooksQuery();
   const { data: cookbook, refetch: refetchCookbook } = useGetUniqueCookbookByIDQuery(id || '');
   const { data: comments, refetch: refetchComments } = useGetAllCommentCookbookQuery(id || '');
   const [createComment] = useCreateCommentCookbookMutation();
   const [addLike] = useAddLikeToCookbookMutation();
+  const [addExistedCookbookToUser] = useAddExistedCookbookToUserMutation();
   const [value, setValue] = useState('');
+  const [openModel, setOpenModel] = useState(false);
+  const [recipeIDTooAddMyCookbook, setRecipeIDTooAddMyCookbook] = useState<string>('');
 
   const numberOfComments = cookbook?._count.commentCookbook || 0;
 
@@ -29,7 +39,6 @@ function SingleCookbook() {
     refetchCookbook();
     refetchComments();
   }
-  console.log(cookbook);
 
   function handleClickLike(cookbook_id?: string) {
     if (cookbook_id) {
@@ -38,17 +47,38 @@ function SingleCookbook() {
     }
   }
 
+  function getCookbookToUser(id?: string) {
+    if (id) {
+      console.log(id)
+      addExistedCookbookToUser(id);
+    }
+  }
+
+  function handleClickOpenModel(recipe: Recipe) {
+    setOpenModel(true);
+    setRecipeIDTooAddMyCookbook(recipe.id);
+  }
+
   useEffect(() => {
     addViews(id || '');
   }, [addViews, id]);
 
   return (
     <section className="container mx-auto">
-      <CookbookDetailInfo data={cookbook} handleClickLike={handleClickLike} />
+      <CookbookDetailInfo
+        data={cookbook}
+        handleClickLike={handleClickLike}
+        getCookbookToUser={getCookbookToUser}
+      />
       <ul className="flex flex-col gap-8 mt-28">
         <h2 className="font-semibold text-4xl">Recipes</h2>
         {cookbook?.recipes.map(item => (
-          <CardRecipes route={location.pathname} key={item.id} {...item} />
+          <CardRecipes
+            handleClickOpenModel={handleClickOpenModel}
+            route={location.pathname}
+            key={item.id}
+            {...item}
+          />
         ))}
       </ul>
       <div className="flex flex-col gap-8 mt-24 mb-24 ">
@@ -77,6 +107,9 @@ function SingleCookbook() {
           </ul>
         </div>
       </div>
+      <Modal onClose={() => setOpenModel(false)} isOpened={openModel}>
+        <FormAddRecipeToMyCookbook recipe_id={recipeIDTooAddMyCookbook} cookbooks={userCookbooks} />
+      </Modal>
     </section>
   );
 }

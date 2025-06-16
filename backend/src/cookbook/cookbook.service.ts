@@ -17,17 +17,21 @@ export class CookbookService {
     return result;
   }
 
-  async updateCookbook(body: UpdateCookbookDto, id: string, user_id: string) {
-    const { recipesIDs, ...cookbook } = body;
+  async addRecipeToCookbook(cookbook_id: string, recipesID: string) {
+
 
     const result = await this.prismaService.client.cookbook.update({
       where: {
-        id,
+        id: cookbook_id,
       },
-      data: { ...cookbook, user_id, recipes: { connect: recipesIDs } },
+      data: {
+        recipes: { connect: { id: recipesID } },
+      },
     });
     return result;
   }
+
+  
   async addCookbookToUSer(id: string, user_id: string) {
     return await this.prismaService.client.user.update({
       where: {
@@ -58,6 +62,7 @@ export class CookbookService {
               select: {
                 likes: true,
                 comment: true,
+                views: true,
               },
             },
           },

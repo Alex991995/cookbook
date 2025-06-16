@@ -5,8 +5,10 @@
   gap: 60px;
 }
 
+
 .list {
   margin-top: 10px;
   display: grid;
   grid-template-columns: repeat(auto-fill, 350px);
+  gap: 10px;
 }

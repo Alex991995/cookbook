@@ -6,19 +6,34 @@ import { Link } from 'react-router';
 import ReactionCounter from 'components/reaction-counter';
 interface RecipeWithUpdate extends Recipe {
   updateRecipe?: (recipe: Recipe) => void;
+  handleClickOpenModel?: (recipe: Recipe) => void;
+  getIdForDelete?: (id?: string) => void;
   route: string;
 }
 
 function CardRecipes(recipe: RecipeWithUpdate) {
-  const { image, title, description, user, _count, updateRecipe, route } = recipe;
+  const {
+    image,
+    title,
+    description,
+    user,
+    _count,
+    updateRecipe,
+    handleClickOpenModel,
+    getIdForDelete,
+    route,
+  } = recipe;
+
   const ifAccountRecipeRoute = route === '/account/recipe';
+  const isSingleCookbook = /\/cookbook\/\w+/gm.test(route);
+
   return (
     <>
       <li className={styles.card}>
-        <Link to={`/recipe/${recipe.id}`}>
+        <Link className="flex gap-4" to={`/recipe/${recipe.id}`}>
           <img className={styles.meal} src={image} alt="meal" />
 
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-between flex-2">
             <div>
               <h4 className="text-2xl">{title}</h4>
               <p className="text-secondary">{user?.name}</p>
@@ -35,14 +50,21 @@ function CardRecipes(recipe: RecipeWithUpdate) {
             </div>
           </div>
         </Link>
-        <div className="flex grow justify-end gap-4">
-          {ifAccountRecipeRoute ? (
-            <>
-              <MdOutlineSystemUpdateAlt onClick={() => updateRecipe!(recipe)} size={23} />
-              <RiChatDeleteFill size={23} />
-            </>
-          ) : null}
-        </div>
+        {isSingleCookbook && (
+          <button
+            onClick={() => handleClickOpenModel!(recipe)}
+            className="border border-primary px-4 rounded-[5px] bottom-4 right-4 absolute z-10"
+          >
+            Save
+          </button>
+        )}
+
+        {ifAccountRecipeRoute ? (
+          <div className="absolute top-3 right-2 flex gap-1">
+            <MdOutlineSystemUpdateAlt onClick={() => updateRecipe!(recipe)} size={23} />
+            <RiChatDeleteFill onClick={() => getIdForDelete!(recipe.id)} size={23} />
+          </div>
+        ) : null}
       </li>
     </>
   );

@@ -5,10 +5,11 @@ import { useState } from 'react';
 import LinksMainLayout from 'components/links-main-layout';
 
 function Cookbook() {
-  const { data:cookbooks } = useGetAllCookbooksQuery();
+  const { data: cookbooks } = useGetAllCookbooksQuery();
   const arrSort = ['popularity', 'views', 'comment'];
 
   const [sort, setSort] = useState(arrSort[0]);
+
 
   function handleAddrTypeChange(e: React.ChangeEvent<HTMLSelectElement>) {
     const value = e.currentTarget.value;

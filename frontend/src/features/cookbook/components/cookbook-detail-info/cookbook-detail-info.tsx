@@ -4,10 +4,11 @@ import type { Cookbook } from 'types';
 
 interface ICookbookDetailInfo {
   data?: Cookbook;
+  getCookbookToUser: (id?:string) => void
   handleClickLike(cookbook_id?: string): void;
 }
 
-function CookbookDetailInfo({ data, handleClickLike }: ICookbookDetailInfo) {
+function CookbookDetailInfo({ data, handleClickLike, getCookbookToUser }: ICookbookDetailInfo) {
   return (
     <div className="flex flex-col gap-4">
       <h3 className="font-bold text-[54px] mt-20">{data?.title}</h3>
@@ -31,7 +32,7 @@ function CookbookDetailInfo({ data, handleClickLike }: ICookbookDetailInfo) {
           />
         </div>
 
-        <Button text="Clone to my cookbooks" maxWidth="210px" paddingX="0" />
+        <Button handleClick={() =>getCookbookToUser(data?.id)} text="Clone to my cookbooks" maxWidth="210px" paddingX="0" />
       </div>
     </div>
   );
