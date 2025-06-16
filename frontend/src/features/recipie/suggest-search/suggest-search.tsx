@@ -33,15 +33,17 @@ function SuggestSearch() {
             onChange={e => setValue(e?.value)}
             options={options}
             placeholder="Find Best Recipes"
-            className="w-full bg-white text-secondary h-[70px] rounded-lg pl-12"
+            styles={{
+              control: base => ({
+                ...base,
+                width: '100%',
+                backgroundColor: 'white',
+                height: '70px',
+                borderRadius: '0.5rem',
+                paddingLeft: '3rem',
+              }),
+            }}
           />
-          {/* <input
-            value={value}
-            onChange={e => setValue(e.target.value)}
-            className="w-full bg-white text-secondary h-[70px] rounded-lg pl-12"
-            type="text"
-            placeholder="Find Best Recipes"
-          /> */}
 
           <img src={search} alt="" className="absolute left-4 top-1/3" />
           <div className="absolute right-0 mr-2 top-1/6 ">
