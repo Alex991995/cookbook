@@ -18,7 +18,7 @@ function CreateCookbookPage() {
     handleSubmit,
     control,
     setError,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<CreateCookbookType>({
     mode: 'onBlur',
     resolver: zodResolver(CreateCookbookSchema),
@@ -28,7 +28,7 @@ function CreateCookbookPage() {
     control,
     name: 'recipesIDs',
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { data: allRecipe } = useGetAllUserRecipesQuery();
   const [selectedRecipes, setSelectedRecipes] = useState<Recipe[]>([]);
   const options = allRecipe?.data.map(item => ({ value: item.title, label: item.title }));
@@ -44,8 +44,6 @@ function CreateCookbookPage() {
     }
   }
 
-
-
   const onSubmit: SubmitHandler<CreateCookbookType> = async data => {
     console.log(data);
     const { picture, ...body } = data;
@@ -60,7 +58,7 @@ function CreateCookbookPage() {
         body: formData,
       });
       const res = await response.json();
-      navigate('/account/cookbook')
+      navigate('/account/cookbook', { replace: true });
       console.log(res);
     } catch (error) {
       console.error(error);
@@ -151,7 +149,7 @@ function CreateCookbookPage() {
         </div>
 
         <div className="flex justify-end">
-          <Button text="Save" type="submit" paddingX="0" disabled={!isValid} maxWidth="90px" />
+          <Button text="Save" type="submit" paddingX="0"  maxWidth="90px" />
         </div>
       </form>
     </section>

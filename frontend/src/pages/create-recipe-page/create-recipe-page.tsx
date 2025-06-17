@@ -19,16 +19,10 @@ function CreateRecipePage() {
     handleSubmit,
     control,
     setError,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<CreateRecipeType>({
-    mode: 'onSubmit',
+    mode: 'onBlur',
     resolver: zodResolver(CreateRecipeSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      picture: undefined,
-      estimated_time: '',
-    },
   });
 
   const {
@@ -99,7 +93,7 @@ function CreateRecipePage() {
       });
 
       const res = await response.json();
-      navigate('/account/recipe');
+      navigate('/account/recipe', { replace: true });
       console.log(res);
     } catch (error) {
       console.error(error);
@@ -238,7 +232,7 @@ function CreateRecipePage() {
           </ul>
         </div>
         <div className="flex justify-end">
-          <Button text="Save" type="submit" paddingX="0" disabled={!isValid} maxWidth="90px" />
+          <Button text="Save" type="submit" paddingX="0"  maxWidth="90px" />
         </div>
       </form>
     </section>

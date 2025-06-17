@@ -37,6 +37,7 @@ export const cookbookApi = createApi({
     getAllUserRecipes: builder.query<ArrayRecipe, void>({
       query: () => `/recipe/all-user`,
       providesTags: ['Recipe'],
+      keepUnusedDataFor: 0,
     }),
     getAllRecipes: builder.query<ArrayRecipe, { sort: string; time: string }>({
       query: ({ sort, time }) => `/recipe/all?sort=${sort}&time=${time}`,
@@ -54,16 +55,20 @@ export const cookbookApi = createApi({
 
     getUniqueRecipeByID: builder.query<Recipe, string>({
       query: id => `/recipe/${id}`,
+      providesTags: ['Recipe'],
       keepUnusedDataFor: 0,
     }),
 
     getAllUserCookbooks: builder.query<ArrayCookbook, void>({
       query: () => `/cookbook/all-user`,
       providesTags: ['Cookbook'],
+      keepUnusedDataFor: 0,
     }),
 
     getAllCookbooks: builder.query<ArrayCookbook, void>({
       query: () => `/cookbook/all`,
+      providesTags: ['Cookbook'],
+      keepUnusedDataFor: 0,
     }),
 
     getPopularCookbooks: builder.query<ArrayCookbook, void>({
@@ -72,6 +77,7 @@ export const cookbookApi = createApi({
 
     getUniqueCookbookByID: builder.query<Cookbook, string>({
       query: id => `/cookbook/${id}`,
+      providesTags: ['Cookbook'],
       keepUnusedDataFor: 0,
     }),
 
@@ -123,6 +129,7 @@ export const cookbookApi = createApi({
         method: 'POST',
         body: id,
       }),
+      invalidatesTags: ['Cookbook'],
     }),
 
     addViewsToRecipe: builder.mutation<null, string>({
@@ -131,6 +138,7 @@ export const cookbookApi = createApi({
         method: 'POST',
         body: id,
       }),
+      invalidatesTags: ['Recipe'],
     }),
 
     addViewsToCookbook: builder.mutation<null, string>({
@@ -139,6 +147,7 @@ export const cookbookApi = createApi({
         method: 'POST',
         body: id,
       }),
+      invalidatesTags: ['Cookbook'],
     }),
 
     addRecipeToMyCookbook: builder.mutation<null, { cookbook_id: string; recipesID: string }>({
