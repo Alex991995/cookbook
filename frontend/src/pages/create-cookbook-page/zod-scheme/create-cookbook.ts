@@ -8,7 +8,7 @@ export const CreateCookbookSchema = z.object({
   title: z.string().min(4),
   description: z.string().optional(),
   picture: z.instanceof(FileList).refine(file => file?.length == 1, 'File is required.'),
-  recipesIDs: z.array(valueObjects),
-});
+  recipesIDs: z.array(valueObjects).min(1),
+}).required();
 
 export type CreateCookbookType = z.infer<typeof CreateCookbookSchema>;

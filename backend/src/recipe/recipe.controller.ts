@@ -36,10 +36,9 @@ export class RecipeController {
         if (!req.file) {
           return next(new HttpError(400, 'Image is required'));
         }
-        console.log(req.file);
         const id = req.user.id;
         const recipeStringify = req.body.data;
-        console.log(recipeStringify);
+
         const fileName = req.file.filename;
         const filePath = `${uploadsRecipePath}/${fileName}`;
 
@@ -69,13 +68,23 @@ export class RecipeController {
       async (req: Request<object, object, object, { sort: string; time: string }>, res, next) => {
         const { sort, time } = req.query;
 
-        const recipes = await this.recipeService.getAllRecipe(sort, +time );
+        const recipes = await this.recipeService.getAllRecipe(sort, +time);
 
         res.send({
           data: recipes,
         });
       },
     );
+
+    this.router.get('/all-without-sort', async (req, res, next) => {
+      const { sort, time } = req.query;
+
+      const recipes = await this.recipeService.getAllRecipeWithoutSort();
+
+      res.send({
+        data: recipes,
+      });
+    });
 
     this.router.get('/all-user', async (req, res, next) => {
       const id = req.user.id;
@@ -105,6 +114,20 @@ export class RecipeController {
         }
       },
     );
+
+    this.router.get('/trend', async (req, res, next) => {
+      const recipes = await this.recipeService.getTrendUserRecipe();
+      res.send({
+        data: recipes,
+      });
+    });
+
+    this.router.get('/:id', async (req, res, next) => {
+      const id = req.params.id;
+
+      const result = await this.recipeService.getUniqueRecipeByID(id);
+      res.send(result);
+    });
 
     this.router.put(
       '/:id',
@@ -190,16 +213,29 @@ export class RecipeController {
       });
     });
 
-    // this.router.put('/like/:id', async (req, res, next) => {
-    //   const id = req.params.id;
+    this.router.post('/like/:id', async (req, res, next) => {
+      const user_id = req.user.id;
+      const recipe_id = req.params.id;
 
-    //   const result = await this.recipeService.addLike(id);
-    //   if (result) {
-    //     res.status(204).send();
-    //   } else {
-    //     next(new HttpError(404, 'Record to update does not exist.'));
-    //   }
-    // });
+      const result = await this.recipeService.addLike(user_id, recipe_id);
+      if (result) {
+        res.sendStatus(204).end();
+      } else {
+        next(new HttpError(404, 'User has already liked this recipe'));
+      }
+    });
+
+    this.router.post('/views/:id', async (req, res, next) => {
+      const user_id = req.user.id;
+      const recipe_id = req.params.id;
+
+      const result = await this.recipeService.addViews(user_id, recipe_id);
+      if (result) {
+        res.sendStatus(204).end();
+      } else {
+        next(new HttpError(404, 'User has already liked this recipe'));
+      }
+    });
 
     return this.router;
   }

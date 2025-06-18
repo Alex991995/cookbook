@@ -3,18 +3,19 @@ import sourceViews from 'assets/views.svg';
 import sourceHeart from 'assets/heart_outline.svg';
 import sourceComment from 'assets/comment.svg';
 import type { Cookbook } from 'types';
+import { Link } from 'react-router';
 
 interface ICookbookWidth extends Cookbook {
   width?: string;
 }
 
-function Card({ image, views, title, user, _count, width }: ICookbookWidth) {
+function Card({ image, title, user, _count, width, id }: ICookbookWidth) {
 
   return (
-    <li className={styles.card}>
+    <Link to={`/cookbook/${id}`} className={styles.card}>
       <div className="flex gap-2">
         <img src={sourceViews} alt="views" />
-        <div>{views} views</div>
+        <div>{_count.views} views</div>
       </div>
       <img className={styles.meal} style={{ width }} src={image} alt="meal" />
 
@@ -33,7 +34,7 @@ function Card({ image, views, title, user, _count, width }: ICookbookWidth) {
           <div className="text-xs">{_count.commentCookbook} comments</div>
         </div>
       </div>
-    </li>
+    </Link>
   );
 }
 

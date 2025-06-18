@@ -1,10 +1,11 @@
 import styles from './trending-recipes.module.css';
 import CardTrendRecipes from '../ui/card-trend-recipes/card-trend-recipes';
-import { useGetAllUserRecipesQuery } from 'store/api/api';
+import { useGetTrendRecipesQuery } from 'store/api/api';
 import { useNavigate } from 'react-router';
 
 function TrendingRecipes() {
-  const { data: allRecipes } = useGetAllUserRecipesQuery();
+  const { data: allRecipes } = useGetTrendRecipesQuery();
+
   const navigate = useNavigate();
   return (
     <section className="px-8">
@@ -14,7 +15,7 @@ function TrendingRecipes() {
 
         <ul className="flex gap-8 mt-6 flex-wrap justify-center">
           {allRecipes?.data.map(item => (
-            <CardTrendRecipes {...item} />
+            <CardTrendRecipes key={item.id} {...item} />
           ))}
         </ul>
         <button onClick={() => navigate('/recipe')} className="py-4 px-8 bg-white text-primary rounded-2xl hover:text-primary-hover mb-4">

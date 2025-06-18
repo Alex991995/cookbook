@@ -5,6 +5,7 @@ import styles from '../styles/authentication.module.css';
 import Logo from 'components/logo';
 import { LoginSchema, type LoginType } from '../zod-scheme/register-schema';
 import Button from 'components/button';
+import { useNavigate } from 'react-router';
 
 export default function LoginForm() {
   const {
@@ -16,6 +17,7 @@ export default function LoginForm() {
     mode: 'onBlur',
     resolver: zodResolver(LoginSchema),
   });
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<LoginType> = async data => {
     try {
@@ -28,6 +30,7 @@ export default function LoginForm() {
       });
 
       await response.json();
+      navigate('/');
     } catch (error) {
       console.error(error);
       setError('email', {
@@ -39,7 +42,7 @@ export default function LoginForm() {
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className="self-start">
-        <Logo fontSize="50px" width="180px" color="white"/>
+        <Logo fontSize="50px" width="180px" color="black" />
       </div>
 
       <div className="self-start ">

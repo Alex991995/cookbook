@@ -8,7 +8,7 @@ function Login() {
     <section className={styles.section}>
       <img src={source} alt="signup" className={styles.img} />
 
-      <div className="flex-auto flex justify-center mx-2.5">
+      <div className="flex-auto flex justify-center mx-2.5 items-center">
         <LoginForm />
       </div>
     </section>

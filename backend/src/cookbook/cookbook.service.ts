@@ -17,16 +17,37 @@ export class CookbookService {
     return result;
   }
 
-  async updateCookbook(body: UpdateCookbookDto, id: string, user_id: string) {
-    const { recipesIDs, ...cookbook } = body;
+  async addRecipeToCookbook(cookbook_id: string, recipesID: string) {
+
 
     const result = await this.prismaService.client.cookbook.update({
       where: {
-        id,
+        id: cookbook_id,
       },
-      data: { ...cookbook, user_id, recipes: { connect: recipesIDs } },
+      data: {
+        recipes: { connect: { id: recipesID } },
+      },
     });
     return result;
+  }
+
+  
+  async addCookbookToUSer(id: string, user_id: string) {
+    return await this.prismaService.client.user.update({
+      where: {
+        id: user_id,
+      },
+      data: {
+        cookbook: {
+          connect: {
+            id,
+          },
+        },
+      },
+      include: {
+        cookbook: true,
+      },
+    });
   }
 
   async getCookbook(id: string) {
@@ -35,7 +56,24 @@ export class CookbookService {
         id,
       },
       include: {
-        recipes: true,
+        recipes: {
+          include: {
+            _count: {
+              select: {
+                likes: true,
+                comment: true,
+                views: true,
+              },
+            },
+          },
+        },
+        user: true,
+        _count: {
+          select: {
+            Cookbook_Likes: true,
+            commentCookbook: true,
+          },
+        },
       },
     });
   }
@@ -60,6 +98,7 @@ export class CookbookService {
           select: {
             Cookbook_Likes: true,
             commentCookbook: true,
+            views: true,
           },
         },
       },
@@ -83,6 +122,7 @@ export class CookbookService {
           select: {
             Cookbook_Likes: true,
             commentCookbook: true,
+            views: true,
           },
         },
       },
@@ -91,6 +131,36 @@ export class CookbookService {
           _count: 'desc',
         },
       },
+    });
+  }
+
+  async fetchAllPopularCookbooks() {
+    return await this.prismaService.client.cookbook.findMany({
+      select: {
+        views: true,
+        id: true,
+        title: true,
+        description: true,
+        image: true,
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            Cookbook_Likes: true,
+            commentCookbook: true,
+            views: true,
+          },
+        },
+      },
+      orderBy: {
+        Cookbook_Likes: {
+          _count: 'desc',
+        },
+      },
+      take: 4,
     });
   }
 
@@ -109,19 +179,31 @@ export class CookbookService {
     }
   }
 
-  // async addLike(id: string) {
-  //   try {
-  //     await this.prismaService.client.cookbook_Likes.update({
-  //       where: {
-  //         id,
-  //       },
-  //       data: { number_likes: { increment: 1 } },
-  //     });
+  async addLike(user_id: string, cookbook_id: string) {
+    try {
+      return await this.prismaService.client.cookbook_Likes.create({
+        data: {
+          user_id,
+          cookbook_id,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
 
-  //     return true;
-  //   } catch (err) {
-  //     console.log(err);
-  //     return false;
-  //   }
-  // }
+  async addViews(user_id: string, cookbook_id: string) {
+    try {
+      return await this.prismaService.client.views_Cookbook.create({
+        data: {
+          user_id,
+          cookbook_id,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
 }

@@ -33,6 +33,22 @@ export class AuthService {
     });
   }
 
+  async logoutUser(email: string) {
+    const payload: jose.JWTPayload = {};
+
+    payload['email'] = 'vvfd';
+
+    const secret = new TextEncoder().encode(jwtConstants.secret);
+
+    const token = await new jose.SignJWT(payload)
+      .setProtectedHeader({ alg: jwtConstants.alg })
+      .setIssuedAt()
+      .setExpirationTime('0s')
+      .sign(secret);
+
+    return token;
+  }
+
   async loginUser({ email, password }: LoginDTO) {
     const existedUser = await this.isExistedUser(email);
     if (!existedUser) {

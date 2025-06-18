@@ -14,6 +14,7 @@ export default defineConfig({
       store: '/src/store',
       common: '/src/common',
       hooks: '/src/hooks',
+      hoc: '/src/hoc',
     },
   },
   server: {

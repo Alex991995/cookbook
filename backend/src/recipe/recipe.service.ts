@@ -40,9 +40,41 @@ export class RecipeService {
           select: {
             likes: true,
             comment: true,
+            views: true,
           },
         },
       },
+    });
+    return result;
+  }
+
+  async getTrendUserRecipe() {
+    const result = await this.prismaService.client.recipe.findMany({
+      omit: {
+        user_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+            views: true,
+          },
+        },
+      },
+      orderBy: {
+        views: {
+          _count: 'desc',
+        },
+      },
+      take: 4,
     });
     return result;
   }
@@ -62,7 +94,11 @@ export class RecipeService {
         },
       };
     } else {
-      obj = { views: 'desc' };
+      obj = {
+        views: {
+          _count: 'desc',
+        },
+      };
     }
 
     const result = await this.prismaService.client.recipe.findMany({
@@ -93,11 +129,65 @@ export class RecipeService {
           select: {
             likes: true,
             comment: true,
+            views: true,
           },
         },
       },
     });
     return result;
+  }
+
+  async getAllRecipeWithoutSort() {
+    const result = await this.prismaService.client.recipe.findMany({
+      omit: {
+        user_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+            views: true,
+          },
+        },
+      },
+    });
+    return result;
+  }
+
+  async getUniqueRecipeByID(id: string) {
+    return await this.prismaService.client.recipe.findUnique({
+      where: {
+        id,
+      },
+      omit: {
+        user_id: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      include: {
+        user: {
+          select: {
+            name: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comment: true,
+            views: true,
+          },
+        },
+      },
+    });
   }
 
   async getRecipeByTitle(title: string) {
@@ -137,19 +227,31 @@ export class RecipeService {
     }
   }
 
-  // async addLike(id: string) {
-  //   try {
-  //     await this.prismaService.client.recipe_Likes.update({
-  //       where: {
-  //         id,
-  //       },
-  //       data: { number_likes: { increment: 1 } },
-  //     });
+  async addLike(user_id: string, recipe_id: string) {
+    try {
+      return await this.prismaService.client.recipe_Likes.create({
+        data: {
+          user_id,
+          recipe_id,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
 
-  //     return true;
-  //   } catch (err) {
-  //     console.log(err);
-  //     return false;
-  //   }
-  // }
+  async addViews(user_id: string, recipe_id: string) {
+    try {
+      return await this.prismaService.client.views_Recipe.create({
+        data: {
+          user_id,
+          recipe_id,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+  }
 }

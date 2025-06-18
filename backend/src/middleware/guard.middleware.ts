@@ -6,8 +6,13 @@ export class GuardMiddleware {
   constructor(private prismaService: PrismaService) {}
 
   async execute(req: Request, res: Response, next: NextFunction) {
-    const [, , route] = req.originalUrl.trim().split('/');
-    if (route === 'auth') {
+    const [, , route, subRoute] = req.originalUrl.trim().split('/');
+
+    if (
+      route === 'auth' ||
+      (route === 'cookbook' && subRoute === 'most-popular') ||
+      (route === 'recipe' && subRoute === 'trend')
+    ) {
       return next();
     }
 

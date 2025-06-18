@@ -10,26 +10,19 @@ import { useState } from 'react';
 import { BsX } from 'react-icons/bs';
 import { getArrMinutes } from 'common/constants';
 import type { CreateRecipeTypeForServer } from 'types';
+import { useNavigate } from 'react-router';
 const arrMinutes = getArrMinutes();
 
 function CreateRecipePage() {
   const {
     register,
     handleSubmit,
-    reset,
     control,
     setError,
-    clearErrors,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<CreateRecipeType>({
-    mode: 'onSubmit',
+    mode: 'onBlur',
     resolver: zodResolver(CreateRecipeSchema),
-    defaultValues: {
-      title: '',
-      description: '',
-      picture: undefined,
-      estimated_time: '',
-    },
   });
 
   const {
@@ -49,16 +42,9 @@ function CreateRecipePage() {
     control,
     name: 'directions',
   });
-
+  const navigate = useNavigate();
   const [valueIngredient, setValueIngredient] = useState('');
   const [valueDirection, setValueDirection] = useState('');
-
-  function clearFields() {
-    clearErrors();
-    reset();
-    removeDirections();
-    removeIngredients();
-  }
 
   function addValueIngredientToAppend() {
     if (valueIngredient.trim()) {
@@ -107,7 +93,7 @@ function CreateRecipePage() {
       });
 
       const res = await response.json();
-      clearFields();
+      navigate('/account/recipe', { replace: true });
       console.log(res);
     } catch (error) {
       console.error(error);
@@ -246,7 +232,7 @@ function CreateRecipePage() {
           </ul>
         </div>
         <div className="flex justify-end">
-          <Button text="Save" type="submit" paddingX="0" disabled={!isValid} maxWidth="90px" />
+          <Button text="Save" type="submit" paddingX="0"  maxWidth="90px" />
         </div>
       </form>
     </section>

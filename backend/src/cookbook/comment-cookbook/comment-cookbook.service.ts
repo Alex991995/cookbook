@@ -3,7 +3,7 @@ import { PrismaService } from '@/database/prisma.service';
 export class CommentCookbookService {
   constructor(private prismaService: PrismaService) {}
 
-   async createComment(cookbook_id : string, description: string) {
+  async createComment(cookbook_id: string, description: string) {
     try {
       const result = await this.prismaService.client.commentCookbook.create({
         data: { description, cookbook_id },
@@ -22,6 +22,8 @@ export class CommentCookbookService {
       },
       select: {
         description: true,
+        id: true,
+        createdAt: true,
         cookbook: {
           select: {
             user: {
@@ -35,5 +37,4 @@ export class CommentCookbookService {
       },
     });
   }
-
 }

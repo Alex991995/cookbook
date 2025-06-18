@@ -7,6 +7,11 @@ export class CommentRecipeService {
     try {
       const result = await this.prismaService.client.commentRecipe.create({
         data: { description, recipe_id },
+        omit: {
+          createdAt: true,
+          updatedAt: true,
+          recipe_id: true,
+        },
       });
       return result;
     } catch (err) {
@@ -22,6 +27,8 @@ export class CommentRecipeService {
       },
       select: {
         description: true,
+        id: true,
+        createdAt: true,
         recipe: {
           select: {
             user: {

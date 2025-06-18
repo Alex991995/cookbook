@@ -59,6 +59,19 @@ export class AuthController {
         }
       },
     );
+
+    this.router.post('/logout', async (req, res) => {
+      const email = req.userEmail;
+      const result = await this.authService.logoutUser(email);
+
+      res
+        .cookie('access_token', result, {
+          httpOnly: true,
+        })
+        .send({ isAuthenticated: true })
+        .end();
+    });
+
     return this.router;
   }
 }
