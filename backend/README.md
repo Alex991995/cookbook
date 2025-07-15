@@ -9,4 +9,5 @@
 
 ######  npm i
 ######  npm run dev
-<img width="1920" height="1080" alt="Снимок экрана 2025-07-15 в 18 11 22" src="https://github.com/user-attachments/assets/035665b5-1ce5-4fb7-b9ab-98de058f8902" />
+
+![Снимок экрана 2025-07-15 в 18 11 22](https://github.com/user-attachments/assets/c8b454b9-8da6-4c17-b37e-a4f2769085aa)
