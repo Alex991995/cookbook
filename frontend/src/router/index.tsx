@@ -1,0 +1,92 @@
+import { createBrowserRouter } from 'react-router';
+import Register from 'pages/register/register';
+import Login from 'pages/login/login';
+import NotFoundPage from 'pages/not-found-page/not-found-page';
+import ErrorBoundary from 'pages/error-boundary/error-boundary';
+import Layout from 'layouts/main-layout';
+import MainPage from 'pages/main-page/main-page';
+import AccountLayout from 'layouts/account-layout';
+import AccountSetting from 'pages/account-setting/account-setting';
+import AccountRecipe from 'pages/account-recipe/account-recipe';
+import AccountCookbook from 'pages/account-cookbook/account-cookbook';
+import CreateRecipePage from 'pages/create-recipe-page/create-recipe-page';
+import CreateCookbookPage from 'pages/create-cookbook-page/create-cookbook-page';
+import Cookbook from 'pages/cookbook/cookbook';
+import Recipe from 'pages/recipe/recipe';
+import SingleRecipe from 'pages/single-recipe/single-recipe';
+import SingleCookbook from 'pages/single-cookbook/single-cookbook';
+
+export const router = createBrowserRouter([
+  {
+    path: '/register',
+    element: <Register />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: '/recipe/create',
+    element: <CreateRecipePage />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: '/cookbook/create',
+    element: <CreateCookbookPage />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: '/recipe/:id',
+    element: <SingleRecipe />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    path: '/cookbook/:id',
+    element: <SingleCookbook />,
+    errorElement: <ErrorBoundary />,
+  },
+  {
+    element: <Layout />,
+    errorElement: <ErrorBoundary />,
+    children: [
+      {
+        path: '/',
+        element: <MainPage />,
+        errorElement: <ErrorBoundary />,
+      },
+      {
+        path: '/cookbook',
+        element: <Cookbook />,
+      },
+      {
+        path: '/recipe',
+        element: <Recipe />,
+      },
+      {
+        path: '/account',
+        element: <AccountLayout />,
+        errorElement: <ErrorBoundary />,
+        children: [
+          {
+            path: 'setting',
+            element: <AccountSetting />,
+          },
+          {
+            path: 'cookbook',
+            element: <AccountCookbook />,
+          },
+          {
+            path: 'recipe',
+            element: <AccountRecipe />,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    path: '*',
+    element: <NotFoundPage />,
+  },
+]);

@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "recipe" ALTER COLUMN "views" SET DATA TYPE BIGINT,
+ALTER COLUMN "estimated_time" SET DATA TYPE BIGINT;

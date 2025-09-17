@@ -1,0 +1,55 @@
+import { AccountController } from './account/account.controller';
+import { App } from './app';
+import { PrismaService } from './database/prisma.service';
+import { ExceptionFilter } from './errors/exception.filter';
+import { LoggerService } from './logger/logger.service';
+import { AuthController } from './auth/auth.controller';
+import { AuthService } from './auth/auth.service';
+import { AuthMiddleware } from './middleware/auth.middleware';
+import { GuardMiddleware } from './middleware/guard.middleware';
+import { RecipeController } from './recipe/recipe.controller';
+import { RecipeService } from './recipe/recipe.service';
+import { CommentRecipeService } from './recipe/comment-recipe/comment-recipe.service';
+
+import { CookbookController } from './cookbook/cookbook.controller';
+import { CookbookService } from './cookbook/cookbook.service';
+import { CommentCookbookService } from './cookbook/comment-cookbook/comment-cookbook.service';
+import { AccountService } from './account/account.service';
+
+async function bootstrap() {
+  const logger = new LoggerService();
+  const prismaService = new PrismaService(logger);
+
+  const accountService = new AccountService(prismaService);
+  const accountController = new AccountController(accountService);
+
+  const authService = new AuthService(prismaService);
+  const authController = new AuthController(authService);
+
+  const recipeService = new RecipeService(prismaService);
+  const commentRecipeService = new CommentRecipeService(prismaService);
+
+  const recipeController = new RecipeController(recipeService, commentRecipeService);
+
+  const cookbookService = new CookbookService(prismaService);
+  const commentCookbookService = new CommentCookbookService(prismaService);
+  const cookbookController = new CookbookController(cookbookService, commentCookbookService);
+
+  const exceptionFilter = new ExceptionFilter(logger);
+  const authMiddleware = new AuthMiddleware(logger);
+  const guardMiddleware = new GuardMiddleware(prismaService);
+
+  const app = new App(
+    logger,
+    accountController,
+    prismaService,
+    exceptionFilter,
+    authController,
+    authMiddleware,
+    guardMiddleware,
+    recipeController,
+    cookbookController,
+  );
+  await app.init();
+}
+bootstrap();

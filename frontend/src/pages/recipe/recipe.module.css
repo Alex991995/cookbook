@@ -1,0 +1,13 @@
+.box {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  margin-top: 10px;
+  gap: 60px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 10px;
+}

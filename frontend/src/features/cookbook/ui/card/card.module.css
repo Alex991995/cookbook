@@ -1,0 +1,19 @@
+.card {
+  box-shadow: 0px 0px 16px 0px #0000000f;
+  transition: 0.3s;
+  padding: 20px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: scale(1.03);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+  }
+}
+
+
+.meal {
+  align-items: center;
+  height: 215px;
+  object-fit: cover;
+  border-radius: 8px;
+  width: 100%;
+}
